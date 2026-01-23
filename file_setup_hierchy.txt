@@ -1,45 +1,51 @@
-Launcher.sln
+Launcher.App
+├── Views/
+│   └── MainWindow.axaml
+│   └── MainWindow.axaml.cs
 │
-├── Launcher.App              (Avalonia UI)
-│   ├── Views/
-│   ├── ViewModels/
-│   ├── Assets/
-│   ├── App.axaml
-│   └── Program.cs
+├── ViewModels/
+│   └── MainWindowViewModel.cs
 │
-├── Launcher.Core             (NO UI)
-│   ├── Emulation/
-│   │   ├── IEmulatorPlugin.cs
-│   │   ├── EmulatorManifest.cs
-│   │   └── EmulatorManager.cs
-│   │
-│   ├── Games/
-│   │   ├── GameEntry.cs
-│   │   └── GameScanner.cs
-│   │
-│   ├── Config/
-│   │   └── LauncherConfig.cs
-│   │
-│   └── Common/
-│       └── Result.cs
+├── Assets/
 │
-├── Launcher.Infrastructure   (Linux-specific stuff)
+├── App.axaml
+├── App.axaml.cs
+└── Program.cs
+
+Launcher.Core
+├── Emulation/
+│   ├── IEmulatorPlugin.cs
+│   ├── EmulatorManifest.cs
+│   └── EmulatorManager.cs
+│
+├── Games/
+│   ├── GameEntry.cs
+│   └── GameScanner.cs
+│
+├── Config/
+│   └── LauncherConfig.cs
+│
+└── Common/
+    └── Result.cs
+
+Launcher.Infrastructure
+├── Linux/
 │   ├── ProcessRunner.cs
 │   ├── PathResolver.cs
 │   └── FileSystem.cs
+
+Plugins
+├── Mupen64Plus.Plugin
+│   ├── Mupen64PlusPlugin.cs
+│   └── plugin.json
 │
-├── Launcher.Plugins          (Shared plugin contracts)
-│   ├── ILauncherPlugin.cs
-│   └── PluginLoader.cs
+├── Dolphin.Plugin
+│   └── DolphinPlugin.cs
 │
-├── Plugins
-│   ├── Mupen64Plus.Plugin
-│   │   ├── Mupen64PlusPlugin.cs
-│   │   └── plugin.json
-│   │
-│   ├── Dolphin.Plugin
-│   │   └── DolphinPlugin.cs
-│   │
-│   └── RetroArch.Plugin
-│
-└── Launcher.Tests            (Optional, future-you will thank you)
+└── RetroArch.Plugin
+
+Launcher.Tests
+├── Core/
+├── PluginLoading/
+└── GameScanning/
+
