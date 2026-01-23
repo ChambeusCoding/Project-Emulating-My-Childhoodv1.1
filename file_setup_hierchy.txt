@@ -1,0 +1,45 @@
+Launcher.sln
+│
+├── Launcher.App              (Avalonia UI)
+│   ├── Views/
+│   ├── ViewModels/
+│   ├── Assets/
+│   ├── App.axaml
+│   └── Program.cs
+│
+├── Launcher.Core             (NO UI)
+│   ├── Emulation/
+│   │   ├── IEmulatorPlugin.cs
+│   │   ├── EmulatorManifest.cs
+│   │   └── EmulatorManager.cs
+│   │
+│   ├── Games/
+│   │   ├── GameEntry.cs
+│   │   └── GameScanner.cs
+│   │
+│   ├── Config/
+│   │   └── LauncherConfig.cs
+│   │
+│   └── Common/
+│       └── Result.cs
+│
+├── Launcher.Infrastructure   (Linux-specific stuff)
+│   ├── ProcessRunner.cs
+│   ├── PathResolver.cs
+│   └── FileSystem.cs
+│
+├── Launcher.Plugins          (Shared plugin contracts)
+│   ├── ILauncherPlugin.cs
+│   └── PluginLoader.cs
+│
+├── Plugins
+│   ├── Mupen64Plus.Plugin
+│   │   ├── Mupen64PlusPlugin.cs
+│   │   └── plugin.json
+│   │
+│   ├── Dolphin.Plugin
+│   │   └── DolphinPlugin.cs
+│   │
+│   └── RetroArch.Plugin
+│
+└── Launcher.Tests            (Optional, future-you will thank you)
