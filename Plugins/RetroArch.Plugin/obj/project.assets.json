@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "/home/chambeus/.nuget/packages/": {}
+    "/home/chambersj/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/RetroArch.Plugin/RetroArch.Plugin.csproj",
+      "projectUniqueName": "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Plugins/RetroArch.Plugin/RetroArch.Plugin.csproj",
       "projectName": "RetroArch.Plugin",
-      "projectPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/RetroArch.Plugin/RetroArch.Plugin.csproj",
-      "packagesPath": "/home/chambeus/.nuget/packages/",
-      "outputPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/RetroArch.Plugin/obj/",
+      "projectPath": "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Plugins/RetroArch.Plugin/RetroArch.Plugin.csproj",
+      "packagesPath": "/home/chambersj/.nuget/packages/",
+      "outputPath": "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Plugins/RetroArch.Plugin/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/chambeus/.nuget/NuGet/NuGet.Config"
+        "/home/chambersj/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
