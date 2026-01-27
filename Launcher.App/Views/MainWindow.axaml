@@ -1,13 +1,82 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="Launcher.App.Views.MainWindow"
-        Width="800"
-        Height="600"
-        Title="{Binding Title}">
+        Width="1200"
+        Height="800"
+        Background="#121212">
 
-    <TextBlock Text="{Binding Title}"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"
-               FontSize="28"/>
+    <DockPanel>
+
+        <!-- Top Command Bar -->
+        <Border DockPanel.Dock="Top"
+                Height="48"
+                Background="#1E1E1E"
+                Padding="12,0">
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center">
+
+                <Button Content="Scan Games"
+                        Margin="0,0,8,0"/>
+
+                <Button Content="Settings"
+                        Margin="0,0,16,0"/>
+
+                <TextBox Width="200"
+                         Watermark="Search…"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Sidebar -->
+        <Border DockPanel.Dock="Left"
+                Width="220"
+                Background="#181818"
+                Padding="8">
+            <StackPanel>
+
+                <TextBlock Text="Systems"
+                           FontWeight="Bold"
+                           Margin="4,4,4,12"/>
+
+                <Button Content="Nintendo 64"
+                        Margin="0,0,0,6"/>
+
+                <Button Content="GameCube"
+                        Margin="0,0,0,6"/>
+
+                <Button Content="Wii"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main Content -->
+        <ScrollViewer>
+            <WrapPanel Margin="16"
+                       ItemWidth="160"
+                       ItemHeight="220">
+
+                <!-- Game Card -->
+                <Border Width="160"
+                        Height="220"
+                        Background="#252525"
+                        CornerRadius="6"
+                        Margin="0,0,16,16">
+
+                    <StackPanel>
+                        <!-- Box Art Placeholder -->
+                        <Border Height="160"
+                                Background="#333"/>
+
+                        <TextBlock Text="Super Mario 64"
+                                   Margin="6"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                </Border>
+
+            </WrapPanel>
+        </ScrollViewer>
+
+    </DockPanel>
 </Window>
+
+
 

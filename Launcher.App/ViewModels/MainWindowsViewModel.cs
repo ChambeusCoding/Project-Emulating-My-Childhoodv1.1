@@ -21,9 +21,17 @@
 //         }
 //     }
 // }
+using System.Collections.ObjectModel;
+
 namespace Launcher.App.ViewModels;
 
 public class MainWindowViewModel
 {
-    public string Title => "EMCbetav1.2 🎮";
+    public ObservableCollection<GameViewModel> Games { get; } = new()
+    {
+        new GameViewModel("Super Mario 64"),
+        new GameViewModel("Ocarina of Time"),
+        new GameViewModel("Majora's Mask")
+    };
 }
+
