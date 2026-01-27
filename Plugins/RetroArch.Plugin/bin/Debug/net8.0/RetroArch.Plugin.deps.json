@@ -1,0 +1,50 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "RetroArch.Plugin/1.0.0": {
+        "dependencies": {
+          "Launcher.Core": "1.0.0",
+          "Launcher.Infrastructure": "1.0.0"
+        },
+        "runtime": {
+          "RetroArch.Plugin.dll": {}
+        }
+      },
+      "Launcher.Core/1.0.0": {
+        "runtime": {
+          "Launcher.Core.dll": {}
+        }
+      },
+      "Launcher.Infrastructure/1.0.0": {
+        "dependencies": {
+          "Launcher.Core": "1.0.0"
+        },
+        "runtime": {
+          "Launcher.Infrastructure.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "RetroArch.Plugin/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Launcher.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Launcher.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

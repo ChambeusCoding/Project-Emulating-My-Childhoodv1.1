@@ -22,4 +22,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Core_\" />
+    <Folder Include="GameScanning_\" />
+    <Folder Include="PluginLoading_\" />
+  </ItemGroup>
+
 </Project>

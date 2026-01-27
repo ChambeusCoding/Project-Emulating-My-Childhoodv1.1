@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RetroArch.Plugin")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+56e0830f49a1760eb7916693f0c5e7d0d6773110")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cde3c0faa5e068d3f7960acbbbdca7bace411f31")]
 [assembly: System.Reflection.AssemblyProductAttribute("RetroArch.Plugin")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RetroArch.Plugin")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

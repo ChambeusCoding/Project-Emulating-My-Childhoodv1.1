@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Launcher.Infrastructure/1.0.0": {
+        "dependencies": {
+          "Launcher.Core": "1.0.0"
+        },
+        "runtime": {
+          "Launcher.Infrastructure.dll": {}
+        }
+      },
+      "Launcher.Core/1.0.0": {
+        "runtime": {
+          "Launcher.Core.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Launcher.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Launcher.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
