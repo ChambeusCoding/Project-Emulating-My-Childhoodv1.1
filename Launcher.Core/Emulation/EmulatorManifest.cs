@@ -1,8 +1,12 @@
 namespace Launcher.Core.Emulation;
 
-public class EmulatorManifest
+public sealed class EmulatorManifest
 {
-    public string Id { get; init; } = "";
-    public string Executable { get; init; } = "";
-    public string[] SupportedExtensions { get; init; } = [];
+    public required string Id { get; init; }
+    public required string DisplayName { get; init; }
+
+    public required string System { get; init; }   // "Nintendo 64"
+    public required string Executable { get; init; }
+
+    public required IReadOnlyList<string> SupportedExtensions { get; init; }
 }

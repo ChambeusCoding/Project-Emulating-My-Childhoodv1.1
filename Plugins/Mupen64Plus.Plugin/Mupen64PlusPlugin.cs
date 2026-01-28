@@ -1,24 +1,26 @@
-using System;
-using System.Threading.Tasks;
 using Launcher.Core.Emulation;
-using Launcher.Core.Games;
 using Launcher.Infrastructure.Linux;
 
 namespace Mupen64Plus.Plugin;
 
-public class Mupen64PlusPlugin : IEmulatorPlugin
+public sealed class Mupen64PlusPlugin : IEmulatorPlugin
 {
-    public string Id => "mupen64plus";
-    public string DisplayName => "Mupen64Plus";
-
-    public bool CanHandle(GameEntry game)
+    public EmulatorManifest Manifest { get; } = new()
     {
-        return game.FilePath.EndsWith(".n64", StringComparison.OrdinalIgnoreCase);
-    }
+        Id = "mupen64plus",
+        DisplayName = "Mupen64Plus",
+        System = "Nintendo 64",
+        Executable = "mupen64plus",
+        SupportedExtensions = new[] { ".n64", ".z64", ".v64" }
+    };
 
-    public Task LaunchAsync(GameEntry game)
+    public Task LaunchAsync(string romPath)
     {
-        ProcessRunner.Run("mupen64plus", $"\"{game.FilePath}\"");
+        ProcessRunner.Run(
+            Manifest.Executable,
+            $"\"{romPath}\""
+        );
+
         return Task.CompletedTask;
     }
 }

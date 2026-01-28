@@ -1,13 +1,8 @@
-using Launcher.Core.Games;
-
 namespace Launcher.Core.Emulation;
 
 public interface IEmulatorPlugin
 {
-    string Id { get; }
-    string DisplayName { get; }
+    EmulatorManifest Manifest { get; }
 
-    bool CanHandle(GameEntry game);
-
-    Task LaunchAsync(GameEntry game);
+    Task LaunchAsync(string romPath);
 }

@@ -1,18 +1,53 @@
-using Launcher.Core.Games;
+using System.Collections.Generic;
 
 namespace Launcher.Core.Emulation;
 
 public class EmulatorManager
 {
-    private readonly IEnumerable<IEmulatorPlugin> _plugins;
+    private readonly Dictionary<string, List<IEmulatorPlugin>> _registry = new();
 
-    public EmulatorManager(IEnumerable<IEmulatorPlugin> plugins)
+    public void Register(IEmulatorPlugin plugin)
     {
-        _plugins = plugins;
+        if (!_registry.ContainsKey(plugin.Manifest.System))
+            _registry[plugin.Manifest.System] = new List<IEmulatorPlugin>();
+
+        _registry[plugin.Manifest.System].Add(plugin);
     }
 
-    public IEmulatorPlugin? FindPlugin(GameEntry game)
+    public IEnumerable<IEmulatorPlugin> GetEmulators(string system)
+        => _registry.TryGetValue(system, out var list) ? list : new List<IEmulatorPlugin>();
+
+    public bool IsSupportedRom(string path)
     {
-        return _plugins.FirstOrDefault(p => p.CanHandle(game));
+        foreach (var emus in _registry.Values)
+        {
+            foreach (var e in emus)
+            {
+                foreach (var ext in e.Manifest.SupportedExtensions)
+                {
+                    if (path.EndsWith(ext, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                }
+            }
+        }
+        return false;
     }
+
+    public IEmulatorPlugin? FindForRom(string path)
+    {
+        foreach (var emus in _registry.Values)
+        {
+            foreach (var e in emus)
+            {
+                foreach (var ext in e.Manifest.SupportedExtensions)
+                {
+                    if (path.EndsWith(ext, StringComparison.OrdinalIgnoreCase))
+                        return e;
+                }
+            }
+        }
+        return null;
+    }
+
+    public IEnumerable<string> RegisteredSystems() => _registry.Keys;
 }

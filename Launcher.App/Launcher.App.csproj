@@ -10,6 +10,16 @@
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.11" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Assets\Shirtfffff.png" />
+    <AvaloniaResource Include="Assets\Shirtfffff.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="EmulatorManager\" />
+    <Folder Include="Plugins\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
