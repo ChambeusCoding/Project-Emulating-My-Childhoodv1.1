@@ -2,7 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="https://github.com/avaloniaui/design"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="clr-namespace:Launcher.App.ViewModels"
         x:Class="Launcher.App.Views.MainWindow"
         Width="1200"
         Height="800"
@@ -11,10 +10,6 @@
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="48"
         mc:Ignorable="d">
-
-    <Window.DataContext>
-        <vm:MainWindowViewModel />
-    </Window.DataContext>
 
     <DockPanel>
 
@@ -25,17 +20,17 @@
                 Padding="12,0">
             <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
 
-                <!-- LEFT: Logo + Title -->
+                <!-- LEFT -->
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="8">
                     <Image Source="avares://Launcher.App/Assets/Shirtfffff.png"
-                           Width="75" Height="75"/>
-                    <TextBlock Text="E.M.Cbetav1.2"
+                           Width="32" Height="32"/>
+                    <TextBlock Text="E.M.C betav1.2"
                                FontSize="16"
                                FontWeight="Bold"
                                VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <!-- CENTER: Search -->
+                <!-- CENTER -->
                 <StackPanel Grid.Column="1"
                             Orientation="Horizontal"
                             HorizontalAlignment="Center"
@@ -43,21 +38,16 @@
                     <Button Content="Scan Games"
                             Margin="0,0,8,0"
                             Command="{Binding ScanGamesCommand}"/>
-                    <Button Content="Settings"
-                            Margin="0,0,16,0"/>
                     <TextBox Width="200"
                              Watermark="Search…"
                              Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
 
-                <!-- RIGHT: Buttons -->
+                <!-- RIGHT -->
                 <StackPanel Grid.Column="2"
                             Orientation="Horizontal"
                             VerticalAlignment="Center">
-                    <Button Content="Plugins" Margin="0,0,8,0"/>
-                    <Button Content="Dev" Margin="0,0,8,0"/>
-                    <Button Content="Help" Margin="0,0,8,0"/>
-                    <Button Content="Discord"/>
+                    <Button Content="Plugins"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -68,48 +58,65 @@
                 Background="#181818"
                 Padding="8">
             <StackPanel>
-                <TextBlock Text="Systems" FontWeight="Bold" Margin="4,4,4,12"/>
-                <ItemsControl Items="{Binding Systems}">
+                <TextBlock Text="Systems"
+                           FontWeight="Bold"
+                           Margin="4,4,4,12"/>
+
+                <ItemsControl ItemsSource="{Binding Systems}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Content="{Binding}" Margin="0,0,0,6"
-                                    Command="{Binding DataContext.SelectSystemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            <Button Content="{Binding}"
+                                    Margin="0,0,0,6"
+                                    HorizontalAlignment="Stretch"
+                                    Background="#2A2A2A"
+                                    Foreground="White"
+                                    CornerRadius="4"
+                                    Padding="10,6"
+                                    Command="{Binding DataContext.SelectSystemCommand,
+                  RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding}"/>
+
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>
         </Border>
 
-        <!-- Main Content: Game Cards -->
+        <!-- Main Content -->
         <ScrollViewer>
-            <WrapPanel Margin="16" ItemWidth="160" ItemHeight="220">
-                <ItemsControl Items="{Binding FilteredGames}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Width="160"
-                                    Height="220"
-                                    Background="#252525"
-                                    CornerRadius="6"
-                                    Margin="0,0,16,16">
-                                <StackPanel>
-                                    <!-- Box Art Placeholder -->
-                                    <Border Height="160" Background="#333">
-                                        <Image Source="{Binding BoxArtPath}" Stretch="UniformToFill"/>
-                                    </Border>
+            <ItemsControl ItemsSource="{Binding FilteredGames}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Margin="16"
+                                   ItemWidth="160"
+                                   ItemHeight="220"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-                                    <TextBlock Text="{Binding Title}" Margin="6" TextWrapping="Wrap"/>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Width="160"
+                                Height="220"
+                                Background="#252525"
+                                CornerRadius="6"
+                                Margin="0,0,16,16">
+                            <StackPanel>
+                                <Border Height="160" Background="#333"/>
 
-                                    <Button Content="Play"
-                                            Margin="6,2,6,0"
-                                            Command="{Binding DataContext.LaunchGameCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                            CommandParameter="{Binding}"/>
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </WrapPanel>
+                                <TextBlock Text="{Binding Title}"
+                                           Margin="6"
+                                           TextWrapping="Wrap"/>
+
+                                <Button Content="Play"
+                                        Margin="6,2,6,0"
+                                        Command="{Binding DataContext.LaunchGameCommand,
+                                                          RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ScrollViewer>
 
     </DockPanel>

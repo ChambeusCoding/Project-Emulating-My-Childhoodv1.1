@@ -3,28 +3,46 @@ using System.Windows.Input;
 
 namespace Launcher.App.Common;
 
-public class RelayCommand<T> : ICommand
+public sealed class RelayCommand : ICommand
 {
-    private readonly Action<T> _execute;
-    private readonly Func<T, bool>? _canExecute;
+    private readonly Action _execute;
 
-    public RelayCommand(Action<T> execute, Func<T, bool>? canExecute = null)
+    public RelayCommand(Action execute)
     {
         _execute = execute;
-        _canExecute = canExecute;
     }
 
-    public bool CanExecute(object? parameter)
+    public bool CanExecute(object? parameter) => true;
+
+    public void Execute(object? parameter) => _execute();
+
+    public event EventHandler? CanExecuteChanged
     {
-        if (_canExecute == null) return true;
-        return parameter is T t && _canExecute(t);
+        add { }
+        remove { }
     }
+}
+
+public sealed class RelayCommand<T> : ICommand
+{
+    private readonly Action<T> _execute;
+
+    public RelayCommand(Action<T> execute)
+    {
+        _execute = execute;
+    }
+
+    public bool CanExecute(object? parameter) => true;
 
     public void Execute(object? parameter)
     {
-        if (parameter is T t)
-            _execute(t);
+        if (parameter is T value)
+            _execute(value);
     }
 
-    public event EventHandler? CanExecuteChanged;
+    public event EventHandler? CanExecuteChanged
+    {
+        add { }
+        remove { }
+    }
 }

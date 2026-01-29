@@ -4,47 +4,46 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-using Launcher.Core.Games;       // GameEntry, GameScanner
-using Launcher.Core.Emulation;   // EmulatorManager
-
+using Launcher.Core.Games;
+using Launcher.Core.Emulation;
+using Launcher.App.Common;
 
 namespace Launcher.App.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public sealed class MainWindowViewModel : ViewModelBase
     {
         private readonly GameScanner _scanner;
         private readonly EmulatorManager _emulators;
 
         public MainWindowViewModel(GameScanner scanner)
         {
-            _scanner = scanner;
-            _emulators = scanner.EmulatorManager; // make EmulatorManager accessible in scanner
+            _scanner = scanner ?? throw new ArgumentNullException(nameof(scanner));
+            _emulators = scanner.EmulatorManager;
 
             Games = new ObservableCollection<GameEntry>();
             FilteredGames = new ObservableCollection<GameEntry>();
             Systems = new ObservableCollection<string>();
 
             ScanGamesCommand = new RelayCommand(ScanGames);
-            SelectSystemCommand = new RelayCommand<string>(system =>
-            {
-                SelectedSystem = system;
-            });
-
-            LaunchGameCommand = new RelayCommand<GameEntry>(async game =>
-            {
-                if (game.EmulatorId == null) return;
-                var emulator = _emulators.GetEmulators(game.System)
-                    .FirstOrDefault(e => e.Manifest.Id == game.EmulatorId);
-                if (emulator != null)
-                    await emulator.LaunchAsync(game.FilePath);
-            });
+            SelectSystemCommand = new RelayCommand<string>(SelectSystem);
+            LaunchGameCommand = new RelayCommand<GameEntry>(
+                game => _ = LaunchGameAsync(game)
+            );
 
             LoadSystems();
         }
 
+        // ========================
+        // Collections
+        // ========================
+
         public ObservableCollection<GameEntry> Games { get; }
         public ObservableCollection<GameEntry> FilteredGames { get; }
         public ObservableCollection<string> Systems { get; }
+
+        // ========================
+        // Properties
+        // ========================
 
         private string _searchText = string.Empty;
         public string SearchText
@@ -52,12 +51,10 @@ namespace Launcher.App.ViewModels
             get => _searchText;
             set
             {
-                if (_searchText != value)
-                {
-                    _searchText = value;
-                    OnPropertyChanged();
-                    ApplyFilters();
-                }
+                if (_searchText == value) return;
+                _searchText = value;
+                OnPropertyChanged();
+                ApplyFilters();
             }
         }
 
@@ -67,45 +64,91 @@ namespace Launcher.App.ViewModels
             get => _selectedSystem;
             set
             {
-                if (_selectedSystem != value)
-                {
-                    _selectedSystem = value;
-                    OnPropertyChanged();
-                    ApplyFilters();
-                }
+                if (_selectedSystem == value) return;
+                _selectedSystem = value;
+                OnPropertyChanged();
+                ApplyFilters();
             }
         }
 
+        // ========================
+        // Commands
+        // ========================
+
+#pragma warning disable CS0414
         public ICommand ScanGamesCommand { get; }
         public ICommand SelectSystemCommand { get; }
         public ICommand LaunchGameCommand { get; }
+#pragma warning restore CS0414
 
-        public void ScanGames()
+
+        // ========================
+        // Command Logic
+        // ========================
+
+        private void ScanGames()
         {
-            // Replace with your actual games folder path
-            string gamesFolder = @"C:\Games";
+            string gamesFolder = "/home/chambeus/Documents/Emulators/N64/";
+
+            Console.WriteLine($"[ScanGames] Scanning folder: {gamesFolder}");
+
+            if (!Directory.Exists(gamesFolder))
+            {
+                Console.WriteLine("[ScanGames] Folder does NOT exist");
+                return;
+            }
 
             Games.Clear();
+            
+            foreach (var file in Directory.EnumerateFiles(gamesFolder))
+            {
+                Console.WriteLine($"[DEBUG] Found file: {file}");
+            }
+
+            int count = 0;
             foreach (var game in _scanner.Scan(gamesFolder))
             {
-                // Make sure System is populated in GameEntry
-                game.System ??= _emulators.FindForRom(game.FilePath)?.Manifest.System ?? "Unknown";
-
-                // Optional: set a placeholder BoxArtPath
+                game.System ??= "Unknown";
                 game.BoxArtPath ??= "avares://Launcher.App/Assets/placeholder.png";
-
                 Games.Add(game);
+                count++;
             }
-            ApplyFilters();
+
+            Console.WriteLine($"[ScanGames] Found {count} games");
         }
+
+
+        private void SelectSystem(string system)
+        {
+            SelectedSystem = system;
+        }
+
+        private async Task LaunchGameAsync(GameEntry game)
+        {
+            if (game?.EmulatorId == null || game.System == null)
+                return;
+
+            var emulator = _emulators
+                .GetEmulators(game.System)
+                .FirstOrDefault(e => e.Manifest.Id == game.EmulatorId);
+
+            if (emulator != null)
+                await emulator.LaunchAsync(game.FilePath);
+        }
+
+        // ========================
+        // Helpers
+        // ========================
 
         private void ApplyFilters()
         {
             FilteredGames.Clear();
+
             foreach (var game in Games)
             {
                 if ((SelectedSystem == "All" || game.System == SelectedSystem) &&
-                    (string.IsNullOrWhiteSpace(SearchText) || game.Title.Contains(SearchText, StringComparison.OrdinalIgnoreCase)))
+                    (string.IsNullOrWhiteSpace(SearchText) ||
+                     game.Title.Contains(SearchText, StringComparison.OrdinalIgnoreCase)))
                 {
                     FilteredGames.Add(game);
                 }
@@ -116,57 +159,9 @@ namespace Launcher.App.ViewModels
         {
             Systems.Clear();
             Systems.Add("All");
+
             foreach (var system in _emulators.RegisteredSystems())
                 Systems.Add(system);
-        }
-    }
-
-    // Simple RelayCommand implementation
-    public class RelayCommand : ICommand
-    {
-        private readonly Action<object?> _execute;
-        private readonly Func<object?, bool>? _canExecute;
-
-        public RelayCommand(Action execute) : this(o => execute(), null) { }
-
-        public RelayCommand(Action<object?> execute, Func<object?, bool>? canExecute = null)
-        {
-            _execute = execute;
-            _canExecute = canExecute;
-        }
-
-        public bool CanExecute(object? parameter) => _canExecute?.Invoke(parameter) ?? true;
-
-        public void Execute(object? parameter) => _execute(parameter);
-
-        public event EventHandler? CanExecuteChanged
-        {
-            add { }   // do nothing
-            remove { } // do nothing
-        }
-
-    }
-
-    public class RelayCommand<T> : ICommand
-    {
-        private readonly Action<T> _execute;
-        private readonly Func<T, bool>? _canExecute;
-
-        public RelayCommand(Action<T> execute, Func<T, bool>? canExecute = null)
-        {
-            _execute = execute;
-            _canExecute = canExecute;
-        }
-
-        public bool CanExecute(object? parameter) => _canExecute?.Invoke((T)parameter!) ?? true;
-
-        public void Execute(object? parameter) => _execute((T)parameter!);
-
-        public event EventHandler? CanExecuteChanged
-        {
-            add { }
-            remove { }
-
         }
     }
 }

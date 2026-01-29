@@ -1,10 +1,11 @@
 namespace Launcher.Core.Games;
 
-public class GameEntry
+public sealed class GameEntry
 {
     public string Title { get; set; } = string.Empty;
     public string FilePath { get; set; } = string.Empty;
-    public string System { get; set; } = string.Empty;
+
+    public string? System { get; set; }
     public string? EmulatorId { get; set; }
-    public string? BoxArtPath { get; set; } // optional for your Phase 3 UI
+    public string? BoxArtPath { get; set; }
 }

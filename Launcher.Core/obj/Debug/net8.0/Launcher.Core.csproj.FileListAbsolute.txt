@@ -10,3 +10,15 @@
 /home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/Debug/net8.0/refint/Launcher.Core.dll
 /home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/Debug/net8.0/Launcher.Core.pdb
 /home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/Debug/net8.0/ref/Launcher.Core.dll
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/bin/Debug/net8.0/Launcher.Core.deps.json
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/bin/Debug/net8.0/Launcher.Core.dll
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/bin/Debug/net8.0/Launcher.Core.pdb
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/Debug/net8.0/Launcher.Core.GeneratedMSBuildEditorConfig.editorconfig
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/Debug/net8.0/Launcher.Core.AssemblyInfoInputs.cache
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/Debug/net8.0/Launcher.Core.AssemblyInfo.cs
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/Debug/net8.0/Launcher.Core.csproj.CoreCompileInputs.cache
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/Debug/net8.0/Launcher.Core.sourcelink.json
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/Debug/net8.0/Launcher.Core.dll
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/Debug/net8.0/refint/Launcher.Core.dll
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/Debug/net8.0/Launcher.Core.pdb
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/Debug/net8.0/ref/Launcher.Core.dll
