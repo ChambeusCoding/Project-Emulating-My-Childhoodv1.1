@@ -1,0 +1,7 @@
+{
+  "id": "mupen64plus",
+  "displayName": "Mupen64Plus",
+  "system": "Nintendo 64",
+  "executable": "mupen64plus",
+  "supportedExtensions": [".n64", ".z64", ".v64"]
+}

@@ -1,0 +1,8 @@
+{
+  "Id": "mupen64plus",
+  "DisplayName": "Mupen64Plus",
+  "System": "Nintendo 64",
+  "Executable": "/usr/games/mupen64plus",
+  "SupportedExtensions": [".n64", ".z64", ".v64"]
+}
+

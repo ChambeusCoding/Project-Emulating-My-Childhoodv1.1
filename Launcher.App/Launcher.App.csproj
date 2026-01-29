@@ -13,11 +13,12 @@
   <ItemGroup>
     <None Remove="Assets\Shirtfffff.png" />
     <AvaloniaResource Include="Assets\Shirtfffff.png" />
+    <None Include="bin\Debug\net8.0\Plugins\Mupen64Plus\plugin.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="EmulatorManager\" />
-    <Folder Include="Plugins\" />
+    <Folder Include="Plugins\Mupen64Plus\" />
   </ItemGroup>
 
   <PropertyGroup>

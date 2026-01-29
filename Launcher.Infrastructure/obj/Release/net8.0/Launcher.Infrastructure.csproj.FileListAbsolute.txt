@@ -1,0 +1,16 @@
+/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/bin/Release/net8.0/Launcher.Infrastructure.deps.json
+/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/bin/Release/net8.0/Launcher.Infrastructure.dll
+/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/bin/Release/net8.0/Launcher.Infrastructure.pdb
+/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/bin/Release/net8.0/Launcher.Core.dll
+/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/bin/Release/net8.0/Launcher.Core.pdb
+/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/obj/Release/net8.0/Launcher.Infrastructure.csproj.AssemblyReference.cache
+/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/obj/Release/net8.0/Launcher.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/obj/Release/net8.0/Launcher.Infrastructure.AssemblyInfoInputs.cache
+/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/obj/Release/net8.0/Launcher.Infrastructure.AssemblyInfo.cs
+/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/obj/Release/net8.0/Launcher.Infrastructure.csproj.CoreCompileInputs.cache
+/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/obj/Release/net8.0/Launcher.Infrastructure.sourcelink.json
+/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/obj/Release/net8.0/Launcher.Infrastructure.csproj.CopyComplete
+/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/obj/Release/net8.0/Launcher.Infrastructure.dll
+/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/obj/Release/net8.0/refint/Launcher.Infrastructure.dll
+/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/obj/Release/net8.0/Launcher.Infrastructure.pdb
+/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/obj/Release/net8.0/ref/Launcher.Infrastructure.dll

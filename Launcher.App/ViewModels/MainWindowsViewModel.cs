@@ -88,34 +88,35 @@ namespace Launcher.App.ViewModels
 
         private void ScanGames()
         {
-            string gamesFolder = "/home/chambeus/Documents/Emulators/N64/";
-
-            Console.WriteLine($"[ScanGames] Scanning folder: {gamesFolder}");
-
-            if (!Directory.Exists(gamesFolder))
+            var gameFolders = new[]
             {
-                Console.WriteLine("[ScanGames] Folder does NOT exist");
-                return;
-            }
+                "/home/chambeus/Documents/Emulators/N64",
+                "/home/chambersj/Documents/Emulators/N64",
+            };
 
             Games.Clear();
-            
-            foreach (var file in Directory.EnumerateFiles(gamesFolder))
+
+            foreach (var folder in gameFolders)
             {
-                Console.WriteLine($"[DEBUG] Found file: {file}");
+                Console.WriteLine($"[ScanGames] Scanning folder: {folder}");
+
+                if (!Directory.Exists(folder))
+                {
+                    Console.WriteLine($"[ScanGames] Folder does not exist: {folder}");
+                    continue;
+                }
+
+                foreach (var game in _scanner.Scan(folder))
+                {
+                    game.System ??= "Unknown";
+                    game.BoxArtPath ??= "avares://Launcher.App/Assets/placeholder.png";
+                    Games.Add(game);
+                }
             }
 
-            int count = 0;
-            foreach (var game in _scanner.Scan(gamesFolder))
-            {
-                game.System ??= "Unknown";
-                game.BoxArtPath ??= "avares://Launcher.App/Assets/placeholder.png";
-                Games.Add(game);
-                count++;
-            }
-
-            Console.WriteLine($"[ScanGames] Found {count} games");
+            ApplyFilters();
         }
+
 
 
         private void SelectSystem(string system)

@@ -12,13 +12,17 @@ public class EmulatorManager
     // Register a new emulator plugin
     public void Register(IEmulatorPlugin plugin)
     {
+        Console.WriteLine($"[EMULATOR MANAGER] Registering plugin:");
+        Console.WriteLine($"  Id: {plugin.Manifest.Id}");
+        Console.WriteLine($"  System: {plugin.Manifest.System}");
+        Console.WriteLine($"  Extensions: {string.Join(", ", plugin.Manifest.SupportedExtensions)}");
+
         if (!_registry.ContainsKey(plugin.Manifest.System))
             _registry[plugin.Manifest.System] = new List<IEmulatorPlugin>();
 
         _registry[plugin.Manifest.System].Add(plugin);
-
-        Console.WriteLine($"Registered emulator: {plugin.Manifest.DisplayName} for system {plugin.Manifest.System}");
     }
+
 
     // Get all emulators for a system
     public IEnumerable<IEmulatorPlugin> GetEmulators(string system)
@@ -27,33 +31,34 @@ public class EmulatorManager
     // Check if a ROM is supported by any registered emulator
     public bool IsSupportedRom(string path)
     {
-        if (string.IsNullOrWhiteSpace(path))
-        {
-            Console.WriteLine("[DEBUG] Path is null or empty");
-            return false;
-        }
+        var ext = Path.GetExtension(path).ToLowerInvariant();
 
-        var ext = Path.GetExtension(path).ToLowerInvariant(); // normalize extension
-        Console.WriteLine($"[DEBUG] Checking file: {path}, extracted extension: {ext}");
+        Console.WriteLine($"[CHECK] ROM: {path}");
+        Console.WriteLine($"[CHECK] Extension: {ext}");
 
-        foreach (var plugins in _registry.Values)
+        foreach (var (system, plugins) in _registry)
         {
+            Console.WriteLine($"[CHECK] System registered: {system}");
+
             foreach (var plugin in plugins)
             {
-                Console.WriteLine($"[DEBUG] Checking against emulator: {plugin.Manifest.DisplayName}");
-                Console.WriteLine($"[DEBUG] Supported extensions: {string.Join(", ", plugin.Manifest.SupportedExtensions)}");
+                Console.WriteLine(
+                    $"[CHECK] Plugin {plugin.Manifest.Id} supports: {string.Join(", ", plugin.Manifest.SupportedExtensions)}"
+                );
 
-                if (plugin.Manifest.SupportedExtensions.Contains(ext))
+                if (plugin.Manifest.SupportedExtensions
+                    .Any(e => e.Equals(ext, StringComparison.OrdinalIgnoreCase)))
                 {
-                    Console.WriteLine($"[DEBUG] Match found! File {path} is supported by {plugin.Manifest.DisplayName}");
+                    Console.WriteLine("[CHECK] ✅ Supported!");
                     return true;
                 }
             }
         }
 
-        Console.WriteLine($"[DEBUG] No emulator supports the file: {path}");
+        Console.WriteLine("[CHECK] ❌ No emulator supports this ROM");
         return false;
     }
+
 
 
 

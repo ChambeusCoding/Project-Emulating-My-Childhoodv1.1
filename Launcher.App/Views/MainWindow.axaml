@@ -2,14 +2,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="https://github.com/avaloniaui/design"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:Launcher.App.ViewModels"
         x:Class="Launcher.App.Views.MainWindow"
         Width="1200"
         Height="800"
         Background="#121212"
+        Title="RetroRunner beta 2.1"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="48"
         mc:Ignorable="d">
+
 
     <DockPanel>
 
@@ -24,7 +27,7 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="8">
                     <Image Source="avares://Launcher.App/Assets/Shirtfffff.png"
                            Width="32" Height="32"/>
-                    <TextBlock Text="E.M.C betav1.2"
+                    <TextBlock Text="RetroRunner beta 2.1"
                                FontSize="16"
                                FontWeight="Bold"
                                VerticalAlignment="Center"/>

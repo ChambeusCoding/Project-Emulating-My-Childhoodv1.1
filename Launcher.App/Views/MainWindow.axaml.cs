@@ -16,12 +16,27 @@ public partial class MainWindow : Window
 
         // 2️⃣ Load all plugins from Plugins folder
         var pluginsPath = Path.Combine(AppContext.BaseDirectory, "Plugins");
+        Console.WriteLine($"[DEBUG] Loading plugins from {pluginsPath}");
+
         if (Directory.Exists(pluginsPath))
         {
             foreach (var plugin in PluginLoader.LoadPlugins(pluginsPath))
             {
+                Console.WriteLine(
+                    $"[DEBUG] Registering plugin: {plugin.Manifest.DisplayName} ({plugin.Manifest.System})");
                 emulatorManager.Register(plugin);
             }
+        }
+        else
+        {
+            Console.WriteLine($"[DEBUG] Plugins folder does not exist!");
+        }
+
+        // 2.1️⃣ Debug: list all registered systems
+        Console.WriteLine("[DEBUG] Registered Systems:");
+        foreach (var sys in emulatorManager.RegisteredSystems())
+        {
+            Console.WriteLine($" - {sys}");
         }
 
         // 3️⃣ Create the GameScanner
