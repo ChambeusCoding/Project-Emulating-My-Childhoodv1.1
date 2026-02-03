@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Launcher.Core\Launcher.Core.csproj" />
-    <ProjectReference Include="..\..\Launcher.Infrastructure\Launcher.Infrastructure.csproj" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Mupen64Plus.Plugin</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../Launcher.Core/Launcher.Core.csproj" />
+    <ProjectReference Include="../../Launcher.Infrastructure/Launcher.Infrastructure.csproj" />
+  </ItemGroup>
 
 </Project>

@@ -1,16 +1,22 @@
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Launcher.Infrastructure.Linux;
 
 public static class ProcessRunner
 {
-    public static void Run(string executable, string args)
+    public static Task RunAsync(string file, string args = "")
     {
-        Process.Start(new ProcessStartInfo
+        var psi = new ProcessStartInfo
         {
-            FileName = executable,
+            FileName = file,
             Arguments = args,
-            UseShellExecute = false
-        });
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true
+        };
+
+        var process = Process.Start(psi)!;
+        return process.WaitForExitAsync();
     }
 }

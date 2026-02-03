@@ -1,0 +1,12 @@
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/bin/Debug/net8.0/SNESx9.Plugin.deps.json
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/bin/Debug/net8.0/SNESx9.Plugin.dll
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/bin/Debug/net8.0/SNESx9.Plugin.pdb
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/obj/Debug/net8.0/SNESx9.Plugin.GeneratedMSBuildEditorConfig.editorconfig
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/obj/Debug/net8.0/SNESx9.Plugin.AssemblyInfoInputs.cache
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/obj/Debug/net8.0/SNESx9.Plugin.AssemblyInfo.cs
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/obj/Debug/net8.0/SNESx9.Plugin.csproj.CoreCompileInputs.cache
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/obj/Debug/net8.0/SNESx9.Plugin.sourcelink.json
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/obj/Debug/net8.0/SNESx9.Plugin.dll
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/obj/Debug/net8.0/refint/SNESx9.Plugin.dll
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/obj/Debug/net8.0/SNESx9.Plugin.pdb
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/obj/Debug/net8.0/ref/SNESx9.Plugin.dll

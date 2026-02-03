@@ -1,0 +1,12 @@
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/MelonDS.Plugin/bin/Debug/net8.0/MelonDS.Plugin.deps.json
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/MelonDS.Plugin/bin/Debug/net8.0/MelonDS.Plugin.dll
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/MelonDS.Plugin/bin/Debug/net8.0/MelonDS.Plugin.pdb
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/MelonDS.Plugin/obj/Debug/net8.0/MelonDS.Plugin.GeneratedMSBuildEditorConfig.editorconfig
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/MelonDS.Plugin/obj/Debug/net8.0/MelonDS.Plugin.AssemblyInfoInputs.cache
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/MelonDS.Plugin/obj/Debug/net8.0/MelonDS.Plugin.AssemblyInfo.cs
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/MelonDS.Plugin/obj/Debug/net8.0/MelonDS.Plugin.csproj.CoreCompileInputs.cache
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/MelonDS.Plugin/obj/Debug/net8.0/MelonDS.Plugin.sourcelink.json
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/MelonDS.Plugin/obj/Debug/net8.0/MelonDS.Plugin.dll
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/MelonDS.Plugin/obj/Debug/net8.0/refint/MelonDS.Plugin.dll
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/MelonDS.Plugin/obj/Debug/net8.0/MelonDS.Plugin.pdb
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/MelonDS.Plugin/obj/Debug/net8.0/ref/MelonDS.Plugin.dll

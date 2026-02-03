@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "/home/chambersj/.nuget/packages/": {}
+    "/home/chambeus/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj",
+      "projectUniqueName": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj",
       "projectName": "Launcher.Core",
-      "projectPath": "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj",
-      "packagesPath": "/home/chambersj/.nuget/packages/",
-      "outputPath": "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/",
+      "projectPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj",
+      "packagesPath": "/home/chambeus/.nuget/packages/",
+      "outputPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/chambersj/.nuget/NuGet/NuGet.Config"
+        "/home/chambeus/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"

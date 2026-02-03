@@ -90,8 +90,8 @@ namespace Launcher.App.ViewModels
         {
             var gameFolders = new[]
             {
-                "/home/chambeus/Documents/Emulators/N64",
-                "/home/chambersj/Documents/Emulators/N64",
+                "/home/chambeus/Documents/ROMs",
+                "/home/chambersj/Documents/ROMs",
             };
 
             Games.Clear();
