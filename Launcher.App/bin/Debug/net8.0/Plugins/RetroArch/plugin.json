@@ -1,7 +1,0 @@
-{
-  "Id": "retroarch",
-  "DisplayName": "RetroArch",
-  "System": "Nintendo 3DS",
-  "Executable": "/usr/games/retroarch",
-  "SupportedExtensions": [".3ds", ".cia", ".cci"]
-}

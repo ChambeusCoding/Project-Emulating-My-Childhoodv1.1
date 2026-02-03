@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Launcher.Core.Emulation;
-using Launcher.Infrastructure.Linux;
+using Launcher.Infrastructure;
 
 namespace Mupen64Plus.Plugin
 {
@@ -12,14 +12,20 @@ namespace Mupen64Plus.Plugin
 
         public Mupen64PlusPlugin()
         {
-            // Dynamically get the user's home directory
             string homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-            // Standard Linux path for Mupen64Plus inside ~/.local/share/emulators/mupen64plus
-            string defaultExecutable = Path.Combine(homeDir, ".local", "share", "emulators", "mupen64plus", "mupen64plus");
+            string defaultExecutable = Path.Combine(
+                homeDir,
+                ".local",
+                "share",
+                "emulators",
+                "mupen64plus",
+                "mupen64plus"
+            );
 
-            // If it exists, use it; otherwise, fall back to just "mupen64plus" (must be in PATH)
-            string executablePath = File.Exists(defaultExecutable) ? defaultExecutable : "mupen64plus";
+            string executablePath = File.Exists(defaultExecutable)
+                ? defaultExecutable
+                : "mupen64plus";
 
             Manifest = new EmulatorManifest
             {
@@ -38,7 +44,7 @@ namespace Mupen64Plus.Plugin
             Console.WriteLine("[PLUGIN] Mupen64PlusPlugin constructed");
             Console.WriteLine($"[PLUGIN] System: {Manifest.System}");
             Console.WriteLine($"[PLUGIN] Extensions: {string.Join(", ", Manifest.SupportedExtensions)}");
-            Console.WriteLine($"[PLUGIN] Executable: {Manifest.Executable}");
+            Console.WriteLine($"[PLUGIN] Executable (raw): {Manifest.Executable}");
         }
 
         public async Task LaunchAsync(string romPath)
@@ -53,12 +59,24 @@ namespace Mupen64Plus.Plugin
 
             try
             {
-                await ProcessRunner.RunAsync(Manifest.Executable, $"\"{romPath}\"");
-                Console.WriteLine("[PLUGIN] Mupen64Plus process started successfully");
+                // Resolve executable per-OS (Linux PATH / Windows .exe)
+                string resolvedExecutable =
+                    PlatformServices.PathResolver.ResolveExecutable(Manifest.Executable);
+
+                Console.WriteLine($"[PLUGIN] Resolved executable: {resolvedExecutable}");
+                Console.WriteLine($"[PLUGIN] Arguments: \"{romPath}\"");
+
+                int exitCode = await PlatformServices.ProcessRunner.RunAsync(
+                    resolvedExecutable,
+                    $"\"{romPath}\""
+                );
+
+                Console.WriteLine($"[PLUGIN] Mupen64Plus exited with code {exitCode}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[PLUGIN] Failed to launch Mupen64Plus: {ex.Message}");
+                Console.WriteLine($"[PLUGIN] Failed to launch Mupen64Plus");
+                Console.WriteLine($"[PLUGIN] Exception: {ex}");
             }
         }
     }
