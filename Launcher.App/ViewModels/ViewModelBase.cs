@@ -1,4 +1,3 @@
-// Launcher.App/ViewModels/ViewModelBase.cs
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 

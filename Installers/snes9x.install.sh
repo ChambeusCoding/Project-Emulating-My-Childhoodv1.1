@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
+#!/usr/bin/env bash
 set -e
+
+if [[ "$EUID" -ne 0 ]]; then
+    echo "Re-launching installer with admin privileges..."
+    exec pkexec bash "$0" "$@"
+fi
+
 
 echo "🟢 Installing SNES9x..."
 

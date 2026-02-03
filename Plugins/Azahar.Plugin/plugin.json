@@ -1,0 +1,7 @@
+{
+  "id": "azahar",
+  "displayName": "Azahar",
+  "system": "Nintendo 3DS",
+  "executable": "azahar",
+  "supportedExtensions": [".3ds", ".cia", ".cci"]
+}

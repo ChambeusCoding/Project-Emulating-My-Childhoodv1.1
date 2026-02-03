@@ -17,11 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="EmulatorManager\" />
-    <Folder Include="Plugins\Mupen64Plus\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Content Include="bin\Debug\net8.0\Plugins\Azahar\Azahar.Plugin.deps.json" />
+    <Content Include="bin\Debug\net8.0\Plugins\Azahar\Azahar.Plugin.dll" />
+    <Content Include="bin\Debug\net8.0\Plugins\Azahar\Azahar.Plugin.pdb" />
+    <Content Include="bin\Debug\net8.0\Plugins\Azahar\manifest.json" />
+    <Content Include="bin\Debug\net8.0\Plugins\Azahar\plugin.json" />
     <Content Include="bin\Debug\net8.0\Plugins\Citra3DS\Citra3DS.Plugin.deps.json" />
     <Content Include="bin\Debug\net8.0\Plugins\Citra3DS\Citra3DS.Plugin.dll" />
     <Content Include="bin\Debug\net8.0\Plugins\Citra3DS\Citra3DS.Plugin.pdb" />

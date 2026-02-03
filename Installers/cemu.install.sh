@@ -1,17 +1,24 @@
 #!/usr/bin/env bash
+#!/usr/bin/env bash
 set -e
+
+if [[ "$EUID" -ne 0 ]]; then
+    echo "Re-launching installer with admin privileges..."
+    exec pkexec bash "$0" "$@"
+fi
+
 
 EMULATOR_NAME="Cemu"
 INSTALL_DIR="$HOME/.local/share/emulators/Cemu"
 BIN_DIR="$HOME/.local/bin"
 APPIMAGE_NAME="Cemu.AppImage"
 
-# CHANGE THIS to the real URL you use
+
 CEMU_URL="https://example.com/Cemu.AppImage"
 
 echo "🟢 Installing Cemu..."
 
-# Already installed?
+
 if [ -f "$BIN_DIR/cemu" ]; then
   echo "✅ Cemu already installed"
   exit 0

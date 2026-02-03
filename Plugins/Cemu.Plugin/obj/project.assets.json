@@ -1,0 +1,111 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0": {
+      "Launcher.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Launcher.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Launcher.Core.dll": {}
+        }
+      },
+      "Launcher.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Launcher.Core": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Launcher.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Launcher.Infrastructure.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Launcher.Core/1.0.0": {
+      "type": "project",
+      "path": "../../Launcher.Core/Launcher.Core.csproj",
+      "msbuildProject": "../../Launcher.Core/Launcher.Core.csproj"
+    },
+    "Launcher.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../../Launcher.Infrastructure/Launcher.Infrastructure.csproj",
+      "msbuildProject": "../../Launcher.Infrastructure/Launcher.Infrastructure.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net8.0": [
+      "Launcher.Core >= 1.0.0",
+      "Launcher.Infrastructure >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "/home/chambersj/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Plugins/Cemu.Plugin/Cemu.Plugin.csproj",
+      "projectName": "Cemu.Plugin",
+      "projectPath": "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Plugins/Cemu.Plugin/Cemu.Plugin.csproj",
+      "packagesPath": "/home/chambersj/.nuget/packages/",
+      "outputPath": "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Plugins/Cemu.Plugin/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/home/chambersj/.nuget/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {
+            "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj": {
+              "projectPath": "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj"
+            },
+            "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj": {
+              "projectPath": "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net8.0": {
+        "targetAlias": "net8.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.122/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

@@ -9,7 +9,7 @@ public class EmulatorManager
 {
     private readonly Dictionary<string, List<IEmulatorPlugin>> _registry = new();
 
-    // Register a new emulator plugin
+
     public void Register(IEmulatorPlugin plugin)
     {
         Console.WriteLine($"[EMULATOR MANAGER] Registering plugin:");
@@ -24,11 +24,11 @@ public class EmulatorManager
     }
 
 
-    // Get all emulators for a system
+
     public IEnumerable<IEmulatorPlugin> GetEmulators(string system)
         => _registry.TryGetValue(system, out var list) ? list : Enumerable.Empty<IEmulatorPlugin>();
 
-    // Check if a ROM is supported by any registered emulator
+
     public bool IsSupportedRom(string path)
     {
         var ext = Path.GetExtension(path).ToLowerInvariant();
@@ -62,7 +62,7 @@ public class EmulatorManager
 
 
 
-    // Find the first emulator that can run this ROM
+
     public IEmulatorPlugin? FindForRom(string path)
     {
         var ext = Path.GetExtension(path).ToLowerInvariant();
@@ -77,6 +77,6 @@ public class EmulatorManager
         return null;
     }
 
-    // List all registered systems
+
     public IEnumerable<string> RegisteredSystems() => _registry.Keys;
 }

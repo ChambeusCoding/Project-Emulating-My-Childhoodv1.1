@@ -33,17 +33,13 @@ namespace Launcher.App.ViewModels
             LoadSystems();
         }
 
-        // ========================
-        // Collections
-        // ========================
+
 
         public ObservableCollection<GameEntry> Games { get; }
         public ObservableCollection<GameEntry> FilteredGames { get; }
         public ObservableCollection<string> Systems { get; }
 
-        // ========================
-        // Properties
-        // ========================
+
 
         private string _searchText = string.Empty;
         public string SearchText
@@ -71,9 +67,7 @@ namespace Launcher.App.ViewModels
             }
         }
 
-        // ========================
-        // Commands
-        // ========================
+
 
 #pragma warning disable CS0414
         public ICommand ScanGamesCommand { get; }
@@ -82,9 +76,7 @@ namespace Launcher.App.ViewModels
 #pragma warning restore CS0414
 
 
-        // ========================
-        // Command Logic
-        // ========================
+
 
         private void ScanGames()
         {
@@ -137,9 +129,6 @@ namespace Launcher.App.ViewModels
                 await emulator.LaunchAsync(game.FilePath);
         }
 
-        // ========================
-        // Helpers
-        // ========================
 
         private void ApplyFilters()
         {
