@@ -4,6 +4,6 @@
   "DisplayName": "azahar",
   "System": "Nintendo 3DS",
   "SupportedExtensions": [".3ds", ".cia", ".cci"],
-  "Executable": "Azahar.AppImage",
+  "Executable": "azahar-wayland.AppImage",
   "Args": ["{rom}"]
 }

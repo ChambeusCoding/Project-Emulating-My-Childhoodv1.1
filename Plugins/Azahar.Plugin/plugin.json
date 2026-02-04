@@ -1,7 +1,7 @@
 {
-  "id": "azahar",
-  "displayName": "Azahar",
+  "id": "azahar-wayland",
+  "displayName": "Azahar-Wayland",
   "system": "Nintendo 3DS",
-  "executable": "azahar",
+  "executable": "azahar-wayland",
   "supportedExtensions": [".3ds", ".cia", ".cci"]
 }

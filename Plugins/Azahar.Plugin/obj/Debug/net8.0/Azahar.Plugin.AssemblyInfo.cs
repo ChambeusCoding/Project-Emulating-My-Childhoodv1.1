@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Azahar.Plugin")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+994561b67ff30b03c6ba8320ad93d47dcd2e2eab")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+90f3c3fda4f9156e7fb450b775ad4cab9a7bdb1e")]
 [assembly: System.Reflection.AssemblyProductAttribute("Azahar.Plugin")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Azahar.Plugin")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

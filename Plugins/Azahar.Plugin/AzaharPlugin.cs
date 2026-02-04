@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Launcher.Core.Emulation;
 using Launcher.Infrastructure;
@@ -12,19 +13,41 @@ namespace Azahar.Plugin
 
         public AzaharPlugin()
         {
-            string homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string azaharDir = Path.Combine(homeDir, ".local", "share", "emulators", "Azahar");
-            string appImage = Directory.GetFiles(azaharDir, "*AppImage", SearchOption.TopDirectoryOnly)
-                .FirstOrDefault() ?? string.Empty;
+            string homeDir =
+                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-            string executablePath = !string.IsNullOrEmpty(appImage) && File.Exists(appImage)
-                ? appImage
-                : "azahar"; // fallback if it is in PATH
+            string[] searchDirs =
+            {
+                Path.Combine(homeDir, ".local", "share", "emulators", "azahar"),
+                Path.Combine(homeDir, "Downloads")
+            };
+
+            string appImage =
+                searchDirs
+                    .Where(Directory.Exists)
+                    .SelectMany(d =>
+                        Directory.GetFiles(d, "azahar*.AppImage", SearchOption.TopDirectoryOnly)
+                    )
+                    .OrderByDescending(File.GetLastWriteTimeUtc)
+                    .FirstOrDefault()
+                ?? string.Empty;
+
+            string executablePath;
+
+            if (!string.IsNullOrEmpty(appImage) && File.Exists(appImage))
+            {
+                executablePath = appImage;
+            }
+            else
+            {
+                // FINAL fallback — only works if user actually installed it in PATH
+                executablePath = "azahar";
+            }
 
             Manifest = new EmulatorManifest
             {
                 Id = "azahar",
-                DisplayName = "Azahar (3DS)",
+                DisplayName = "Azahar (Nintendo 3DS)",
                 System = "Nintendo 3DS",
                 Executable = executablePath,
                 SupportedExtensions = new[]
@@ -36,9 +59,7 @@ namespace Azahar.Plugin
             };
 
             Console.WriteLine("[PLUGIN] AzaharPlugin constructed");
-            Console.WriteLine($"[PLUGIN] System: {Manifest.System}");
-            Console.WriteLine($"[PLUGIN] Extensions: {string.Join(", ", Manifest.SupportedExtensions)}");
-            Console.WriteLine($"[PLUGIN] Raw Executable: {Manifest.Executable}");
+            Console.WriteLine($"[PLUGIN] Raw executable: {Manifest.Executable}");
         }
 
         public async Task LaunchAsync(string romPath)
@@ -49,22 +70,27 @@ namespace Azahar.Plugin
                 return;
             }
 
-            string resolved = PlatformServices.PathResolver.ResolveExecutable(Manifest.Executable);
-
-            Console.WriteLine($"[PLUGIN] Launching AZAHAR: {resolved} \"{romPath}\"");
-
             try
             {
-                int exitCode = await PlatformServices.ProcessRunner.RunAsync(
+                string resolved =
+                    PlatformServices.PathResolver.ResolveExecutable(
+                        Manifest.Executable
+                    );
+
+                Console.WriteLine("[PLUGIN] Launching Azahar");
+                Console.WriteLine($"  Exec: {resolved}");
+                Console.WriteLine($"  ROM : {romPath}");
+
+                await PlatformServices.ProcessRunner.RunAsync(
                     resolved,
                     $"\"{romPath}\""
                 );
-
-                Console.WriteLine($"[PLUGIN] Azahar exited with code {exitCode}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("[PLUGIN] Failed to launch Azahar");
+                Console.WriteLine("[PLUGIN] ❌ Failed to launch Azahar");
+                Console.WriteLine("Make sure the AppImage is executable:");
+                Console.WriteLine("  chmod +x azahar*.AppImage");
                 Console.WriteLine(ex);
             }
         }
