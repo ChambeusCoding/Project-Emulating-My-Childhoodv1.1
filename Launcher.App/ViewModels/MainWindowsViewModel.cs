@@ -15,6 +15,36 @@ namespace Launcher.App.ViewModels
         private readonly GameScanner _scanner;
         private readonly EmulatorManager _emulators;
 
+        private string _terminalOutput = "";
+        public string TerminalOutput
+        {
+            get => _terminalOutput;
+            set
+            {
+                if (_terminalOutput == value) return;
+                _terminalOutput = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _terminalInput = "";
+        public string TerminalInput
+        {
+            get => _terminalInput;
+            set
+            {
+                if (_terminalInput == value) return;
+                _terminalInput = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        public void AppendTerminal(string line)
+        {
+            TerminalOutput += line + Environment.NewLine;
+        }
+
         public MainWindowViewModel(GameScanner scanner)
         {
             _scanner = scanner ?? throw new ArgumentNullException(nameof(scanner));
@@ -33,13 +63,9 @@ namespace Launcher.App.ViewModels
             LoadSystems();
         }
 
-
-
         public ObservableCollection<GameEntry> Games { get; }
         public ObservableCollection<GameEntry> FilteredGames { get; }
         public ObservableCollection<string> Systems { get; }
-
-
 
         private string _searchText = string.Empty;
         public string SearchText
@@ -67,16 +93,11 @@ namespace Launcher.App.ViewModels
             }
         }
 
-
-
 #pragma warning disable CS0414
         public ICommand ScanGamesCommand { get; }
         public ICommand SelectSystemCommand { get; }
         public ICommand LaunchGameCommand { get; }
 #pragma warning restore CS0414
-
-
-
 
         private void ScanGames()
         {
@@ -90,13 +111,8 @@ namespace Launcher.App.ViewModels
 
             foreach (var folder in gameFolders)
             {
-                Console.WriteLine($"[ScanGames] Scanning folder: {folder}");
-
-                if (!Directory.Exists(folder))
-                {
-                    Console.WriteLine($"[ScanGames] Folder does not exist: {folder}");
+                if (!System.IO.Directory.Exists(folder))
                     continue;
-                }
 
                 foreach (var game in _scanner.Scan(folder))
                 {
@@ -108,8 +124,6 @@ namespace Launcher.App.ViewModels
 
             ApplyFilters();
         }
-
-
 
         private void SelectSystem(string system)
         {
@@ -128,7 +142,6 @@ namespace Launcher.App.ViewModels
             if (emulator != null)
                 await emulator.LaunchAsync(game.FilePath);
         }
-
 
         private void ApplyFilters()
         {

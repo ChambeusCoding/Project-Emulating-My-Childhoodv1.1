@@ -1,52 +1,42 @@
-#!/bin/bash
 #!/usr/bin/env bash
 set -e
 
 if [[ "$EUID" -ne 0 ]]; then
-    echo "Re-launching installer with admin privileges..."
     exec pkexec bash "$0" "$@"
 fi
 
+REAL_USER_HOME=$(getent passwd "$SUDO_USER" | cut -d: -f6)
+APPDIR="$REAL_USER_HOME/.local/share/emulators/Azahar"
+BIN="$REAL_USER_HOME/.local/bin"
 
-APPDIR="$HOME/.local/share/emulators/Azahar"
+echo "🟢 Installing Azahar..."
 
-echo "Installing Azahar emulator..."
+apt update
+apt install -y curl wget jq fuse libfuse2 || true
 
-# Create install directory
 mkdir -p "$APPDIR"
 cd "$APPDIR"
 
-RELEASES_JSON=$(curl -s "https://api.github.com/repos/azahar-emu/azahar/releases")
-URL=$(echo "$RELEASES_JSON" \
-    | grep browser_download_url \
-    | grep -i AppImage \
-    | head -n 1 \
-    | cut -d '"' -f 4)
+echo "🔍 Fetching Azahar releases..."
 
+URL=$(curl -s https://api.github.com/repos/azahar-emu/azahar/releases \
+  | jq -r '.[].assets[].browser_download_url' \
+  | grep -i appimage \
+  | head -n 1)
 
-if [ -z "$URL" ]; then
-    echo "❌ No AppImage release found!"
+if [[ -z "$URL" ]]; then
+    echo "❌ No Azahar AppImage found"
     exit 1
 fi
 
-echo "Found latest Azahar AppImage: $URL"
-
-# Download
 FILENAME=$(basename "$URL")
-echo "Downloading $FILENAME..."
-wget -q "$URL" -O "$FILENAME"
 
-# Make executable
+echo "⬇ Downloading $FILENAME"
+wget -q "$URL" -O "$FILENAME"
 chmod +x "$FILENAME"
 
-echo "Azahar AppImage downloaded and made executable at $APPDIR/$FILENAME"
+mkdir -p "$BIN"
+ln -sf "$APPDIR/$FILENAME" "$BIN/azahar"
 
-# Optional: create a symlink in ~/.local/bin
-if [ -d "$HOME/.local/bin" ]; then
-    ln -sf "$APPDIR/$FILENAME" "$HOME/.local/bin/azahar"
-    echo "Symlink created: azahar -> ~/.local/bin"
-else
-    echo "Note: ~/.local/bin not found. You can run Azahar directly from $APPDIR"
-fi
-
-echo "Azahar installation completed!"
+echo "✅ Azahar installed"
+echo "➡ $BIN/azahar"
