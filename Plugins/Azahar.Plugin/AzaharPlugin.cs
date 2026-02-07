@@ -40,7 +40,7 @@ namespace Azahar.Plugin
             }
             else
             {
-                // FINAL fallback — only works if user actually installed it in PATH
+                // Fallback — only works if user actually installed it in PATH
                 executablePath = "azahar";
             }
 
@@ -62,6 +62,26 @@ namespace Azahar.Plugin
             Console.WriteLine($"[PLUGIN] Raw executable: {Manifest.Executable}");
         }
 
+        // NEW: used by your ViewModel to run Azahar and capture stdout/stderr
+        public (string Executable, string Arguments) BuildLaunchCommand(string romPath)
+        {
+            if (string.IsNullOrWhiteSpace(romPath))
+                throw new ArgumentException("ROM path must not be empty.", nameof(romPath));
+
+            // Resolve executable (AppImage path or PATH)
+            string resolved =
+                PlatformServices.PathResolver.ResolveExecutable(
+                    Manifest.Executable
+                );
+
+            string args = $"\"{romPath}\"";
+
+            Console.WriteLine($"[PLUGIN] BuildLaunchCommand: exe='{resolved}', args={args}");
+
+            return (resolved, args);
+        }
+
+        // Kept for other callers; now delegates to BuildLaunchCommand
         public async Task LaunchAsync(string romPath)
         {
             if (!File.Exists(romPath))
@@ -72,10 +92,7 @@ namespace Azahar.Plugin
 
             try
             {
-                string resolved =
-                    PlatformServices.PathResolver.ResolveExecutable(
-                        Manifest.Executable
-                    );
+                var (resolved, args) = BuildLaunchCommand(romPath);
 
                 Console.WriteLine("[PLUGIN] Launching Azahar");
                 Console.WriteLine($"  Exec: {resolved}");
@@ -83,7 +100,7 @@ namespace Azahar.Plugin
 
                 await PlatformServices.ProcessRunner.RunAsync(
                     resolved,
-                    $"\"{romPath}\""
+                    args
                 );
             }
             catch (Exception ex)

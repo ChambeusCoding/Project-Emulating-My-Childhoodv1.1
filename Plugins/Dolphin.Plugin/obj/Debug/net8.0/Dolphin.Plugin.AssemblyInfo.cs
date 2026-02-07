@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Dolphin.Plugin")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ff4649177868f782e81596548db110a43b6eb6e8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6b024287b109c9a4e02839e40e6035669a2aceb9")]
 [assembly: System.Reflection.AssemblyProductAttribute("Dolphin.Plugin")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Dolphin.Plugin")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -142,8 +142,8 @@
                 BorderThickness="1">
 
             <Grid RowDefinitions="*,Auto">
-
-                <ScrollViewer Grid.Row="0">
+                <!-- OUTPUT - AUTO-SCROLLS -->
+                <ScrollViewer Grid.Row="0" Name="TerminalScrollViewer">
                     <TextBox Text="{Binding TerminalOutput}"
                              IsReadOnly="True"
                              AcceptsReturn="True"
@@ -154,6 +154,7 @@
                              BorderThickness="0"/>
                 </ScrollViewer>
 
+                <!-- INPUT -->
                 <Border Grid.Row="1"
                         Background="#161616"
                         CornerRadius="0,0,12,12"
@@ -167,9 +168,9 @@
                              BorderThickness="0"
                              KeyDown="OnTerminalKeyDown"/>
                 </Border>
-
             </Grid>
         </Border>
+
 
     </Grid>
 </Window>

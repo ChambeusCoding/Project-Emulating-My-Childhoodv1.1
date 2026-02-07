@@ -47,6 +47,25 @@ namespace Mupen64Plus.Plugin
             Console.WriteLine($"[PLUGIN] Executable (raw): {Manifest.Executable}");
         }
 
+        // New: let the UI build the command line and run the process
+        public (string Executable, string Arguments) BuildLaunchCommand(string romPath)
+        {
+            if (string.IsNullOrWhiteSpace(romPath))
+                throw new ArgumentException("ROM path must not be empty.", nameof(romPath));
+
+            // Resolve executable per-OS (Linux PATH / Windows .exe)
+            string resolvedExecutable =
+                PlatformServices.PathResolver.ResolveExecutable(Manifest.Executable);
+
+            // Just the rom path as an argument (quoted)
+            string args = $"\"{romPath}\"";
+
+            Console.WriteLine($"[PLUGIN] BuildLaunchCommand: exe='{resolvedExecutable}', args={args}");
+
+            return (resolvedExecutable, args);
+        }
+
+        // Existing behavior kept for other callers
         public async Task LaunchAsync(string romPath)
         {
             if (!File.Exists(romPath))
@@ -59,16 +78,14 @@ namespace Mupen64Plus.Plugin
 
             try
             {
-                // Resolve executable per-OS (Linux PATH / Windows .exe)
-                string resolvedExecutable =
-                    PlatformServices.PathResolver.ResolveExecutable(Manifest.Executable);
+                var (resolvedExecutable, arguments) = BuildLaunchCommand(romPath);
 
                 Console.WriteLine($"[PLUGIN] Resolved executable: {resolvedExecutable}");
-                Console.WriteLine($"[PLUGIN] Arguments: \"{romPath}\"");
+                Console.WriteLine($"[PLUGIN] Arguments: {arguments}");
 
                 int exitCode = await PlatformServices.ProcessRunner.RunAsync(
                     resolvedExecutable,
-                    $"\"{romPath}\""
+                    arguments
                 );
 
                 Console.WriteLine($"[PLUGIN] Mupen64Plus exited with code {exitCode}");
