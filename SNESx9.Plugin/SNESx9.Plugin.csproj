@@ -2,8 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <OutputType>Library</OutputType>
     <Nullable>enable</Nullable>
+    <RootNamespace>SNESx9.Plugin</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Launcher.Core/Launcher.Core.csproj" />
+    <ProjectReference Include="../Launcher.Infrastructure/Launcher.Infrastructure.csproj" />
+  </ItemGroup>
+
 
 </Project>

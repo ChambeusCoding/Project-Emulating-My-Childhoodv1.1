@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:Launcher.App.ViewModels"
         x:Class="Launcher.App.Views.MainWindow"
+        x:Name="MainWindowRoot"
         Width="1200"
         Height="800"
         Background="#121212"
@@ -11,7 +12,8 @@
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="48"
-        mc:Ignorable="d">
+        mc:Ignorable="d"
+        Loaded="OnMainWindowLoaded">
 
     <!-- ROOT LAYOUT -->
     <Grid RowDefinitions="48,*,320">
@@ -133,7 +135,7 @@
 
         </Grid>
 
-        <!-- ================= TERMINAL (ISOLATED) ================= -->
+        <!-- ================= TERMINAL (INTERACTIVE) ================= -->
         <Border Grid.Row="2"
                 Background="#0E0E0E"
                 CornerRadius="12,12,0,0"
@@ -142,16 +144,21 @@
                 BorderThickness="1">
 
             <Grid RowDefinitions="*,Auto">
-                <!-- OUTPUT - AUTO-SCROLLS -->
-                <ScrollViewer Grid.Row="0" Name="TerminalScrollViewer">
-                    <TextBox Text="{Binding TerminalOutput}"
+                <!-- OUTPUT (read‑only) -->
+                <ScrollViewer Grid.Row="0"
+                              Name="TerminalScrollViewer"
+                              VerticalScrollBarVisibility="Auto">
+                    <TextBox Name="TerminalOutputBox"
+                             Text="{Binding TerminalOutput}"
                              IsReadOnly="True"
                              AcceptsReturn="True"
                              FontFamily="monospace"
                              FontSize="12"
                              Background="#0E0E0E"
                              Foreground="#D0D0D0"
-                             BorderThickness="0"/>
+                             BorderThickness="0"
+                             TextWrapping="Wrap"
+                             Padding="6"/>
                 </ScrollViewer>
 
                 <!-- INPUT -->
@@ -159,7 +166,8 @@
                         Background="#161616"
                         CornerRadius="0,0,12,12"
                         Padding="8">
-                    <TextBox Text="{Binding TerminalInput}"
+                    <TextBox Name="TerminalInputBox"
+                             Text="{Binding TerminalInput, UpdateSourceTrigger=PropertyChanged}"
                              Watermark="terminal ›"
                              FontFamily="monospace"
                              FontSize="12"
@@ -170,6 +178,9 @@
                 </Border>
             </Grid>
         </Border>
+
+
+
 
 
     </Grid>

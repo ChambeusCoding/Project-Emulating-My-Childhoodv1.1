@@ -84,7 +84,7 @@ public static class PluginLoader
                     Console.WriteLine($"[PluginLoader] Loaded plugin: {plugin.Manifest.DisplayName}");
                     Console.WriteLine($"[PluginLoader] Extensions: {string.Join(", ", plugin.Manifest.SupportedExtensions)}");
 
-                    // ✔ yield return OUTSIDE of try/catch
+                   
                     yield return plugin;
                 }
             }

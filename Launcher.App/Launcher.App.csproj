@@ -33,6 +33,10 @@
     <Content Include="bin\Debug\net8.0\Plugins\RetroArch\RetroArch.deps.json" />
     <Content Include="bin\Debug\net8.0\Plugins\RetroArch\RetroArch.dll" />
     <Content Include="bin\Debug\net8.0\Plugins\RetroArch\RetroArch.pdb" />
+    <Content Include="bin\Debug\net8.0\Plugins\Snesx9\plugin.json" />
+    <Content Include="bin\Debug\net8.0\Plugins\Snesx9\SNESx9.Plugin.deps.json" />
+    <Content Include="bin\Debug\net8.0\Plugins\Snesx9\SNESx9.Plugin.dll" />
+    <Content Include="bin\Debug\net8.0\Plugins\Snesx9\SNESx9.Plugin.pdb" />
   </ItemGroup>
 
   <PropertyGroup>

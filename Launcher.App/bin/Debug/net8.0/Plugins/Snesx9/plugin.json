@@ -1,0 +1,9 @@
+{
+  "Id": "snes9x",
+  "Name": "Snes9x",
+  "DisplayName": "Snes9x",
+  "System": "Super Nintendo",
+  "SupportedExtensions": [".smc", ".sfc", ".fig", ".swc"],
+  "Executable": "snes9x",
+  "Args": ["{rom}"]
+}

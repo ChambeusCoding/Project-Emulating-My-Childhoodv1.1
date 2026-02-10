@@ -168,6 +168,8 @@ namespace Launcher.App.ViewModels
 
         public async Task ExecuteTerminalCommand()
         {
+            AppendTerminal("[DEBUG] ExecuteTerminalCommand() invoked");
+
             var input = TerminalInput.Trim();
             TerminalInput = "";
 
@@ -199,6 +201,7 @@ namespace Launcher.App.ViewModels
                     break;
             }
         }
+
 
         public void AppendTerminal(string line)
         {
