@@ -54,15 +54,15 @@ namespace SNESx9.Plugin
             if (string.IsNullOrWhiteSpace(romPath))
                 throw new ArgumentException("ROM path must not be empty.", nameof(romPath));
 
-            string resolvedExecutable =
-                PlatformServices.PathResolver.ResolveExecutable(Manifest.Executable);
+            string resolvedExecutable = PlatformServices.PathResolver.ResolveExecutable(Manifest.Executable);
 
-            string args = $"\"{romPath}\"";
+            // 🔧 FIX: snes9x-gtk requires -n flag for ROM loading
+            string args = $"-n \"{romPath}\"";
 
             Console.WriteLine($"[PLUGIN] BuildLaunchCommand: exe='{resolvedExecutable}', args={args}");
-
             return (resolvedExecutable, args);
         }
+
 
         public async Task LaunchAsync(string romPath)
         {

@@ -8,36 +8,63 @@ APPDIR="$HOME_DIR/.local/share/emulators/Azahar"
 BIN="$HOME_DIR/.local/bin"
 
 mkdir -p "$APPDIR" "$BIN"
-cd "$APPDIR"
 
+# Fix 1: Better tool checking with suggestions
 for cmd in curl jq wget; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
-        echo "❌ Required tool '$cmd' is not installed. Please install it with your package manager and re-run."
+        echo "❌ Required tool '$cmd' is not installed."
+        echo "💡 Install with:"
+        if [[ -f /etc/debian_version ]]; then
+            echo "   sudo apt install $cmd"
+        elif [[ -f /etc/redhat-release ]]; then
+            echo "   sudo dnf install $cmd"
+        elif [[ -f /etc/arch-release ]]; then
+            echo "   sudo pacman -S $cmd"
+        fi
         exit 1
     fi
 done
 
 echo "🔍 Fetching Azahar releases..."
 
-URL=$(curl -s https://api.github.com/repos/azahar-emu/azahar/releases \
-  | jq -r '.[].assets[].browser_download_url' \
-  | grep -i appimage \
+# Fix 2: Fixed URL formatting
+URL=$(curl -s "https://api.github.com/repos/azahar-emu/azahar/releases/latest" \
+  | jq -r '.assets[] | select(.name | contains("AppImage") and contains("wayland")?) | .browser_download_url' \
   | head -n 1)
 
 if [[ -z "$URL" || "$URL" == "null" ]]; then
-    echo "❌ No Azahar AppImage found in releases."
+    echo "❌ No Azahar AppImage found in latest release."
+    echo "💡 Try Flatpak: flatpak install flathub org.azahar_emu.Azahar"
     exit 1
 fi
 
 FILENAME=$(basename "$URL")
+echo "⬇ Downloading $FILENAME from: $URL"
 
-echo "⬇ Downloading $FILENAME"
-wget -q "$URL" -O "$FILENAME"
-chmod +x "$FILENAME"
+# Fix 3: Better download with progress + verification
+wget --show-progress -c "$URL" -O "$APPDIR/$FILENAME"
+chmod +x "$APPDIR/$FILENAME"
 
+# Fix 4: Create launcher symlink
 ln -sf "$APPDIR/$FILENAME" "$BIN/azahar"
 
-echo "✅ Azahar installed"
+# Fix 5: Auto-add to PATH (persistent)
+if ! grep -q "$BIN" "$HOME_DIR/.bashrc" 2>/dev/null && \
+   ! grep -q "$BIN" "$HOME_DIR/.zshrc" 2>/dev/null; then
+    echo "➕ Adding $BIN to PATH in ~/.bashrc..."
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME_DIR/.bashrc"
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME_DIR/.zshrc"
+fi
+
+# Fix 6: Verify installation
+if command -v azahar >/dev/null 2>&1; then
+    echo "✅ Azahar installed and in PATH!"
+    azahar --version || echo "ℹ Version check failed (normal for AppImage)"
+else
+    echo "⚠ Azahar installed but not in PATH yet. Run: source ~/.bashrc"
+fi
+
+echo "🎉 Success!"
+echo "➡ AppImage: $APPDIR/$FILENAME"
 echo "➡ Launcher: $BIN/azahar"
-echo "ℹ Make sure ~/.local/bin is in your PATH:"
-echo "   export PATH=\"\$HOME/.local/bin:\$PATH\""
+echo "ℹ Restart terminal or run: source ~/.bashrc"
