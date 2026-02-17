@@ -58,6 +58,16 @@
             <Button Content="Install"
                     CornerRadius="6"
                     Command="{Binding InstallSelectedEmulatorCommand}" />
+            
+            <Button Content="📋 Copy" 
+                    CornerRadius="6" 
+                    Command="{Binding CopyTerminalCommand}"
+                    Margin="0,0,0,0"/>
+            <Button Content="Paste" 
+                    CornerRadius="6" 
+                    Command="{Binding PasteTerminalCommand}"
+                    Margin="0,0,4,0"/>
+
         </StackPanel>
 
 

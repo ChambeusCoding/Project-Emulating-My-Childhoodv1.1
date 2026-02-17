@@ -9,6 +9,7 @@
       "Launcher.App/1.0.0": {
         "dependencies": {
           "Avalonia.Desktop": "11.3.11",
+          "Avalonia.Fonts.Inter": "11.3.11",
           "Avalonia.Themes.Fluent": "11.3.11",
           "Launcher.Core": "1.0.0",
           "Launcher.Infrastructure": "1.0.0"
@@ -100,6 +101,17 @@
         },
         "runtime": {
           "lib/net8.0/Avalonia.Desktop.dll": {
+            "assemblyVersion": "11.3.11.0",
+            "fileVersion": "11.3.11.0"
+          }
+        }
+      },
+      "Avalonia.Fonts.Inter/11.3.11": {
+        "dependencies": {
+          "Avalonia": "11.3.11"
+        },
+        "runtime": {
+          "lib/net8.0/Avalonia.Fonts.Inter.dll": {
             "assemblyVersion": "11.3.11.0",
             "fileVersion": "11.3.11.0"
           }
@@ -443,6 +455,13 @@
       "sha512": "sha512-m60U1jV96RquwYGg4Pzwp0ENL1HUrM3YZLMCes0gWRn8x+webT9V4Wfs58MAdTOukXPpy9t1XhEd4NON674Wmw==",
       "path": "avalonia.desktop/11.3.11",
       "hashPath": "avalonia.desktop.11.3.11.nupkg.sha512"
+    },
+    "Avalonia.Fonts.Inter/11.3.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VzfS95eXV2YlMxizNWGug3eb4717lNGZ3lIfl5os+DTL+A1djDT+Sv87oXAj8jGVqijdA/eFP9jax5JA9GCb3g==",
+      "path": "avalonia.fonts.inter/11.3.11",
+      "hashPath": "avalonia.fonts.inter.11.3.11.nupkg.sha512"
     },
     "Avalonia.FreeDesktop/11.3.11": {
       "type": "package",

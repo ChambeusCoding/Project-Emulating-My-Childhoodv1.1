@@ -18,6 +18,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="bin\Debug\net8.0\Installers\install_azahar.sh" />
+    <Content Include="bin\Debug\net8.0\Installers\cemu.install.sh" />
+    <Content Include="bin\Debug\net8.0\Installers\dolphin.install.sh" />
+    <Content Include="bin\Debug\net8.0\Installers\emulators.install.ps1" />
+    <Content Include="bin\Debug\net8.0\Installers\melonDS.install.sh" />
+    <Content Include="bin\Debug\net8.0\Installers\install_mupen64plus.sh" />
+    <Content Include="bin\Debug\net8.0\Installers\retroarch.install.sh" />
+    <Content Include="bin\Debug\net8.0\Installers\install_snes9x.sh" />
     <Content Include="bin\Debug\net8.0\Plugins\Azahar\Azahar.Plugin.deps.json" />
     <Content Include="bin\Debug\net8.0\Plugins\Azahar\Azahar.Plugin.dll" />
     <Content Include="bin\Debug\net8.0\Plugins\Azahar\Azahar.Plugin.pdb" />
@@ -27,6 +35,14 @@
     <Content Include="bin\Debug\net8.0\Plugins\Citra3DS\Citra3DS.Plugin.dll" />
     <Content Include="bin\Debug\net8.0\Plugins\Citra3DS\Citra3DS.Plugin.pdb" />
     <Content Include="bin\Debug\net8.0\Plugins\Citra3DS\plugin.json" />
+    <Content Include="bin\Debug\net8.0\Plugins\Installers\azahar.install.sh" />
+    <Content Include="bin\Debug\net8.0\Plugins\Installers\cemu.install.sh" />
+    <Content Include="bin\Debug\net8.0\Plugins\Installers\dolphin.install.sh" />
+    <Content Include="bin\Debug\net8.0\Plugins\Installers\emulators.install.ps1" />
+    <Content Include="bin\Debug\net8.0\Plugins\Installers\melonDS.install.sh" />
+    <Content Include="bin\Debug\net8.0\Plugins\Installers\mupen64plus.install.sh" />
+    <Content Include="bin\Debug\net8.0\Plugins\Installers\retroarch.install.sh" />
+    <Content Include="bin\Debug\net8.0\Plugins\Installers\snes9x.install.sh" />
     <Content Include="bin\Debug\net8.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.deps.json" />
     <Content Include="bin\Debug\net8.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.dll" />
     <Content Include="bin\Debug\net8.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.pdb" />

@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Text;  // Added for StringBuilder
 using Avalonia.Threading;
-
 using Launcher.Core.Games;
 using Launcher.Core.Emulation;
 using Launcher.App.Common;
@@ -16,15 +16,18 @@ namespace Launcher.App.ViewModels
     {
         private readonly GameScanner _scanner;
         private readonly EmulatorManager _emulators;
+        
+        public ICommand CopyTerminalCommand { get; }
+        public ICommand PasteTerminalCommand { get; }
 
         private bool _debugRunning;
+        private readonly DispatcherTimer _terminalFlushTimer;
 
         public ICommand ExecuteTerminalCommandCommand { get; }
         public ICommand ScanGamesCommand { get; }
         public ICommand SelectSystemCommand { get; }
         public ICommand LaunchGameCommand { get; }
 
-        // NEW: installer dropdown + command
         public ObservableCollection<string> EmulatorInstallers { get; } =
             new ObservableCollection<string> { "SNES9x", "Mupen64Plus", "Azahar" };
 
@@ -65,6 +68,10 @@ namespace Launcher.App.ViewModels
                 OnPropertyChanged();
             }
         }
+        
+        // Throttled terminal buffer
+        private readonly StringBuilder _terminalBuffer = new();
+        private readonly object _terminalLock = new();
 
         public MainWindowViewModel(GameScanner scanner)
         {
@@ -75,28 +82,100 @@ namespace Launcher.App.ViewModels
             FilteredGames = new ObservableCollection<GameEntry>();
             Systems = new ObservableCollection<string>();
 
-            ExecuteTerminalCommandCommand =
-                new RelayCommand(() => _ = ExecuteTerminalCommand());
-
+            ExecuteTerminalCommandCommand = new RelayCommand(() => _ = ExecuteTerminalCommand());
             ScanGamesCommand = new RelayCommand(ScanGames);
             SelectSystemCommand = new RelayCommand<string>(SelectSystem);
-            LaunchGameCommand = new RelayCommand<GameEntry>(
-                game => _ = LaunchGameAsync(game)
-            );
+            LaunchGameCommand = new RelayCommand<GameEntry>(game => _ = LaunchGameAsync(game));
+            
+            // Fixed: Only one assignment
+            InstallSelectedEmulatorCommand = new RelayCommand(() => _ = RunSelectedInstaller());
 
-            // NEW: hook up installer command
-            InstallSelectedEmulatorCommand =
-                new RelayCommand(() => _ = RunSelectedInstaller());
+            CopyTerminalCommand = new RelayCommand(async () => await CopyTerminalOutput());
+            PasteTerminalCommand = new RelayCommand(async () => await PasteToTerminal());
+
+            // Setup throttled terminal flushing (60fps)
+            _terminalFlushTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(16) };
+            _terminalFlushTimer.Tick += (s, e) => FlushTerminalBuffer();
+            _terminalFlushTimer.Start();
 
             LoadSystems();
         }
+
+        private async Task CopyTerminalOutput()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(TerminalOutput)) return;
+
+                if (Avalonia.Controls.TopLevel.GetTopLevel(null) is { Clipboard: { } clipboard })
+                {
+                    await clipboard.SetTextAsync(TerminalOutput);
+                    AppendTerminal("[CLIPBOARD] Terminal output copied!");
+                }
+            }
+            catch (Exception ex)
+            {
+                AppendTerminal($"[CLIPBOARD] Copy failed: {ex.Message}");
+            }
+        }
+
+        private async Task PasteToTerminal()
+        {
+            try
+            {
+                if (Avalonia.Controls.TopLevel.GetTopLevel(null) is { Clipboard: { } clipboard })
+                {
+                    var text = await clipboard.GetTextAsync();
+                    if (!string.IsNullOrWhiteSpace(text))
+                    {
+                        TerminalInput = text;
+                        AppendTerminal($"[CLIPBOARD] Pasted: {text.Substring(0, Math.Min(50, text.Length))}...");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AppendTerminal($"[CLIPBOARD] Paste failed: {ex.Message}");
+            }
+        }
+
+        // ================= FIXED TERMINAL METHODS =================
+
+        public void AppendTerminal(string line)
+        {
+            if (ShouldFilter(line)) return;
+
+            var timestamped = $"[{DateTime.Now:HH:mm:ss}] {line}\n";
+            
+            lock (_terminalLock)
+            {
+                _terminalBuffer.Append(timestamped);
+            }
+        }
+
+        private void FlushTerminalBuffer()
+        {
+            lock (_terminalLock)
+            {
+                if (_terminalBuffer.Length > 0)
+                {
+                    TerminalOutput += _terminalBuffer.ToString();
+                    _terminalBuffer.Clear();
+                }
+            }
+        }
+
+        private static bool ShouldFilter(string line) =>
+            line.Contains("[IME]") || 
+            line.Contains("Tmds.DBus.Protocol") || 
+            line.Contains("org.freedesktop.DBus.Error") ||
+            line.Contains("IBus");
 
         // ================= TERMINAL =================
 
         private async Task RunShellCommand(string command)
         {
-            if (string.IsNullOrWhiteSpace(command))
-                return;
+            if (string.IsNullOrWhiteSpace(command)) return;
 
             AppendTerminal($"$ {command}");
 
@@ -113,12 +192,16 @@ namespace Launcher.App.ViewModels
 
             async Task ReadStreamAsync(System.IO.StreamReader reader)
             {
-                while (!reader.EndOfStream)
+                try
                 {
-                    var line = await reader.ReadLineAsync();
-                    if (line != null)
-                        AppendTerminal(line);
+                    while (!reader.EndOfStream)
+                    {
+                        var line = await reader.ReadLineAsync();
+                        if (line != null)
+                            AppendTerminal(line);
+                    }
                 }
+                catch { /* Stream closed */ }
             }
 
             await Task.WhenAll(
@@ -129,11 +212,9 @@ namespace Launcher.App.ViewModels
             await process.WaitForExitAsync();
         }
 
-        // generic process runner that streams output into the UI terminal
         private async Task RunProcessAsync(string fileName, string arguments)
         {
-            if (string.IsNullOrWhiteSpace(fileName))
-                return;
+            if (string.IsNullOrWhiteSpace(fileName)) return;
 
             AppendTerminal($"$ {fileName} {arguments}");
 
@@ -150,12 +231,16 @@ namespace Launcher.App.ViewModels
 
             async Task ReadStreamAsync(System.IO.StreamReader reader)
             {
-                while (!reader.EndOfStream)
+                try
                 {
-                    var line = await reader.ReadLineAsync();
-                    if (line != null)
-                        AppendTerminal(line);
+                    while (!reader.EndOfStream)
+                    {
+                        var line = await reader.ReadLineAsync();
+                        if (line != null)
+                            AppendTerminal(line);
+                    }
                 }
+                catch { /* Stream closed */ }
             }
 
             await Task.WhenAll(
@@ -175,7 +260,6 @@ namespace Launcher.App.ViewModels
             }
 
             _debugRunning = true;
-
             try
             {
                 AppendTerminal("[DEBUG] Relaunching in Development mode...");
@@ -195,8 +279,7 @@ namespace Launcher.App.ViewModels
             var input = TerminalInput.Trim();
             TerminalInput = "";
 
-            if (string.IsNullOrWhiteSpace(input))
-                return;
+            if (string.IsNullOrWhiteSpace(input)) return;
 
             var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             var cmd = parts[0].ToLowerInvariant();
@@ -209,31 +292,17 @@ namespace Launcher.App.ViewModels
                     AppendTerminal("  clear  - clear terminal");
                     AppendTerminal("  debug  - relaunch app in dev mode");
                     break;
-
                 case "clear":
                     TerminalOutput = "";
                     break;
-
                 case "debug":
                     await RunDebugger();
                     break;
-
                 default:
                     await RunShellCommand(input);
                     break;
             }
         }
-
-        public void AppendTerminal(string line)
-        {
-            Dispatcher.UIThread.Post(() =>
-            {
-                TerminalOutput +=
-                    $"[{DateTime.Now:HH:mm:ss}] {line}{Environment.NewLine}";
-            });
-        }
-
-        // ================= EMULATOR INSTALLERS (NEW) =================
 
         private async Task RunSelectedInstaller()
         {
@@ -244,13 +313,12 @@ namespace Launcher.App.ViewModels
             }
 
             var name = SelectedEmulatorInstaller;
-
             var scriptName = name switch
             {
-                "SNES9x"      => "install_snes9x.sh",
+                "SNES9x" => "install_snes9x.sh",
                 "Mupen64Plus" => "install_mupen64plus.sh",
-                "Azahar"      => "install_azahar.sh",
-                _             => null
+                "Azahar" => "install_azahar.sh",
+                _ => null
             };
 
             if (scriptName is null)
@@ -259,10 +327,10 @@ namespace Launcher.App.ViewModels
                 return;
             }
 
-            var scriptsDir = System.IO.Path.Combine(AppContext.BaseDirectory, "Installers");
-            var scriptPath = System.IO.Path.Combine(scriptsDir, scriptName);
+            var scriptsDir = Path.Combine(AppContext.BaseDirectory, "Installers");
+            var scriptPath = Path.Combine(scriptsDir, scriptName);
 
-            if (!System.IO.File.Exists(scriptPath))
+            if (!File.Exists(scriptPath))
             {
                 AppendTerminal($"[INSTALL] Script not found: {scriptPath}");
                 return;
@@ -286,12 +354,16 @@ namespace Launcher.App.ViewModels
 
                 async Task ReadStreamAsync(System.IO.StreamReader reader)
                 {
-                    while (!reader.EndOfStream)
+                    try
                     {
-                        var line = await reader.ReadLineAsync();
-                        if (line != null)
-                            AppendTerminal(line);
+                        while (!reader.EndOfStream)
+                        {
+                            var line = await reader.ReadLineAsync();
+                            if (line != null)
+                                AppendTerminal(line);
+                        }
                     }
+                    catch { /* Stream closed */ }
                 }
 
                 await Task.WhenAll(
@@ -342,12 +414,9 @@ namespace Launcher.App.ViewModels
 
         private void ScanGames()
         {
-            // Cross‑platform user home
             var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-
             var gameFolders = new[]
             {
-                Path.Combine(home, "Documents"),
                 Path.Combine(home, "Documents", "ROMs"),
             };
 
@@ -366,24 +435,19 @@ namespace Launcher.App.ViewModels
             ApplyFilters();
         }
 
-
         private void SelectSystem(string system) => SelectedSystem = system;
 
-        // uses plugin BuildLaunchCommand + RunProcessAsync
         private async Task LaunchGameAsync(GameEntry game)
         {
-            if (game?.EmulatorId == null || game.System == null)
-                return;
+            if (game?.EmulatorId == null || game.System == null) return;
 
             var emulator = _emulators
                 .GetEmulators(game.System)
                 .FirstOrDefault(e => e.Manifest.Id == game.EmulatorId);
 
-            if (emulator == null)
-                return;
+            if (emulator == null) return;
 
             var (exe, args) = emulator.BuildLaunchCommand(game.FilePath);
-
             await RunProcessAsync(exe, args);
         }
 
