@@ -24,6 +24,24 @@ namespace Launcher.App.ViewModels
         public ICommand SelectSystemCommand { get; }
         public ICommand LaunchGameCommand { get; }
 
+        // NEW: installer dropdown + command
+        public ObservableCollection<string> EmulatorInstallers { get; } =
+            new ObservableCollection<string> { "SNES9x", "Mupen64Plus", "Azahar" };
+
+        private string? _selectedEmulatorInstaller;
+        public string? SelectedEmulatorInstaller
+        {
+            get => _selectedEmulatorInstaller;
+            set
+            {
+                if (_selectedEmulatorInstaller == value) return;
+                _selectedEmulatorInstaller = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ICommand InstallSelectedEmulatorCommand { get; }
+
         private string _terminalOutput = "";
         public string TerminalOutput
         {
@@ -65,6 +83,10 @@ namespace Launcher.App.ViewModels
             LaunchGameCommand = new RelayCommand<GameEntry>(
                 game => _ = LaunchGameAsync(game)
             );
+
+            // NEW: hook up installer command
+            InstallSelectedEmulatorCommand =
+                new RelayCommand(() => _ = RunSelectedInstaller());
 
             LoadSystems();
         }
@@ -202,7 +224,6 @@ namespace Launcher.App.ViewModels
             }
         }
 
-
         public void AppendTerminal(string line)
         {
             Dispatcher.UIThread.Post(() =>
@@ -210,6 +231,81 @@ namespace Launcher.App.ViewModels
                 TerminalOutput +=
                     $"[{DateTime.Now:HH:mm:ss}] {line}{Environment.NewLine}";
             });
+        }
+
+        // ================= EMULATOR INSTALLERS (NEW) =================
+
+        private async Task RunSelectedInstaller()
+        {
+            if (string.IsNullOrWhiteSpace(SelectedEmulatorInstaller))
+            {
+                AppendTerminal("[INSTALL] No emulator selected.");
+                return;
+            }
+
+            var name = SelectedEmulatorInstaller;
+
+            var scriptName = name switch
+            {
+                "SNES9x"      => "install_snes9x.sh",
+                "Mupen64Plus" => "install_mupen64plus.sh",
+                "Azahar"      => "install_azahar.sh",
+                _             => null
+            };
+
+            if (scriptName is null)
+            {
+                AppendTerminal($"[INSTALL] No script mapped for '{name}'.");
+                return;
+            }
+
+            var scriptsDir = System.IO.Path.Combine(AppContext.BaseDirectory, "Installers");
+            var scriptPath = System.IO.Path.Combine(scriptsDir, scriptName);
+
+            if (!System.IO.File.Exists(scriptPath))
+            {
+                AppendTerminal($"[INSTALL] Script not found: {scriptPath}");
+                return;
+            }
+
+            AppendTerminal($"[INSTALL] Running {scriptName}...");
+
+            try
+            {
+                var psi = new ProcessStartInfo
+                {
+                    FileName = "/usr/bin/env",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                };
+                psi.ArgumentList.Add("bash");
+                psi.ArgumentList.Add(scriptPath);
+
+                using var proc = Process.Start(psi)!;
+
+                async Task ReadStreamAsync(System.IO.StreamReader reader)
+                {
+                    while (!reader.EndOfStream)
+                    {
+                        var line = await reader.ReadLineAsync();
+                        if (line != null)
+                            AppendTerminal(line);
+                    }
+                }
+
+                await Task.WhenAll(
+                    ReadStreamAsync(proc.StandardOutput),
+                    ReadStreamAsync(proc.StandardError)
+                );
+
+                await proc.WaitForExitAsync();
+                AppendTerminal($"[INSTALL] Exit code: {proc.ExitCode}");
+            }
+            catch (Exception ex)
+            {
+                AppendTerminal($"[INSTALL] Failed: {ex.Message}");
+            }
         }
 
         // ================= GAMES =================
@@ -246,15 +342,18 @@ namespace Launcher.App.ViewModels
 
         private void ScanGames()
         {
+            // Cross‑platform user home
+            var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
             var gameFolders = new[]
             {
-                "/home/chambeus/Documents/ROMs",
-                "/home/chambersj/Documents/ROMs",
+                Path.Combine(home, "Documents"),
+                Path.Combine(home, "Documents", "ROMs"),
             };
 
             Games.Clear();
 
-            foreach (var folder in gameFolders.Where(System.IO.Directory.Exists))
+            foreach (var folder in gameFolders.Where(Directory.Exists))
             {
                 foreach (var game in _scanner.Scan(folder))
                 {
@@ -266,6 +365,7 @@ namespace Launcher.App.ViewModels
 
             ApplyFilters();
         }
+
 
         private void SelectSystem(string system) => SelectedSystem = system;
 
@@ -282,7 +382,6 @@ namespace Launcher.App.ViewModels
             if (emulator == null)
                 return;
 
-            // IEmulatorPlugin exposes (string Executable, string Arguments) BuildLaunchCommand(string romPath)
             var (exe, args) = emulator.BuildLaunchCommand(game.FilePath);
 
             await RunProcessAsync(exe, args);

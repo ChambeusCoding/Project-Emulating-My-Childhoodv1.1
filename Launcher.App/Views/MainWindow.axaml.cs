@@ -94,13 +94,12 @@ public partial class MainWindow : Window
             _terminalInputBox = this.FindControl<TextBox>("TerminalInputBox");
         }
     }
-    
+
     private void OnMainWindowLoaded(object? sender, RoutedEventArgs e)
     {
         _terminalInputBox ??= this.FindControl<TextBox>("TerminalInputBox");
         _terminalInputBox?.Focus();
     }
-
 
     // Handles Enter (execute) and Escape (clear)
     private async void OnTerminalKeyDown(object? sender, KeyEventArgs e)
@@ -112,8 +111,6 @@ public partial class MainWindow : Window
         {
             case Key.Enter:
                 e.Handled = true;
-
-                // just call the VM method; it handles trimming & clearing
                 await vm.ExecuteTerminalCommand();
                 break;
 

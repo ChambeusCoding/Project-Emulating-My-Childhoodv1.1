@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
-if [[ "$EUID" -ne 0 ]]; then
-    exec pkexec bash "$0" "$@"
-fi
+echo "🟢 Installing Azahar (user-local)..."
 
-REAL_USER_HOME=$(getent passwd "$SUDO_USER" | cut -d: -f6)
-APPDIR="$REAL_USER_HOME/.local/share/emulators/Azahar"
-BIN="$REAL_USER_HOME/.local/bin"
+HOME_DIR="$HOME"
+APPDIR="$HOME_DIR/.local/share/emulators/Azahar"
+BIN="$HOME_DIR/.local/bin"
 
-echo "🟢 Installing Azahar..."
-
-apt update
-apt install -y curl wget jq fuse libfuse2 || true
-
-mkdir -p "$APPDIR"
+mkdir -p "$APPDIR" "$BIN"
 cd "$APPDIR"
+
+for cmd in curl jq wget; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        echo "❌ Required tool '$cmd' is not installed. Please install it with your package manager and re-run."
+        exit 1
+    fi
+done
 
 echo "🔍 Fetching Azahar releases..."
 
@@ -24,8 +24,8 @@ URL=$(curl -s https://api.github.com/repos/azahar-emu/azahar/releases \
   | grep -i appimage \
   | head -n 1)
 
-if [[ -z "$URL" ]]; then
-    echo "❌ No Azahar AppImage found"
+if [[ -z "$URL" || "$URL" == "null" ]]; then
+    echo "❌ No Azahar AppImage found in releases."
     exit 1
 fi
 
@@ -35,8 +35,9 @@ echo "⬇ Downloading $FILENAME"
 wget -q "$URL" -O "$FILENAME"
 chmod +x "$FILENAME"
 
-mkdir -p "$BIN"
 ln -sf "$APPDIR/$FILENAME" "$BIN/azahar"
 
 echo "✅ Azahar installed"
-echo "➡ $BIN/azahar"
+echo "➡ Launcher: $BIN/azahar"
+echo "ℹ Make sure ~/.local/bin is in your PATH:"
+echo "   export PATH=\"\$HOME/.local/bin:\$PATH\""

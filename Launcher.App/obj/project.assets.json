@@ -127,6 +127,22 @@
           }
         }
       },
+      "Avalonia.Fonts.Inter/11.3.11": {
+        "type": "package",
+        "dependencies": {
+          "Avalonia": "11.3.11"
+        },
+        "compile": {
+          "lib/net8.0/Avalonia.Fonts.Inter.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Avalonia.Fonts.Inter.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Avalonia.FreeDesktop/11.3.11": {
         "type": "package",
         "dependencies": {
@@ -764,6 +780,24 @@
         "lib/netstandard2.0/Avalonia.Desktop.xml"
       ]
     },
+    "Avalonia.Fonts.Inter/11.3.11": {
+      "sha512": "VzfS95eXV2YlMxizNWGug3eb4717lNGZ3lIfl5os+DTL+A1djDT+Sv87oXAj8jGVqijdA/eFP9jax5JA9GCb3g==",
+      "type": "package",
+      "path": "avalonia.fonts.inter/11.3.11",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "avalonia.fonts.inter.11.3.11.nupkg.sha512",
+        "avalonia.fonts.inter.nuspec",
+        "lib/net6.0/Avalonia.Fonts.Inter.dll",
+        "lib/net6.0/Avalonia.Fonts.Inter.xml",
+        "lib/net8.0/Avalonia.Fonts.Inter.dll",
+        "lib/net8.0/Avalonia.Fonts.Inter.xml",
+        "lib/netstandard2.0/Avalonia.Fonts.Inter.dll",
+        "lib/netstandard2.0/Avalonia.Fonts.Inter.xml"
+      ]
+    },
     "Avalonia.FreeDesktop/11.3.11": {
       "sha512": "kmmYhKVWAFAz064K4FYTqVOk/Oin6DWp5LfzVNISz3BP4YYUZdrGyglxhjbS6t8iOyzMnAoHCrNs1Pw+BRFYUQ==",
       "type": "package",
@@ -1304,25 +1338,26 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "Avalonia.Desktop >= 11.3.11",
+      "Avalonia.Fonts.Inter >= 11.3.11",
       "Avalonia.Themes.Fluent >= 11.3.11",
       "Launcher.Core >= 1.0.0",
       "Launcher.Infrastructure >= 1.0.0"
     ]
   },
   "packageFolders": {
-    "/home/chambersj/.nuget/packages/": {}
+    "/home/phoenix/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.App/Launcher.App.csproj",
+      "projectUniqueName": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.App/Launcher.App.csproj",
       "projectName": "Launcher.App",
-      "projectPath": "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.App/Launcher.App.csproj",
-      "packagesPath": "/home/chambersj/.nuget/packages/",
-      "outputPath": "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.App/obj/",
+      "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.App/Launcher.App.csproj",
+      "packagesPath": "/home/phoenix/.nuget/packages/",
+      "outputPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.App/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/chambersj/.nuget/NuGet/NuGet.Config"
+        "/home/phoenix/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -1334,11 +1369,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj": {
-              "projectPath": "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj"
+            "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj": {
+              "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj"
             },
-            "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj": {
-              "projectPath": "/home/chambersj/Documents/GitKraken Repos/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj"
+            "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj": {
+              "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj"
             }
           }
         }
@@ -1354,6 +1389,10 @@
         "targetAlias": "net8.0",
         "dependencies": {
           "Avalonia.Desktop": {
+            "target": "Package",
+            "version": "[11.3.11, )"
+          },
+          "Avalonia.Fonts.Inter": {
             "target": "Package",
             "version": "[11.3.11, )"
           },
@@ -1378,7 +1417,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.123/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.124/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
