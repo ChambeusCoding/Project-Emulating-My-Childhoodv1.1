@@ -2,7 +2,7 @@
   "Id": "mupen64plus",
   "DisplayName": "Mupen64Plus",
   "System": "Nintendo 64",
-  "Executable": "mupen64plus",
+  "Executable": "/home/phoenix/.local/share/emulators/mupen64plus/mupen64plus",
   "SupportedExtensions": [".n64", ".z64", ".v64"],
   "Args": ["{rom}"]
 }
