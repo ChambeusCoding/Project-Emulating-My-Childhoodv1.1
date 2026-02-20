@@ -25,6 +25,9 @@ public partial class MainWindow : Window
 
         // 1️⃣ Create the emulator manager
         var emulatorManager = new EmulatorManager();
+        
+        _terminalScrollViewer = this.FindControl<ScrollViewer>("TerminalScrollViewer");
+
 
         // 2️⃣ Load all plugins from Plugins folder
         var pluginsPath = Path.Combine(AppContext.BaseDirectory, "Plugins");
@@ -58,6 +61,7 @@ public partial class MainWindow : Window
 
         DataContextChanged += OnDataContextChanged;
     }
+    
 
     private void RedirectConsoleToTerminal()
     {
@@ -94,6 +98,16 @@ public partial class MainWindow : Window
             _terminalInputBox = this.FindControl<TextBox>("TerminalInputBox");
         }
     }
+    
+    private void OnTerminalOutputTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        if (_terminalScrollViewer != null)
+        {
+            DispatcherTimer.RunOnce(() => _terminalScrollViewer.ScrollToEnd(), 
+                TimeSpan.FromMilliseconds(10));
+        }
+    }
+
 
     private void OnMainWindowLoaded(object? sender, RoutedEventArgs e)
     {

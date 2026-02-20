@@ -155,51 +155,49 @@
 
         </Grid>
 
-        <!-- ================= TERMINAL (INTERACTIVE) ================= -->
-        <Border Grid.Row="2"
-                Background="#0E0E0E"
-                CornerRadius="12,12,0,0"
-                Margin="12"
-                BorderBrush="#2A2A2A"
-                BorderThickness="1">
+<!-- ================= TERMINAL (INTERACTIVE) ================= -->
+<Border Grid.Row="2"
+        Background="#0E0E0E"
+        CornerRadius="12,12,0,0"
+        Margin="12"
+        BorderBrush="#2A2A2A"
+        BorderThickness="1">
 
-            <Grid RowDefinitions="*,Auto">
-                <ScrollViewer Grid.Row="0"
-                              Name="TerminalScrollViewer"
-                              VerticalScrollBarVisibility="Auto">
-                    <TextBox Name="TerminalOutputBox"
-                             Text="{Binding TerminalOutput}"
-                             IsReadOnly="True"
-                             AcceptsReturn="True"
-                             FontFamily="monospace"
-                             FontSize="12"
-                             Background="#0E0E0E"
-                             Foreground="#D0D0D0"
-                             BorderThickness="0"
-                             TextWrapping="Wrap"
-                             Padding="6"/>
-                </ScrollViewer>
-                
-                <Border Grid.Row="1"
-                        Background="#161616"
-                        CornerRadius="0,0,12,12"
-                        Padding="8">
-                    <TextBox Name="TerminalInputBox"
-                             Text="{Binding TerminalInput, UpdateSourceTrigger=PropertyChanged}"
-                             Watermark="terminal ›"
-                             FontFamily="monospace"
-                             FontSize="12"
-                             Background="#161616"
-                             Foreground="White"
-                             BorderThickness="0"
-                             KeyDown="OnTerminalKeyDown"/>
-                </Border>
-            </Grid>
+    <Grid RowDefinitions="*,Auto">
+        <ScrollViewer Grid.Row="0"
+                      Name="TerminalScrollViewer"
+                      VerticalScrollBarVisibility="Auto">
+            
+            <TextBox Name="TerminalOutputBox"
+                     Text="{Binding TerminalOutput}"
+                     IsReadOnly="True"
+                     AcceptsReturn="True"
+                     FontFamily="monospace"
+                     FontSize="12"
+                     Background="#0E0E0E"
+                     Foreground="#D0D0D0"
+                     BorderThickness="0"
+                     TextWrapping="Wrap"
+                     Padding="6"
+                     TextChanged="OnTerminalOutputTextChanged"/>
+                     
+        </ScrollViewer>
+        
+        <Border Grid.Row="1"
+                Background="#161616"
+                CornerRadius="0,0,12,12"
+                Padding="8">
+            <TextBox Name="TerminalInputBox"
+                     Text="{Binding TerminalInput, UpdateSourceTrigger=PropertyChanged}"
+                     Watermark="terminal ›"
+                     FontFamily="monospace"
+                     FontSize="12"
+                     Background="#161616"
+                     Foreground="White"
+                     BorderThickness="0"
+                     KeyDown="OnTerminalKeyDown"/>
         </Border>
-
-
-
-
-
+    </Grid>
+</Border>
     </Grid>
 </Window>
