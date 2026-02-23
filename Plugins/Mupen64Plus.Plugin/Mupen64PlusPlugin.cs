@@ -12,33 +12,13 @@ namespace Mupen64Plus.Plugin
 
         public Mupen64PlusPlugin()
         {
-            string homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-
-            string defaultExecutable = Path.Combine(
-                homeDir,
-                ".local",
-                "share",
-                "emulators",
-                "mupen64plus",
-                "mupen64plus"
-            );
-
-            string executablePath = File.Exists(defaultExecutable)
-                ? defaultExecutable
-                : "mupen64plus";
-
             Manifest = new EmulatorManifest
             {
                 Id = "mupen64plus",
                 DisplayName = "Mupen64Plus",
                 System = "Nintendo 64",
-                Executable = executablePath,
-                SupportedExtensions = new[]
-                {
-                    ".n64",
-                    ".z64",
-                    ".v64"
-                }
+                Executable = "mupen64plus",  // Just the name - PATH finds /usr/games/mupen64plus
+                SupportedExtensions = new[] { ".n64", ".z64", ".v64" }
             };
 
             Console.WriteLine("[PLUGIN] Mupen64PlusPlugin constructed");
@@ -47,23 +27,20 @@ namespace Mupen64Plus.Plugin
             Console.WriteLine($"[PLUGIN] Executable (raw): {Manifest.Executable}");
         }
 
-        // New: let the UI build the command line and run the process
+
         public (string Executable, string Arguments) BuildLaunchCommand(string romPath)
         {
             if (string.IsNullOrWhiteSpace(romPath))
                 throw new ArgumentException("ROM path must not be empty.", nameof(romPath));
 
-            // Resolve executable per-OS (Linux PATH / Windows .exe)
-            string resolvedExecutable =
-                PlatformServices.PathResolver.ResolveExecutable(Manifest.Executable);
-
-            // Just the rom path as an argument (quoted)
+            // Let PathResolver do normal PATH lookup like before
+            string resolvedExecutable = PlatformServices.PathResolver.ResolveExecutable(Manifest.Executable);
             string args = $"\"{romPath}\"";
 
             Console.WriteLine($"[PLUGIN] BuildLaunchCommand: exe='{resolvedExecutable}', args={args}");
-
             return (resolvedExecutable, args);
         }
+
 
         // Existing behavior kept for other callers
         public async Task LaunchAsync(string romPath)
