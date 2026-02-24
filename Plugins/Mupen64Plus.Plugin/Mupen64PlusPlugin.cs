@@ -15,34 +15,29 @@ namespace Mupen64Plus.Plugin
             Manifest = new EmulatorManifest
             {
                 Id = "mupen64plus",
-                DisplayName = "Mupen64Plus",
+                DisplayName = "Mupen64Plus", 
                 System = "Nintendo 64",
-                Executable = "mupen64plus",  // Just the name - PATH finds /usr/games/mupen64plus
+                Executable = "mupen64plus",  // Just name - PATH finds /usr/games/bin/mupen64plus
                 SupportedExtensions = new[] { ".n64", ".z64", ".v64" }
             };
 
             Console.WriteLine("[PLUGIN] Mupen64PlusPlugin constructed");
-            Console.WriteLine($"[PLUGIN] System: {Manifest.System}");
-            Console.WriteLine($"[PLUGIN] Extensions: {string.Join(", ", Manifest.SupportedExtensions)}");
-            Console.WriteLine($"[PLUGIN] Executable (raw): {Manifest.Executable}");
+            Console.WriteLine($"[PLUGIN] Executable: {Manifest.Executable}");
         }
-
 
         public (string Executable, string Arguments) BuildLaunchCommand(string romPath)
         {
             if (string.IsNullOrWhiteSpace(romPath))
-                throw new ArgumentException("ROM path must not be empty.", nameof(romPath));
+                throw new ArgumentException("ROM path required", nameof(romPath));
 
-            // Let PathResolver do normal PATH lookup like before
+            // PATH lookup finds /usr/games/bin/mupen64plus automatically
             string resolvedExecutable = PlatformServices.PathResolver.ResolveExecutable(Manifest.Executable);
             string args = $"\"{romPath}\"";
-
+            
             Console.WriteLine($"[PLUGIN] BuildLaunchCommand: exe='{resolvedExecutable}', args={args}");
             return (resolvedExecutable, args);
         }
 
-
-        // Existing behavior kept for other callers
         public async Task LaunchAsync(string romPath)
         {
             if (!File.Exists(romPath))
@@ -51,17 +46,17 @@ namespace Mupen64Plus.Plugin
                 return;
             }
 
-            Console.WriteLine($"[PLUGIN] Launching ROM: {romPath}");
+            Console.WriteLine($"[PLUGIN] Launching: {romPath}");
 
             try
             {
                 var (resolvedExecutable, arguments) = BuildLaunchCommand(romPath);
-
-                Console.WriteLine($"[PLUGIN] Resolved executable: {resolvedExecutable}");
+                
+                Console.WriteLine($"[PLUGIN] Executable: {resolvedExecutable}");
                 Console.WriteLine($"[PLUGIN] Arguments: {arguments}");
 
                 int exitCode = await PlatformServices.ProcessRunner.RunAsync(
-                    resolvedExecutable,
+                    resolvedExecutable, 
                     arguments
                 );
 
@@ -69,8 +64,7 @@ namespace Mupen64Plus.Plugin
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[PLUGIN] Failed to launch Mupen64Plus");
-                Console.WriteLine($"[PLUGIN] Exception: {ex}");
+                Console.WriteLine($"[PLUGIN] Launch failed: {ex.Message}");
             }
         }
     }
