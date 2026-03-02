@@ -22,14 +22,11 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-
-        // 1️⃣ Create the emulator manager
+        
         var emulatorManager = new EmulatorManager();
         
         _terminalScrollViewer = this.FindControl<ScrollViewer>("TerminalScrollViewer");
-
-
-        // 2️⃣ Load all plugins from Plugins folder
+        
         var pluginsPath = Path.Combine(AppContext.BaseDirectory, "Plugins");
         Console.WriteLine($"[DEBUG] Loading plugins from {pluginsPath}");
 
@@ -55,8 +52,7 @@ public partial class MainWindow : Window
 
         var scanner = new GameScanner(emulatorManager);
         DataContext = new MainWindowViewModel(scanner);
-
-        // Redirect console output to the UI terminal
+        
         RedirectConsoleToTerminal();
 
         DataContextChanged += OnDataContextChanged;
@@ -72,8 +68,7 @@ public partial class MainWindow : Window
 
             Console.SetOut(new TerminalTextWriter(vm.AppendTerminal));
             Console.SetError(new TerminalTextWriter(vm.AppendTerminal));
-
-            // Use Trace to capture debug info
+            
             Trace.Listeners.Add(new TerminalTraceListener(vm.AppendTerminal));
             Trace.AutoFlush = true;
         }
@@ -114,8 +109,7 @@ public partial class MainWindow : Window
         _terminalInputBox ??= this.FindControl<TextBox>("TerminalInputBox");
         _terminalInputBox?.Focus();
     }
-
-    // Handles Enter (execute) and Escape (clear)
+    
     private async void OnTerminalKeyDown(object? sender, KeyEventArgs e)
     {
         if (DataContext is not MainWindowViewModel vm)
@@ -137,7 +131,6 @@ public partial class MainWindow : Window
 
     protected override void OnClosed(EventArgs e)
     {
-        // Restore original console writers
         if (_originalOut is not null)
             Console.SetOut(_originalOut);
         if (_originalError is not null)
@@ -146,8 +139,6 @@ public partial class MainWindow : Window
         base.OnClosed(e);
     }
 }
-
-// ================= HELPER CLASSES =================
 
 public class TerminalTextWriter : TextWriter
 {

@@ -4,6 +4,116 @@
     "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/MelonDS.Plugin.csproj": {}
   },
   "projects": {
+    "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj",
+        "projectName": "Launcher.Core",
+        "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj",
+        "packagesPath": "/home/phoenix/.nuget/packages/",
+        "outputPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/phoenix/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.124/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj",
+        "projectName": "Launcher.Infrastructure",
+        "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj",
+        "packagesPath": "/home/phoenix/.nuget/packages/",
+        "outputPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/phoenix/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj": {
+                "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.124/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/MelonDS.Plugin.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -25,7 +135,14 @@
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj": {
+                "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj"
+              },
+              "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj": {
+                "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

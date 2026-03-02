@@ -34,3 +34,9 @@
 /home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/obj/Debug/net8.0/refint/MelonDS.Plugin.dll
 /home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/obj/Debug/net8.0/MelonDS.Plugin.pdb
 /home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/obj/Debug/net8.0/ref/MelonDS.Plugin.dll
+/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/bin/Debug/net8.0/Launcher.Core.dll
+/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/bin/Debug/net8.0/Launcher.Infrastructure.dll
+/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/bin/Debug/net8.0/Launcher.Core.pdb
+/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/bin/Debug/net8.0/Launcher.Infrastructure.pdb
+/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/obj/Debug/net8.0/MelonDS.Plugin.csproj.AssemblyReference.cache
+/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/obj/Debug/net8.0/MelonDS.Plugin.csproj.CopyComplete

@@ -1,0 +1,8 @@
+{
+  "Id": "MelonDS",
+  "DisplayName": "MelonDS Plugin",
+  "System": "MelonDS",
+  "Executable": "MelonDS.exe",
+  "SupportedExtensions": [".nds", ".zip", "7z"],
+  "Args": ["{rom}"]
+}

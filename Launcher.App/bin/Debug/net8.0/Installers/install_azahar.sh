@@ -5,7 +5,6 @@ BIN="$HOME/.local/bin"
 
 mkdir -p "$APPDIR" "$BIN"
 
-# TRY FLATPAK FIRST (like apt - cached/fast)
 if command -v flatpak >/dev/null 2>&1; then
     echo "🔄 Trying Flatpak (fast)..."
     if flatpak install flathub org.azahar_emu.Azahar -y --noninteractive 2>/dev/null | grep -q installed; then
@@ -14,7 +13,6 @@ if command -v flatpak >/dev/null 2>&1; then
     fi
 fi
 
-# FALLBACK: AppImage (backgrounded like my last script)
 echo "🔄 Flatpak failed, launching AppImage download in background..."
 (
     URL=$(curl -s --max-time 10 "https://api.github.com/repos/azahar-emu/azahar/releases/latest" \

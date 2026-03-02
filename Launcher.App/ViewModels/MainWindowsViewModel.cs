@@ -318,6 +318,7 @@ namespace Launcher.App.ViewModels
                 "SNES9x" => "install_snes9x.sh",
                 "Mupen64Plus" => "install_mupen64plus.sh",
                 "Azahar" => "install_azahar.sh",
+                "MelonDS" => "install_melonds.sh",
                 _ => null
             };
 

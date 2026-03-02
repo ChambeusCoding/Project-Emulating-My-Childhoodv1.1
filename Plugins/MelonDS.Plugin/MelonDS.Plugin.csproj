@@ -8,4 +8,8 @@
         <RootNamespace>MelonDS.Plugin</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="../../Launcher.Core/Launcher.Core.csproj" />
+        <ProjectReference Include="../../Launcher.Infrastructure/Launcher.Infrastructure.csproj" />
+    </ItemGroup>
 </Project>

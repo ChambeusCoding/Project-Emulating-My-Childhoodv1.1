@@ -4,25 +4,25 @@ using System.Threading.Tasks;
 using Launcher.Core.Emulation;
 using Launcher.Infrastructure;
 
-namespace Mupen64Plus.Plugin
+namespace MelonDS.Plugin
 {
-    public sealed class Mupen64PlusPlugin : IEmulatorPlugin
+    public sealed class MelonDSPlugin : IEmulatorPlugin
     {
         public EmulatorManifest Manifest { get; }
 
-        public Mupen64PlusPlugin()
+        public MelonDSPlugin()
         {
             Manifest = new EmulatorManifest
             {
-                Id = "mupen64plus",
-                DisplayName = "Mupen64Plus", 
-                System = "Nintendo 64",
-                Executable = "mupen64plus",
-                SupportedExtensions = new[] { ".n64", ".z64", ".v64" }
+                Id = "MelonDS",
+                DisplayName = "MelonDS Plugin",
+                System = "Nintendo DS",
+                Executable = "MelonDS.exe",
+                SupportedExtensions = new[] { ".nds", ".zip", "7z" }
             };
-
-            Console.WriteLine("[PLUGIN] Mupen64PlusPlugin constructed");
-            Console.WriteLine($"[PLUGIN] Executable: {Manifest.Executable}");
+            
+            Console.WriteLine("[PLUGIN] MelonDSPlugin constructed");
+            Console.WriteLine($"[PLUGIN] Executable path: {Manifest.Executable}");
         }
 
         public (string Executable, string Arguments) BuildLaunchCommand(string romPath)
@@ -41,29 +41,28 @@ namespace Mupen64Plus.Plugin
         {
             if (!File.Exists(romPath))
             {
-                Console.WriteLine($"[PLUGIN] ROM not found: {romPath}");
+                Console.WriteLine($"[PLUGIN] File not found: {romPath}");
                 return;
             }
-
-            Console.WriteLine($"[PLUGIN] Launching: {romPath}");
+            
+            Console.WriteLine($"[PLUGIN] Launching ROM: {romPath}");
 
             try
             {
                 var (resolvedExecutable, arguments) = BuildLaunchCommand(romPath);
                 
-                Console.WriteLine($"[PLUGIN] Executable: {resolvedExecutable}");
-                Console.WriteLine($"[PLUGIN] Arguments: {arguments}");
+                Console.WriteLine($"[PLUGIN] Executable path: {resolvedExecutable}");
+                Console.WriteLine($"[PLUGIN] arguments: {arguments}");
 
                 int exitCode = await PlatformServices.ProcessRunner.RunAsync(
-                    resolvedExecutable, 
+                    resolvedExecutable,
                     arguments
-                );
-
-                Console.WriteLine($"[PLUGIN] Mupen64Plus exited with code {exitCode}");
+                    );
+                Console.WriteLine($"[Plugin] MelonDS exit code: {exitCode}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[PLUGIN] Launch failed: {ex.Message}");
+                Console.WriteLine($"[PLUGIN] MelonDS exception: {ex.Message}");
             }
         }
     }
