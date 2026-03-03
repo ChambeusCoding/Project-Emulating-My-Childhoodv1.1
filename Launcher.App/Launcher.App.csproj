@@ -22,7 +22,7 @@
     <Content Include="bin\Debug\net8.0\Installers\cemu.install.sh" />
     <Content Include="bin\Debug\net8.0\Installers\dolphin.install.sh" />
     <Content Include="bin\Debug\net8.0\Installers\emulators.install.ps1" />
-    <Content Include="bin\Debug\net8.0\Installers\melonds_install.sh" />
+    <Content Include="bin\Debug\net8.0\Installers\install_melonds.sh" />
     <Content Include="bin\Debug\net8.0\Installers\install_mupen64plus.sh" />
     <Content Include="bin\Debug\net8.0\Installers\retroarch.install.sh" />
     <Content Include="bin\Debug\net8.0\Installers\install_snes9x.sh" />

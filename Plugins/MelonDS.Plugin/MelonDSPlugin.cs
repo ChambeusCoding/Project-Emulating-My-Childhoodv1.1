@@ -17,7 +17,7 @@ namespace MelonDS.Plugin
                 Id = "MelonDS",
                 DisplayName = "MelonDS Plugin",
                 System = "Nintendo DS",
-                Executable = "MelonDS.exe",
+                Executable = "melonds",
                 SupportedExtensions = new[] { ".nds", ".zip", "7z" }
             };
             

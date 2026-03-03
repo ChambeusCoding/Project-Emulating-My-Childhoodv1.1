@@ -1,8 +1,8 @@
 {
   "Id": "MelonDS",
   "DisplayName": "MelonDS Plugin",
-  "System": "MelonDS",
-  "Executable": "MelonDS.exe",
+  "System": "Nintendo DS",
+  "Executable": "melonds", 
   "SupportedExtensions": [".nds", ".zip", "7z"],
   "Args": ["{rom}"]
 }

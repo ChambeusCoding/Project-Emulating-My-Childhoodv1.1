@@ -58,6 +58,18 @@ public partial class MainWindow : Window
         DataContextChanged += OnDataContextChanged;
     }
     
+    private void MainWindow_OnScrollChanged(object sender, ScrollChangedEventArgs e)
+    {
+        if (sender is ScrollViewer scrollViewer)
+        {
+            // Update ViewModel ticker position
+            if (DataContext is MainWindowViewModel vm)
+            {
+                // Handle scroll for news ticker
+            }
+        }
+    }
+
 
     private void RedirectConsoleToTerminal()
     {

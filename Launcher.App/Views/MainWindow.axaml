@@ -15,7 +15,7 @@
         mc:Ignorable="d"
         Loaded="OnMainWindowLoaded">
     
-    <Grid RowDefinitions="48,*,320">
+    <Grid RowDefinitions="48,*,28,320">
 
 <!-- ================= TOP BAR ================= -->
 <Border Grid.Row="0"
@@ -70,93 +70,107 @@
 
         </StackPanel>
 
-
     </Grid>
 </Border>
 
+<!-- ================= MAIN CONTENT ================= -->
+<Grid Grid.Row="1" ColumnDefinitions="220,*">
+    
+    <Border Background="#181818"
+            CornerRadius="12"
+            Margin="12"
+            Padding="8">
+        <StackPanel>
+            <TextBlock Text="Systems"
+                       FontWeight="Bold"
+                       Margin="6,6,6,12"/>
 
-        <!-- ================= MAIN CONTENT ================= -->
-        <Grid Grid.Row="1" ColumnDefinitions="220,*">
-            
-            <Border Background="#181818"
-                    CornerRadius="12"
-                    Margin="12"
-                    Padding="8">
-                <StackPanel>
-                    <TextBlock Text="Systems"
-                               FontWeight="Bold"
-                               Margin="6,6,6,12"/>
+            <ItemsControl ItemsSource="{Binding Systems}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding}"
+                                Margin="0,0,0,6"
+                                Background="#2A2A2A"
+                                Foreground="White"
+                                CornerRadius="8"
+                                Padding="10,6"
+                                HorizontalAlignment="Stretch"
+                                Command="{Binding DataContext.SelectSystemCommand,
+                                          RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Border>
+    
+    <ScrollViewer Grid.Column="1">
+        <ItemsControl ItemsSource="{Binding FilteredGames}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Margin="16"
+                               ItemWidth="180"
+                               ItemHeight="260"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
 
-                    <ItemsControl ItemsSource="{Binding Systems}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Button Content="{Binding}"
-                                        Margin="0,0,0,6"
-                                        Background="#2A2A2A"
-                                        Foreground="White"
-                                        CornerRadius="8"
-                                        Padding="10,6"
-                                        HorizontalAlignment="Stretch"
-                                        Command="{Binding DataContext.SelectSystemCommand,
-                                                  RelativeSource={RelativeSource AncestorType=Window}}"
-                                        CommandParameter="{Binding}"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-            </Border>
-            
-            <ScrollViewer Grid.Column="1">
-                <ItemsControl ItemsSource="{Binding FilteredGames}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Margin="16"
-                                       ItemWidth="180"
-                                       ItemHeight="260"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border Width="180"
+                            Height="260"
+                            Background="#252525"
+                            CornerRadius="12"
+                            Margin="0,0,16,16"
+                            Padding="8">
+                        
+                        <Grid RowDefinitions="160,*,Auto">
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Width="180"
-                                    Height="260"
-                                    Background="#252525"
-                                    CornerRadius="12"
-                                    Margin="0,0,16,16"
-                                    Padding="8">
-                                
-                                <Grid RowDefinitions="160,*,Auto">
+                            <Border Grid.Row="0"
+                                    Background="#333"
+                                    CornerRadius="8"/>
 
-                                    <Border Grid.Row="0"
-                                            Background="#333"
-                                            CornerRadius="8"/>
+                            <TextBlock Grid.Row="1"
+                                       Text="{Binding Title}"
+                                       Margin="4"
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Top"/>
 
-                                    <TextBlock Grid.Row="1"
-                                               Text="{Binding Title}"
-                                               Margin="4"
-                                               TextWrapping="Wrap"
-                                               VerticalAlignment="Top"/>
+                            <Button Grid.Row="2"
+                                    Content="Play"
+                                    Height="32"
+                                    Margin="0,8,0,0"
+                                    CornerRadius="8"
+                                    HorizontalAlignment="Stretch"
+                                    Command="{Binding DataContext.LaunchGameCommand,
+                                              RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
 
-                                    <Button Grid.Row="2"
-                                            Content="Play"
-                                            Height="32"
-                                            Margin="0,8,0,0"
-                                            CornerRadius="8"
-                                            HorizontalAlignment="Stretch"
-                                            Command="{Binding DataContext.LaunchGameCommand,
-                                                      RelativeSource={RelativeSource AncestorType=Window}}"
-                                            CommandParameter="{Binding}"/>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
+</Grid>
 
-        </Grid>
+<!-- ================= STATUS BAR (NEW) ================= -->
+<Border Grid.Row="2"
+        Background="#0A0A0A"
+        BorderBrush="#2A2A2A"
+        BorderThickness="0,1"
+        Padding="12,4">
+    <ScrollViewer Name="GamesScrollViewer" 
+                  ScrollChanged="MainWindow_OnScrollChanged">
+        <ListBox ItemsSource="{Binding FilteredGames}" 
+                 SelectedItem="{Binding SelectedGame}">
+            <!-- game items -->
+        </ListBox>
+    </ScrollViewer>
+
+</Border>
 
 <!-- ================= TERMINAL (INTERACTIVE) ================= -->
-<Border Grid.Row="2"
+<Border Grid.Row="3"
         Background="#0E0E0E"
         CornerRadius="12,12,0,0"
         Margin="12"
