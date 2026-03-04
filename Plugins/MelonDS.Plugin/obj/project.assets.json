@@ -46,19 +46,19 @@
     ]
   },
   "packageFolders": {
-    "/home/phoenix/.nuget/packages/": {}
+    "/home/chambeus/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/MelonDS.Plugin.csproj",
+      "projectUniqueName": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/MelonDS.Plugin.csproj",
       "projectName": "MelonDS.Plugin",
-      "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/MelonDS.Plugin.csproj",
-      "packagesPath": "/home/phoenix/.nuget/packages/",
-      "outputPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/obj/",
+      "projectPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/MelonDS.Plugin.csproj",
+      "packagesPath": "/home/chambeus/.nuget/packages/",
+      "outputPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/phoenix/.nuget/NuGet/NuGet.Config"
+        "/home/chambeus/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -70,11 +70,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj": {
-              "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj"
+            "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj": {
+              "projectPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj"
             },
-            "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj": {
-              "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj"
+            "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj": {
+              "projectPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj"
             }
           }
         }

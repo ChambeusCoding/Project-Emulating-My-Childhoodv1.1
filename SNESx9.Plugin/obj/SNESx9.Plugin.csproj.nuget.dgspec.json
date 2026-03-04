@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/SNESx9.Plugin.csproj": {}
+    "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/SNESx9.Plugin.csproj": {}
   },
   "projects": {
-    "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj": {
+    "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj",
+        "projectUniqueName": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj",
         "projectName": "Launcher.Core",
-        "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj",
-        "packagesPath": "/home/phoenix/.nuget/packages/",
-        "outputPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/",
+        "projectPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj",
+        "packagesPath": "/home/chambeus/.nuget/packages/",
+        "outputPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/phoenix/.nuget/NuGet/NuGet.Config"
+          "/home/chambeus/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -57,17 +57,17 @@
         }
       }
     },
-    "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj": {
+    "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj",
+        "projectUniqueName": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj",
         "projectName": "Launcher.Infrastructure",
-        "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj",
-        "packagesPath": "/home/phoenix/.nuget/packages/",
-        "outputPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/obj/",
+        "projectPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj",
+        "packagesPath": "/home/chambeus/.nuget/packages/",
+        "outputPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/phoenix/.nuget/NuGet/NuGet.Config"
+          "/home/chambeus/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -79,8 +79,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj": {
-                "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj"
+              "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj": {
+                "projectPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj"
               }
             }
           }
@@ -114,17 +114,17 @@
         }
       }
     },
-    "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/SNESx9.Plugin.csproj": {
+    "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/SNESx9.Plugin.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/SNESx9.Plugin.csproj",
+        "projectUniqueName": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/SNESx9.Plugin.csproj",
         "projectName": "SNESx9.Plugin",
-        "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/SNESx9.Plugin.csproj",
-        "packagesPath": "/home/phoenix/.nuget/packages/",
-        "outputPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/obj/",
+        "projectPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/SNESx9.Plugin.csproj",
+        "packagesPath": "/home/chambeus/.nuget/packages/",
+        "outputPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/phoenix/.nuget/NuGet/NuGet.Config"
+          "/home/chambeus/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -136,11 +136,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj": {
-                "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj"
+              "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj": {
+                "projectPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Core/Launcher.Core.csproj"
               },
-              "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj": {
-                "projectPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj"
+              "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj": {
+                "projectPath": "/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Infrastructure/Launcher.Infrastructure.csproj"
               }
             }
           }

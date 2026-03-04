@@ -256,20 +256,47 @@ namespace Launcher.App.ViewModels
                     break;
             }
         }
+        private async Task RunDebugger()
+        {
+            if (_debugRunning) 
+            {
+                AppendTerminal("[WARN] Debug already running");
+                return;
+            }
+            _debugRunning = true;
+            try
+            {
+                var exe = Environment.ProcessPath!;
+                await RunShellCommand($"DOTNET_ENVIRONMENT=Development \"{exe}\"");
+            }
+            finally { _debugRunning = false; }
+        }
 
         private async Task RunShellCommand(string command)
         {
             var psi = new ProcessStartInfo
             {
                 FileName = "/bin/bash",
-                Arguments = $"-c \"{command}\"",
+                Arguments = $"-l -i -c \"{command}\"",  // 🔥 Added -l -i for login shell
+                WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), // 🔥 HOME dir
+                UseShellExecute = false,
+                RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
-                UseShellExecute = false
+        
+                // 🔥 TERMINAL ENVIRONMENT - matches Rider exactly
+                EnvironmentVariables =
+                {
+                    ["TERM"] = "xterm-256color",
+                    ["COLORTERM"] = "truecolor", 
+                    ["LANG"] = "en_US.UTF-8",
+                    ["PATH"] = Environment.GetEnvironmentVariable("PATH") ?? "",
+                    ["HOME"] = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
+                }
             };
 
             using var process = Process.Start(psi)!;
-            
+    
             async Task ReadStream(StreamReader reader)
             {
                 try
@@ -290,90 +317,87 @@ namespace Launcher.App.ViewModels
             await process.WaitForExitAsync();
         }
 
-        private async Task RunDebugger()
-        {
-            if (_debugRunning) 
-            {
-                AppendTerminal("[WARN] Debug already running");
-                return;
-            }
-            _debugRunning = true;
-            try
-            {
-                var exe = Environment.ProcessPath!;
-                await RunShellCommand($"DOTNET_ENVIRONMENT=Development \"{exe}\"");
-            }
-            finally { _debugRunning = false; }
-        }
 
         // ================= EMULATOR INSTALLERS =================
         private async Task RunSelectedInstaller()
+{
+    if (string.IsNullOrWhiteSpace(SelectedEmulatorInstaller))
+    {
+        AppendTerminal("[INSTALL] Select an emulator first");
+        return;
+    }
+
+    var scriptName = SelectedEmulatorInstaller switch
+    {
+        "SNES9x" => "install_snes9x.sh",
+        "Mupen64Plus" => "install_mupen64plus.sh",
+        "Azahar" => "install_azahar.sh",
+        "MelonDS" => "install_melonds.sh",
+        _ => null
+    };
+
+    if (scriptName == null)
+    {
+        AppendTerminal($"[INSTALL] No script for {SelectedEmulatorInstaller}");
+        return;
+    }
+
+    var scriptsDir = Path.Combine(AppContext.BaseDirectory, "Installers");
+    var scriptPath = Path.Combine(scriptsDir, scriptName);
+
+    if (!File.Exists(scriptPath))
+    {
+        AppendTerminal($"[INSTALL] Missing: {scriptPath}");
+        return;
+    }
+
+    AppendTerminal($"[INSTALL] Running {scriptName}...");
+
+    // 🔥 FIXED VERSION - This makes it identical to Rider terminal
+    var psi = new ProcessStartInfo
+    {
+        FileName = "/bin/bash",
+        Arguments = $"\"{scriptPath}\"",
+        WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), // ← HOME dir
+        UseShellExecute = false,
+        RedirectStandardOutput = true,
+        RedirectStandardError = true,
+        
+        // 🔥 TERMINAL ENVIRONMENT - matches Rider exactly
+        EnvironmentVariables =
         {
-            if (string.IsNullOrWhiteSpace(SelectedEmulatorInstaller))
-            {
-                AppendTerminal("[INSTALL] Select an emulator first");
-                return;
-            }
-
-            var scriptName = SelectedEmulatorInstaller switch
-            {
-                "SNES9x" => "install_snes9x.sh",
-                "Mupen64Plus" => "install_mupen64plus.sh",
-                "Azahar" => "install_azahar.sh",
-                "MelonDS" => "install_melonds.sh",
-                _ => null
-            };
-
-            if (scriptName == null)
-            {
-                AppendTerminal($"[INSTALL] No script for {SelectedEmulatorInstaller}");
-                return;
-            }
-
-            var scriptsDir = Path.Combine(AppContext.BaseDirectory, "Installers");
-            var scriptPath = Path.Combine(scriptsDir, scriptName);
-
-            if (!File.Exists(scriptPath))
-            {
-                AppendTerminal($"[INSTALL] Missing: {scriptPath}");
-                return;
-            }
-
-            AppendTerminal($"[INSTALL] Running {scriptName}...");
-
-            // ✅ FIXED: Use proper bash + full path
-            var psi = new ProcessStartInfo
-            {
-                FileName = "/bin/bash",
-                Arguments = $"\"{scriptPath}\"",  // ← Full path in quotes
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            };
-
-            using var proc = Process.Start(psi)!;
-    
-            async Task ReadStream(StreamReader reader)
-            {
-                try
-                {
-                    while (!reader.EndOfStream)
-                    {
-                        var line = await reader.ReadLineAsync();
-                        if (line != null) AppendTerminal(line);
-                    }
-                }
-                catch { }
-            }
-
-            await Task.WhenAll(
-                ReadStream(proc.StandardOutput),
-                ReadStream(proc.StandardError)
-            );
-    
-            await proc.WaitForExitAsync();
-            AppendTerminal($"[INSTALL] Done (code: {proc.ExitCode})");
+            ["TERM"] = "xterm-256color",
+            ["COLORTERM"] = "truecolor",
+            ["LANG"] = "en_US.UTF-8",
+            ["PATH"] = Environment.GetEnvironmentVariable("PATH") ?? "",
+            ["HOME"] = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
         }
+    };
+
+    using var proc = Process.Start(psi)!;
+
+    async Task ReadStream(StreamReader reader)
+    {
+        try
+        {
+            while (!reader.EndOfStream)
+            {
+                var line = await reader.ReadLineAsync();
+                if (line != null) AppendTerminal(line);
+            }
+        }
+        catch { }
+    }
+
+    await Task.WhenAll(
+        ReadStream(proc.StandardOutput),
+        ReadStream(proc.StandardError)
+    );
+
+    await proc.WaitForExitAsync();
+    AppendTerminal($"[INSTALL] Done (code: {proc.ExitCode})");
+}
+
 
 
         // ================= GAMES =================
@@ -442,13 +466,22 @@ namespace Launcher.App.ViewModels
             {
                 FileName = fileName,
                 Arguments = arguments,
+                WorkingDirectory = Path.GetDirectoryName(arguments) ?? Environment.CurrentDirectory, // 🔥 ROMs dir
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
-                RedirectStandardError = true
+                RedirectStandardError = true,
+        
+                // 🔥 TERMINAL ENVIRONMENT
+                EnvironmentVariables =
+                {
+                    ["TERM"] = "xterm-256color",
+                    ["LANG"] = "en_US.UTF-8",
+                    ["PATH"] = Environment.GetEnvironmentVariable("PATH") ?? ""
+                }
             };
 
             using var process = Process.Start(psi)!;
-            
+    
             async Task ReadStream(StreamReader reader)
             {
                 try
@@ -468,6 +501,7 @@ namespace Launcher.App.ViewModels
             );
             await process.WaitForExitAsync();
         }
+
 
         private void ApplyFilters()
         {
