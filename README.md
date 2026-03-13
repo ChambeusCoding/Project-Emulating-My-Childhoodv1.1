@@ -1,4 +1,4 @@
-# Project-Emulating-My-Childhoodv1.1
+# RetroRunner 2.1
 Project Emualting My Chilhood (later named as RetroRunner) is a open source application intended for 
 Linux users who like emulation like I do. No seperate dowloads needed, all you have to do is 1. install
 2. load plugins 3. play 
