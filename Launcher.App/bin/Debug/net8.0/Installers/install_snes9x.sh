@@ -1,79 +1,81 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "🟢 Installing SNES9x (user-safe installer)..."
+echo "🟢 Installing SNES9x (fixed installer 2026)..."
 
-if command -v snes9x >/dev/null 2>&1; then
-    echo "✅ SNES9x already installed: $(command -v snes9x)"
+# Check ALL snes9x variants first (libretro, standalone, snaps)
+if command -v snes9x >/dev/null 2>&1 || command -v snes9x-gtk >/dev/null 2>&1; then
+    echo "✅ Standalone SNES9x found!"
+    exit 0
+fi
+
+if command -v snap >/dev/null 2>&1 && snap list snes9x-gtk >/dev/null 2>&1; then
+    echo "✅ Snap SNES9x-gtk detected!"
+    echo "🔧 Run: sudo snap connect snes9x-gtk:joystick removable-media"
+    exit 0
+fi
+
+if dpkg -l | grep -q libretro-snes9x; then
+    echo "ℹ️  Libretro SNES9x core found (needs RetroArch frontend)"
+    echo "🎮 For RetroRunner: Use libretro core instead of snes9x-gtk"
     exit 0
 fi
 
 INSTALL_DIR="$HOME/.local/bin"
 mkdir -p "$INSTALL_DIR"
 
-echo "🔄 Downloading SNES9x (live progress)..."
+echo "🔄 Trying reliable methods..."
 
-# Try multiple installation methods
-METHODS=(
-    "Flatpak: org.snes9x.Snes9x"
-    "AppImage: https://github.com/snes9xgit/snes9x/releases/latest/download/snes9x.AppImage"
-    "Prebuilt: https://github.com/snes9xgit/snes9x/releases/download/1.63/snes9x-1.63-linux.tar.gz"
-)
+# 1. Snap INSTALL (most reliable - needs sudo but works everywhere)
+if command -v snap >/dev/null 2>&1; then
+    echo "🌐 Snap (RECOMMENDED)..."
+    if sudo snap install snes9x-gtk 2>/dev/null && command -v snes9x-gtk >/dev/null 2>&1; then
+        echo "✅ SNAP SUCCESS! Run: snes9x-gtk"
+        echo "🔧 Permissions: sudo snap connect snes9x-gtk:joystick removable-media"
+        exit 0
+    fi
+fi
 
-for METHOD in "${METHODS[@]}"; do
-    echo "🌐 Trying: $METHOD"
-    
-    case "$METHOD" in
-        "Flatpak: "*)
-            if command -v flatpak >/dev/null 2>&1; then
-                flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || true
-                if flatpak install --user -y flathub org.snes9x.Snes9x 2>/dev/null | grep -q "installed"; then
-                    echo "✅ SUCCESS: $METHOD"
-                    echo "📝 Run with: flatpak run org.snes9x.Snes9x"
-                    exit 0
-                fi
-            fi
-            ;;
-        "AppImage: "*)
-            URL="${METHOD#AppImage: }"
-            if wget --spider --timeout=10 "$URL" 2>/dev/null; then
-                echo "🔗 Downloading AppImage: $URL"
-                if wget --timeout=60 --show-progress --progress=bar:force "$URL" -O "/tmp/snes9x.AppImage"; then
-                    chmod +x "/tmp/snes9x.AppImage"
-                    mv "/tmp/snes9x.AppImage" "$INSTALL_DIR/snes9x"
-                    ln -sf "$INSTALL_DIR/snes9x" "$INSTALL_DIR/snes9x-gtk"
-                    echo "✅ SUCCESS: $METHOD"
-                    echo "📍 Ready: $INSTALL_DIR/snes9x"
-                    exit 0
-                fi
-            fi
-            ;;
-        "Prebuilt: "*)
-            URL="${METHOD#Prebuilt: }"
-            if wget --spider --timeout=10 "$URL" 2>/dev/null; then
-                echo "🔗 Downloading prebuilt: $URL"
-                if wget --timeout=60 --show-progress --progress=bar:force "$URL" -O "/tmp/snes9x.tar.gz"; then
-                    tar xzf "/tmp/snes9x.tar.gz" -C /tmp
-                    cp /tmp/snes9x-*/snes9x "$INSTALL_DIR/snes9x" 2>/dev/null || cp /tmp/snes9x-1.*/snes9x "$INSTALL_DIR/snes9x"
-                    chmod +x "$INSTALL_DIR/snes9x"
-                    echo "✅ SUCCESS: $METHOD"
-                    echo "📍 Ready: $INSTALL_DIR/snes9x"
-                    exit 0
-                fi
-            fi
-            ;;
-    esac
-done
+# 2. Flatpak (user install - no sudo)
+if command -v flatpak >/dev/null 2>&1; then
+    echo "🌐 Flatpak..."
+    flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
+    if flatpak install --user -y flathub org.snes9x.Snes9x 2>/dev/null && flatpak list | grep -q org.snes9x.Snes9x; then
+        echo "✅ Flatpak SUCCESS! Run: flatpak run org.snes9x.Snes9x"
+        exit 0
+    fi
+fi
+
+# 3. AppImage (direct version URL)
+echo "🌐 AppImage..."
+cd /tmp
+if wget -T 15 --no-verbose "https://github.com/snes9xgit/snes9x/releases/download/1.63.7/snes9x-1.63.7-x64.AppImage"; then
+    chmod +x snes9x-1.63.7-x64.AppImage
+    mv snes9x-1.63.7-x64.AppImage "$INSTALL_DIR/snes9x"
+    ln -sf "$INSTALL_DIR/snes9x" "$INSTALL_DIR/snes9x-gtk"
+    echo "✅ AppImage SUCCESS! Run: $INSTALL_DIR/snes9x"
+    echo "export PATH=\"\$HOME/.local/bin:\$PATH\"" >> ~/.bashrc
+    exit 0
+fi
 
 cat << EOF
-❌ SNES9x installation failed!
+❌ Auto-install failed!
 
-Manual alternatives:
-1. Flatpak: flatpak install --user flathub org.snes9x.Snes9x
-2. AppImage: https://github.com/snes9xgit/snes9x/releases/latest
-3. System package: sudo apt install snes9x-gtk
-4. Build from source: https://github.com/snes9xgit/snes9x
+🚀 MANUAL OPTIONS (Copy-paste these):
 
+1. **SNAP (BEST - already half-working on your system)**:
+   sudo snap connect snes9x-gtk:joystick
+   sudo snap connect snes9x-gtk:removable-media
+   snes9x-gtk "~/Documents/ROMs/Super Punch-Out!! (USA).sfc"
+
+2. **RetroRunner + Libretro** (you already have this):
+   Plugin: Use libretro-snes9x core (/usr/lib/libretro/snes9x_libretro.so)
+   
+3. **AppImage**:
+   cd ~/Documents/ROMs && wget https://github.com/snes9xgit/snes9x/releases/download/1.63.7/snes9x-1.63.7-x64.AppImage
+   chmod +x snes9x-1.63.7-x64.AppImage
+
+📝 PATH: echo 'export PATH="/snap/bin:\$HOME/.local/bin:\$PATH"' >> ~/.bashrc
 EOF
-echo "❌ All install methods failed!"
+
 exit 1
