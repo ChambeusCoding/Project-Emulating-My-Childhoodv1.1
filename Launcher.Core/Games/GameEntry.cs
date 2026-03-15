@@ -8,4 +8,5 @@ public sealed class GameEntry
     public string? System { get; set; }
     public string? EmulatorId { get; set; }
     public string? BoxArtPath { get; set; }
+    public string? _selectedGame { get; set; }
 }

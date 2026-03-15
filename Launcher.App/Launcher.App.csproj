@@ -14,6 +14,8 @@
   <ItemGroup>
     <None Remove="Assets\Shirtfffff.png" />
     <AvaloniaResource Include="Assets\Shirtfffff.png" />
+    <None Remove="Assets\logo.png" />
+    <AvaloniaResource Include="Assets\logo.png" />
     <None Include="bin\Debug\net8.0\Plugins\Mupen64Plus\plugin.json" />
   </ItemGroup>
 
@@ -58,6 +60,11 @@
     <Content Include="bin\Debug\net8.0\Plugins\Snesx9\SNESx9.Plugin.deps.json" />
     <Content Include="bin\Debug\net8.0\Plugins\Snesx9\SNESx9.Plugin.dll" />
     <Content Include="bin\Debug\net8.0\Plugins\Snesx9\SNESx9.Plugin.pdb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\logo.png" />
+    <Resource Include="Assets\logo.png" />
   </ItemGroup>
 
   <PropertyGroup>

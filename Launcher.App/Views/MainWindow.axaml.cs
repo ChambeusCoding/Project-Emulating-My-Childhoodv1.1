@@ -9,6 +9,8 @@ using Launcher.Core.Games;
 using Launcher.Core.Emulation;
 using Launcher.App.ViewModels;
 using Avalonia.Interactivity;
+using System.ComponentModel; 
+
 
 namespace Launcher.App.Views;
 
@@ -18,12 +20,14 @@ public partial class MainWindow : Window
     private TextWriter? _originalOut;
     private TextWriter? _originalError;
     private TextBox? _terminalInputBox;
+    
 
     public MainWindow()
     {
         InitializeComponent();
         
         var emulatorManager = new EmulatorManager();
+        
         
         _terminalScrollViewer = this.FindControl<ScrollViewer>("TerminalScrollViewer");
         

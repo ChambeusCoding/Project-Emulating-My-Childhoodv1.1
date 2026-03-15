@@ -1,15 +1,19 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Text;
+using System.Text.Json;
 using Avalonia.Threading;
-using Avalonia.Controls;
 using Launcher.Core.Games;
 using Launcher.Core.Emulation;
 using Launcher.App.Common;
+using System.Net.Http;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 
 namespace Launcher.App.ViewModels
 {
@@ -17,20 +21,25 @@ namespace Launcher.App.ViewModels
     {
         private readonly GameScanner _scanner;
         private readonly EmulatorManager _emulators;
-        
         public ICommand CopyTerminalCommand { get; }
         public ICommand PasteTerminalCommand { get; }
-
-        private bool _debugRunning;
-        private readonly DispatcherTimer _terminalFlushTimer;
-        private readonly DispatcherTimer _tickerTimer;
-
         public ICommand ExecuteTerminalCommandCommand { get; }
         public ICommand ScanGamesCommand { get; }
         public ICommand SelectSystemCommand { get; }
         public ICommand LaunchGameCommand { get; }
         public ICommand InstallSelectedEmulatorCommand { get; }
         
+        private static readonly HttpClient _httpClient = new()
+        {
+            DefaultRequestHeaders = { { "User-Agent", "RetroRunner/2.1 (+https://your-site.example)" } }
+        };
+
+        private const string TgdbApiKey = "56c228bda3f885713c79ce7fdb9e651b83fa33c48df611bf672b387329f1df2d";
+
+        private bool _debugRunning;
+        private readonly DispatcherTimer _terminalFlushTimer;
+        private readonly DispatcherTimer _tickerTimer;
+
         private string _statusText = "Welcome to RetroRunner! Install emulators, scan ROMs, launch games. Trust the terminal output.";
         public string StatusText 
         { 
@@ -87,7 +96,6 @@ namespace Launcher.App.ViewModels
         private readonly StringBuilder _terminalBuffer = new();
         private readonly object _terminalLock = new();
 
-        // Observable collections - declared here for completeness
         public ObservableCollection<GameEntry> Games { get; }
         public ObservableCollection<GameEntry> FilteredGames { get; }
         public ObservableCollection<string> Systems { get; }
@@ -126,14 +134,13 @@ namespace Launcher.App.ViewModels
             Games = new ObservableCollection<GameEntry>();
             FilteredGames = new ObservableCollection<GameEntry>();
             Systems = new ObservableCollection<string>();
-
             ExecuteTerminalCommandCommand = new RelayCommand(() => _ = ExecuteTerminalCommand());
             ScanGamesCommand = new RelayCommand(ScanGames);
             SelectSystemCommand = new RelayCommand<string>(SelectSystem);
             LaunchGameCommand = new RelayCommand<GameEntry>(game => _ = LaunchGameAsync(game));
             InstallSelectedEmulatorCommand = new RelayCommand(() => _ = RunSelectedInstaller());
-            CopyTerminalCommand = new RelayCommand(async () => await CopyTerminalOutput());
-            PasteTerminalCommand = new RelayCommand(async () => await PasteToTerminal());
+            CopyTerminalCommand = new RelayCommand(() => CopyTerminalOutput());
+            PasteTerminalCommand = new RelayCommand(() => PasteToTerminal());
 
             _terminalFlushTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(16) };
             _terminalFlushTimer.Tick += (s, e) => FlushTerminalBuffer();
@@ -155,18 +162,14 @@ namespace Launcher.App.ViewModels
             StatusText = "🎮 RetroRunner | Ready to scan & launch games";
         }
 
-        // ================= TERMINAL =================
-        private async Task CopyTerminalOutput()
+        private void CopyTerminalOutput()
         {
             try
             {
-                if (string.IsNullOrEmpty(TerminalOutput)) return;
-
-                if (Avalonia.Controls.TopLevel.GetTopLevel(null) is { Clipboard: { } clipboard })
+                if (!string.IsNullOrEmpty(TerminalOutput))
                 {
-                    await clipboard.SetTextAsync(TerminalOutput);
-                    AppendTerminal("[CLIPBOARD] Output copied!");
-                    StatusText = "📋 Terminal copied";
+                    AppendTerminal("[CLIPBOARD] Copy requires clipboard service (disabled in ViewModel)");
+                    StatusText = "📋 Copy needs DI service";
                 }
             }
             catch (Exception ex)
@@ -175,19 +178,11 @@ namespace Launcher.App.ViewModels
             }
         }
 
-        private async Task PasteToTerminal()
+        private void PasteToTerminal()
         {
             try
             {
-                if (Avalonia.Controls.TopLevel.GetTopLevel(null) is { Clipboard: { } clipboard })
-                {
-                    var text = await clipboard.GetTextAsync();
-                    if (!string.IsNullOrWhiteSpace(text))
-                    {
-                        TerminalInput = text;
-                        AppendTerminal($"[PASTE] {text.Substring(0, Math.Min(50, text.Length))}...");
-                    }
-                }
+                AppendTerminal("[PASTE] Paste requires clipboard service (disabled in ViewModel)");
             }
             catch (Exception ex)
             {
@@ -235,7 +230,7 @@ namespace Launcher.App.ViewModels
             AppendTerminal($"$ {input}");
             
             var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            var cmd = parts[0].ToLowerInvariant();
+            var cmd = parts.Length > 0 ? parts[0].ToLowerInvariant() : "";
 
             switch (cmd)
             {
@@ -256,6 +251,7 @@ namespace Launcher.App.ViewModels
                     break;
             }
         }
+
         private async Task RunDebugger()
         {
             if (_debugRunning) 
@@ -277,23 +273,19 @@ namespace Launcher.App.ViewModels
             var psi = new ProcessStartInfo
             {
                 FileName = "/bin/bash",
-                Arguments = $"-l -i -c \"{command}\"",  // 🔥 Added -l -i for login shell
-                WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), // 🔥 HOME dir
+                Arguments = $"-l -i -c \"{command}\"",
+                WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                 UseShellExecute = false,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
-                RedirectStandardError = true,
-        
-                // 🔥 TERMINAL ENVIRONMENT - matches Rider exactly
-                EnvironmentVariables =
-                {
-                    ["TERM"] = "xterm-256color",
-                    ["COLORTERM"] = "truecolor", 
-                    ["LANG"] = "en_US.UTF-8",
-                    ["PATH"] = Environment.GetEnvironmentVariable("PATH") ?? "",
-                    ["HOME"] = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
-                }
+                RedirectStandardError = true
             };
+
+            psi.EnvironmentVariables["TERM"] = "xterm-256color";
+            psi.EnvironmentVariables["COLORTERM"] = "truecolor"; 
+            psi.EnvironmentVariables["LANG"] = "en_US.UTF-8";
+            psi.EnvironmentVariables["PATH"] = Environment.GetEnvironmentVariable("PATH") ?? "";
+            psi.EnvironmentVariables["HOME"] = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
             using var process = Process.Start(psi)!;
     
@@ -317,96 +309,94 @@ namespace Launcher.App.ViewModels
             await process.WaitForExitAsync();
         }
 
-
-        // ================= EMULATOR INSTALLERS =================
         private async Task RunSelectedInstaller()
-{
-    if (string.IsNullOrWhiteSpace(SelectedEmulatorInstaller))
-    {
-        AppendTerminal("[INSTALL] Select an emulator first");
-        return;
-    }
-
-    var scriptName = SelectedEmulatorInstaller switch
-    {
-        "SNES9x" => "install_snes9x.sh",
-        "Mupen64Plus" => "install_mupen64plus.sh",
-        "Azahar" => "install_azahar.sh",
-        "MelonDS" => "install_melonds.sh",
-        _ => null
-    };
-
-    if (scriptName == null)
-    {
-        AppendTerminal($"[INSTALL] No script for {SelectedEmulatorInstaller}");
-        return;
-    }
-
-    var scriptsDir = Path.Combine(AppContext.BaseDirectory, "Installers");
-    var scriptPath = Path.Combine(scriptsDir, scriptName);
-
-    if (!File.Exists(scriptPath))
-    {
-        AppendTerminal($"[INSTALL] Missing: {scriptPath}");
-        return;
-    }
-
-    AppendTerminal($"[INSTALL] Running {scriptName}...");
-
-    // 🔥 FIXED VERSION - This makes it identical to Rider terminal
-    var psi = new ProcessStartInfo
-    {
-        FileName = "/bin/bash",
-        Arguments = $"\"{scriptPath}\"",
-        WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), // ← HOME dir
-        UseShellExecute = false,
-        RedirectStandardOutput = true,
-        RedirectStandardError = true,
-        
-        // 🔥 TERMINAL ENVIRONMENT - matches Rider exactly
-        EnvironmentVariables =
         {
-            ["TERM"] = "xterm-256color",
-            ["COLORTERM"] = "truecolor",
-            ["LANG"] = "en_US.UTF-8",
-            ["PATH"] = Environment.GetEnvironmentVariable("PATH") ?? "",
-            ["HOME"] = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
-        }
-    };
-
-    using var proc = Process.Start(psi)!;
-
-    async Task ReadStream(StreamReader reader)
-    {
-        try
-        {
-            while (!reader.EndOfStream)
+            if (string.IsNullOrWhiteSpace(SelectedEmulatorInstaller))
             {
-                var line = await reader.ReadLineAsync();
-                if (line != null) AppendTerminal(line);
+                AppendTerminal("[INSTALL] Select an emulator first");
+                return;
             }
+
+            var scriptName = SelectedEmulatorInstaller switch
+            {
+                "SNES9x" => "install_snes9x.sh",
+                "Mupen64Plus" => "install_mupen64plus.sh",
+                "Azahar" => "install_azahar.sh",
+                "MelonDS" => "install_melonds.sh",
+                _ => null
+            };
+
+            if (scriptName == null)
+            {
+                AppendTerminal($"[INSTALL] No script for {SelectedEmulatorInstaller}");
+                return;
+            }
+
+            var scriptsDir = Path.Combine(AppContext.BaseDirectory, "Installers");
+            var scriptPath = Path.Combine(scriptsDir, scriptName);
+
+            if (!File.Exists(scriptPath))
+            {
+                AppendTerminal($"[INSTALL] Missing: {scriptPath}");
+                return;
+            }
+
+            AppendTerminal($"[INSTALL] Running {scriptName}...");
+
+            var psi = new ProcessStartInfo
+            {
+                FileName = "/bin/bash",
+                Arguments = $"\"{scriptPath}\"",
+                WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+
+            psi.EnvironmentVariables["TERM"] = "xterm-256color";
+            psi.EnvironmentVariables["COLORTERM"] = "truecolor";
+            psi.EnvironmentVariables["LANG"] = "en_US.UTF-8";
+            psi.EnvironmentVariables["PATH"] = Environment.GetEnvironmentVariable("PATH") ?? "";
+            psi.EnvironmentVariables["HOME"] = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+            using var proc = Process.Start(psi)!;
+
+            async Task ReadStream(StreamReader reader)
+            {
+                try
+                {
+                    while (!reader.EndOfStream)
+                    {
+                        var line = await reader.ReadLineAsync();
+                        if (line != null) AppendTerminal(line);
+                    }
+                }
+                catch { }
+            }
+
+            await Task.WhenAll(
+                ReadStream(proc.StandardOutput),
+                ReadStream(proc.StandardError)
+            );
+
+            await proc.WaitForExitAsync();
+            AppendTerminal($"[INSTALL] Done (code: {proc.ExitCode})");
         }
-        catch { }
-    }
 
-    await Task.WhenAll(
-        ReadStream(proc.StandardOutput),
-        ReadStream(proc.StandardError)
-    );
-
-    await proc.WaitForExitAsync();
-    AppendTerminal($"[INSTALL] Done (code: {proc.ExitCode})");
-}
-
-
-
-        // ================= GAMES =================
         private void ScanGames()
         {
             AppendTerminal("[SCAN] Scanning ~/Documents/ROMs...");
             
             var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             var romsDir = Path.Combine(home, "Documents", "ROMs");
+            
+            foreach (var game in _scanner.Scan(romsDir))
+            {
+                game.System ??= "Unknown";
+                game.BoxArtPath = null;  // ← THIS LINE FIXES BINDING ERRORS
+                Games.Add(game);
+                AppendTerminal($"[SCAN] + {game.Title}");
+            }
             
             Games.Clear();
             
@@ -419,7 +409,7 @@ namespace Launcher.App.ViewModels
             foreach (var game in _scanner.Scan(romsDir))
             {
                 game.System ??= "Unknown";
-                game.BoxArtPath ??= "avares://Launcher.App/Assets/placeholder.png";
+                game.BoxArtPath ??= "Assets/placeholder.png";  // ← THIS LINE FIXED
                 Games.Add(game);
                 AppendTerminal($"[SCAN] + {game.Title}");
             }
@@ -451,7 +441,7 @@ namespace Launcher.App.ViewModels
 
             try
             {
-                string romPath = game.FilePath;  // Use game.FilePath consistently
+                string romPath = game.FilePath;
                 string romDirectory = Path.GetDirectoryName(romPath)!;
         
                 var (exe, args) = emulator.BuildLaunchCommand(romPath);
@@ -459,7 +449,7 @@ namespace Launcher.App.ViewModels
                 AppendTerminal($"[LAUNCH] Executable: {exe}");
                 AppendTerminal($"[LAUNCH] WorkingDirectory: {romDirectory}");
         
-                await RunProcessAsync(exe, args, romDirectory);  // ✅ All 3 parameters defined!
+                await RunProcessAsync(exe, args, romDirectory);
             }
             catch (Exception ex)
             {
@@ -467,24 +457,21 @@ namespace Launcher.App.ViewModels
             }
         }
 
-
         private async Task RunProcessAsync(string fileName, string arguments, string workingDirectory)
         {
             var psi = new ProcessStartInfo
             {
                 FileName = fileName,
                 Arguments = arguments,
-                WorkingDirectory = workingDirectory,  // ← FIXED! Clean path from plugins
+                WorkingDirectory = workingDirectory,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                EnvironmentVariables =
-                {
-                    ["TERM"] = "xterm-256color",
-                    ["LANG"] = "en_US.UTF-8", 
-                    ["PATH"] = Environment.GetEnvironmentVariable("PATH") ?? ""
-                }
+                RedirectStandardError = true
             };
+
+            psi.EnvironmentVariables["TERM"] = "xterm-256color";
+            psi.EnvironmentVariables["LANG"] = "en_US.UTF-8"; 
+            psi.EnvironmentVariables["PATH"] = Environment.GetEnvironmentVariable("PATH") ?? "";
 
             using var process = Process.Start(psi)!;
     
@@ -508,7 +495,6 @@ namespace Launcher.App.ViewModels
             await process.WaitForExitAsync();
         }
 
-
         private void ApplyFilters()
         {
             FilteredGames.Clear();
@@ -529,6 +515,23 @@ namespace Launcher.App.ViewModels
             Systems.Add("All");
             foreach (var system in _emulators.RegisteredSystems())
                 Systems.Add(system);
+        }
+        
+        public ICommand LoadCoversCommand { get; }
+
+// Add field for SelectedGame (you mentioned you have this already)
+        private GameEntry? _selectedGame;
+        public GameEntry? SelectedGame
+        {
+            get => _selectedGame;
+            set
+            {
+                if (_selectedGame != value)
+                {
+                    _selectedGame = value;
+                    OnPropertyChanged();
+                }
+            }
         }
     }
 }
