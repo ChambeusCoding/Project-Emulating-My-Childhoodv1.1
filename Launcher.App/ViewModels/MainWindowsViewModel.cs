@@ -439,7 +439,7 @@ namespace Launcher.App.ViewModels
             }
 
             AppendTerminal($"[LAUNCH] {game.Title}...");
-            
+    
             var emulator = _emulators.GetEmulators(game.System)
                 .FirstOrDefault(e => e.Manifest.Id == game.EmulatorId);
 
@@ -451,8 +451,15 @@ namespace Launcher.App.ViewModels
 
             try
             {
-                var (exe, args) = emulator.BuildLaunchCommand(game.FilePath);
-                await RunProcessAsync(exe, args);
+                string romPath = game.FilePath;  // Use game.FilePath consistently
+                string romDirectory = Path.GetDirectoryName(romPath)!;
+        
+                var (exe, args) = emulator.BuildLaunchCommand(romPath);
+        
+                AppendTerminal($"[LAUNCH] Executable: {exe}");
+                AppendTerminal($"[LAUNCH] WorkingDirectory: {romDirectory}");
+        
+                await RunProcessAsync(exe, args, romDirectory);  // ✅ All 3 parameters defined!
             }
             catch (Exception ex)
             {
@@ -460,22 +467,21 @@ namespace Launcher.App.ViewModels
             }
         }
 
-        private async Task RunProcessAsync(string fileName, string arguments)
+
+        private async Task RunProcessAsync(string fileName, string arguments, string workingDirectory)
         {
             var psi = new ProcessStartInfo
             {
                 FileName = fileName,
                 Arguments = arguments,
-                WorkingDirectory = Path.GetDirectoryName(arguments) ?? Environment.CurrentDirectory, // 🔥 ROMs dir
+                WorkingDirectory = workingDirectory,  // ← FIXED! Clean path from plugins
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
-        
-                // 🔥 TERMINAL ENVIRONMENT
                 EnvironmentVariables =
                 {
                     ["TERM"] = "xterm-256color",
-                    ["LANG"] = "en_US.UTF-8",
+                    ["LANG"] = "en_US.UTF-8", 
                     ["PATH"] = Environment.GetEnvironmentVariable("PATH") ?? ""
                 }
             };

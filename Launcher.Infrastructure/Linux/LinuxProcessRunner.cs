@@ -6,13 +6,17 @@ namespace Launcher.Infrastructure.Linux
 {
     public sealed class LinuxProcessRunner : IProcessRunner
     {
-        public async Task<int> RunAsync(string executable, string arguments)
+        public async Task<int> RunAsync(
+            string executable,
+            string arguments,
+            string? workingDirectory = null)
         {
             var startInfo = new ProcessStartInfo
             {
                 FileName = executable,
                 Arguments = arguments,
-                UseShellExecute = false
+                UseShellExecute = false,
+                WorkingDirectory = workingDirectory ?? string.Empty  // or Environment.CurrentDirectory
             };
 
             using var process = Process.Start(startInfo);

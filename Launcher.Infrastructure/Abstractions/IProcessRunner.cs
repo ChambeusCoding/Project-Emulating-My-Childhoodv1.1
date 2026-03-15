@@ -1,7 +1,10 @@
+using System.Threading.Tasks;
+
 namespace Launcher.Infrastructure.Abstractions
 {
-    public interface IPathResolver
+    public interface IProcessRunner
     {
-        string ResolveExecutable(string name);
+        Task<int> RunAsync(string executable, string arguments, string? workingDirectory = null);
     }
+
 }

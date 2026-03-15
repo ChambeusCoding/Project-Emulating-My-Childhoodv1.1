@@ -72,27 +72,28 @@ namespace SNESx9.Plugin
                 return;
             }
 
-            Console.WriteLine($"[PLUGIN] Launching ROM: {romPath}");
-
             try
             {
                 var (resolvedExecutable, arguments) = BuildLaunchCommand(romPath);
+                string workingDir = Path.GetDirectoryName(romPath)!;  // ← ADD THIS
 
-                Console.WriteLine($"[PLUGIN] Resolved executable: {resolvedExecutable}");
+                Console.WriteLine($"[PLUGIN] Executable: {resolvedExecutable}");
                 Console.WriteLine($"[PLUGIN] Arguments: {arguments}");
+                Console.WriteLine($"[PLUGIN] WorkingDirectory: {workingDir}");  // ← ADD LOGGING
 
                 int exitCode = await PlatformServices.ProcessRunner.RunAsync(
-                    resolvedExecutable,
-                    arguments
+                    resolvedExecutable, 
+                    arguments,
+                    workingDir  // ← PASS THIS
                 );
 
-                Console.WriteLine($"[PLUGIN] SNESx9 exited with code {exitCode}");
+                Console.WriteLine($"[PLUGIN] Emulator exited with code {exitCode}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("[PLUGIN] Failed to launch SNESx9");
-                Console.WriteLine($"[PLUGIN] Exception: {ex}");
+                Console.WriteLine($"[PLUGIN] Launch failed: {ex.Message}");
             }
         }
+
     }
 }

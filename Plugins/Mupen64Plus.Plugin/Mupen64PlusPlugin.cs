@@ -45,26 +45,28 @@ namespace Mupen64Plus.Plugin
                 return;
             }
 
-            Console.WriteLine($"[PLUGIN] Launching: {romPath}");
-
             try
             {
                 var (resolvedExecutable, arguments) = BuildLaunchCommand(romPath);
-                
+                string workingDir = Path.GetDirectoryName(romPath)!;  // ← ADD THIS
+
                 Console.WriteLine($"[PLUGIN] Executable: {resolvedExecutable}");
                 Console.WriteLine($"[PLUGIN] Arguments: {arguments}");
+                Console.WriteLine($"[PLUGIN] WorkingDirectory: {workingDir}");  // ← ADD LOGGING
 
                 int exitCode = await PlatformServices.ProcessRunner.RunAsync(
                     resolvedExecutable, 
-                    arguments
+                    arguments,
+                    workingDir  // ← PASS THIS
                 );
 
-                Console.WriteLine($"[PLUGIN] Mupen64Plus exited with code {exitCode}");
+                Console.WriteLine($"[PLUGIN] Emulator exited with code {exitCode}");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"[PLUGIN] Launch failed: {ex.Message}");
             }
         }
+
     }
 }

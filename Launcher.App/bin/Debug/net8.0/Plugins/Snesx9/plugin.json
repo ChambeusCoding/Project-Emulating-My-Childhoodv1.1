@@ -4,6 +4,7 @@
   "DisplayName": "Snes9x",
   "System": "Super Nintendo",
   "SupportedExtensions": [".smc", ".sfc", ".fig", ".swc"],
-  "Executable": "snes9x-gtk.snes9x-gtk",
-  "Args": ["-n", "{rom}"]
+  "Executable": "snes9x-gtk",
+  "Args": ["-n", "{rom}"],
+  "WorkingDirectory": "{rom_directory}"
 }

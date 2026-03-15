@@ -1,8 +1,10 @@
 {
   "Id": "mupen64plus",
+  "Name": "Mupen64Plus",
   "DisplayName": "Mupen64Plus",
   "System": "Nintendo 64",
-  "Executable": "mupen64plus",
   "SupportedExtensions": [".n64", ".z64", ".v64"],
-  "Args": ["{rom}"]
+  "Executable": "mupen64plus",
+  "Args": ["{rom}"],
+  "WorkingDirectory": "{rom_directory}"
 }

@@ -92,23 +92,24 @@ namespace Azahar.Plugin
 
             try
             {
-                var (resolved, args) = BuildLaunchCommand(romPath);
+                var (resolvedExecutable, arguments) = BuildLaunchCommand(romPath);
+                string workingDir = Path.GetDirectoryName(romPath)!;  // ← ADD THIS
 
-                Console.WriteLine("[PLUGIN] Launching Azahar");
-                Console.WriteLine($"  Exec: {resolved}");
-                Console.WriteLine($"  ROM : {romPath}");
+                Console.WriteLine($"[PLUGIN] Executable: {resolvedExecutable}");
+                Console.WriteLine($"[PLUGIN] Arguments: {arguments}");
+                Console.WriteLine($"[PLUGIN] WorkingDirectory: {workingDir}");  // ← ADD LOGGING
 
-                await PlatformServices.ProcessRunner.RunAsync(
-                    resolved,
-                    args
+                int exitCode = await PlatformServices.ProcessRunner.RunAsync(
+                    resolvedExecutable, 
+                    arguments,
+                    workingDir  // ← PASS THIS
                 );
+
+                Console.WriteLine($"[PLUGIN] Emulator exited with code {exitCode}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("[PLUGIN] ❌ Failed to launch Azahar");
-                Console.WriteLine("Make sure the AppImage is executable:");
-                Console.WriteLine("  chmod +x azahar*.AppImage");
-                Console.WriteLine(ex);
+                Console.WriteLine($"[PLUGIN] Launch failed: {ex.Message}");
             }
         }
     }

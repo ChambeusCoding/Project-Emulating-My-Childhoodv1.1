@@ -46,3 +46,9 @@
 /home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/obj/Debug/net8.0/refint/SNESx9.Plugin.dll
 /home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/obj/Debug/net8.0/SNESx9.Plugin.pdb
 /home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/obj/Debug/net8.0/ref/SNESx9.Plugin.dll
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/bin/Debug/net8.0/Launcher.Core.dll
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/bin/Debug/net8.0/Launcher.Infrastructure.dll
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/bin/Debug/net8.0/Launcher.Core.pdb
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/bin/Debug/net8.0/Launcher.Infrastructure.pdb
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/obj/Debug/net8.0/SNESx9.Plugin.csproj.AssemblyReference.cache
+/home/chambeus/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/obj/Debug/net8.0/SNESx9.Plugin.csproj.CopyComplete

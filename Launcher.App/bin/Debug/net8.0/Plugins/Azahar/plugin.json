@@ -1,9 +1,10 @@
 {
   "Id": "azahar",
   "Name": "Azahar",
-  "DisplayName": "azahar",
+  "DisplayName": "Azahar",
   "System": "Nintendo 3DS",
   "SupportedExtensions": [".3ds", ".cia", ".cci"],
-  "Executable": "azahar-wayland.AppImage",
-  "Args": ["{rom}"]
+  "Executable": "azahar",
+  "Args": ["{rom}"],
+  "WorkingDirectory": "{rom_directory}"
 }

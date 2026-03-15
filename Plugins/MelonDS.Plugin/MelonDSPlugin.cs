@@ -41,29 +41,32 @@ namespace MelonDS.Plugin
         {
             if (!File.Exists(romPath))
             {
-                Console.WriteLine($"[PLUGIN] File not found: {romPath}");
+                Console.WriteLine($"[PLUGIN] ROM not found: {romPath}");
                 return;
             }
-            
-            Console.WriteLine($"[PLUGIN] Launching ROM: {romPath}");
 
             try
             {
                 var (resolvedExecutable, arguments) = BuildLaunchCommand(romPath);
-                
-                Console.WriteLine($"[PLUGIN] Executable path: {resolvedExecutable}");
-                Console.WriteLine($"[PLUGIN] arguments: {arguments}");
+                string workingDir = Path.GetDirectoryName(romPath)!;  // ← ADD THIS
+
+                Console.WriteLine($"[PLUGIN] Executable: {resolvedExecutable}");
+                Console.WriteLine($"[PLUGIN] Arguments: {arguments}");
+                Console.WriteLine($"[PLUGIN] WorkingDirectory: {workingDir}");  // ← ADD LOGGING
 
                 int exitCode = await PlatformServices.ProcessRunner.RunAsync(
-                    resolvedExecutable,
-                    arguments
-                    );
-                Console.WriteLine($"[Plugin] MelonDS exit code: {exitCode}");
+                    resolvedExecutable, 
+                    arguments,
+                    workingDir  // ← PASS THIS
+                );
+
+                Console.WriteLine($"[PLUGIN] Emulator exited with code {exitCode}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[PLUGIN] MelonDS exception: {ex.Message}");
+                Console.WriteLine($"[PLUGIN] Launch failed: {ex.Message}");
             }
         }
+
     }
 }
