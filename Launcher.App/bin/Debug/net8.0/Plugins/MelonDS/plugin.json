@@ -1,8 +1,10 @@
 {
   "Id": "MelonDS",
+  "Name": "MelonDS",
   "DisplayName": "MelonDS Plugin",
   "System": "Nintendo DS",
   "Executable": "melonds", 
   "SupportedExtensions": [".nds", ".zip", "7z"],
-  "Args": ["{rom}"]
+  "Args": ["{rom}"],
+  "WorkingDirectory": "{rom_directory}"
 }

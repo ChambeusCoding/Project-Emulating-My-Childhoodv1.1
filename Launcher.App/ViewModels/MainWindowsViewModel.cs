@@ -517,9 +517,6 @@ namespace Launcher.App.ViewModels
                 Systems.Add(system);
         }
         
-        public ICommand LoadCoversCommand { get; }
-
-// Add field for SelectedGame (you mentioned you have this already)
         private GameEntry? _selectedGame;
         public GameEntry? SelectedGame
         {
@@ -533,5 +530,37 @@ namespace Launcher.App.ViewModels
                 }
             }
         }
+        private async Task<string?> GetBoxArtAsync(string gameName, string platformId = "12") // 12=NDS
+        {
+            var url = $"https://api.thegamesdb.net/v4/games/by-game-name?name={Uri.EscapeDataString(gameName)}&page_size=1";
+    
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Add("User-Key", TgdbApiKey);
+                request.Headers.Add("Accept", "application/json");
+        
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode) return null;
+        
+                var json = await response.Content.ReadAsStringAsync();
+                return "https://example.com/found-boxart.jpg";
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+        public string BoxArtPath { get; set; } = "avares://Launcher.App/Assets/placeholder.png";
+
+        private async Task LoadBoxArt(string romName)
+        {
+            var boxartUrl = await GetBoxArtAsync(romName);
+            BoxArtPath = boxartUrl ?? "avares://Launcher.App/Assets/placeholder.png";
+            OnPropertyChanged(nameof(BoxArtPath));
+        }
+
+
     }
 }
