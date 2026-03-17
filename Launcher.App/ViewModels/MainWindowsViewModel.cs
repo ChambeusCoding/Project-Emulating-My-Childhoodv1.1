@@ -55,7 +55,7 @@ namespace Launcher.App.ViewModels
         }
 
         public ObservableCollection<string> EmulatorInstallers { get; } =
-            new ObservableCollection<string> { "SNES9x", "Mupen64Plus", "Azahar", "MelonDS"};
+            new ObservableCollection<string> { "SNES9x", "Mupen64Plus", "Azahar", "MelonDS", "Cemu"};
 
         private string? _selectedEmulatorInstaller;
         public string? SelectedEmulatorInstaller
@@ -246,6 +246,13 @@ namespace Launcher.App.ViewModels
                 case "debug":
                     await RunDebugger();
                     break;
+                case "systat":
+                {
+                    var list = string.Join(", ", EmulatorInstallers);
+                    AppendTerminal($"Available emulators: {list}");
+                    break;
+                }
+                    
                 default:
                     await RunShellCommand(input);
                     break;

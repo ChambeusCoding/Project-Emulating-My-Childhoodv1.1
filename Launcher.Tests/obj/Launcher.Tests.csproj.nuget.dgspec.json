@@ -13,6 +13,7 @@
         "packagesPath": "/home/phoenix/.nuget/packages/",
         "outputPath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Launcher.Tests/obj/",
         "projectStyle": "PackageReference",
+        "crossTargeting": true,
         "configFilePaths": [
           "/home/phoenix/.nuget/NuGet/NuGet.Config"
         ],
