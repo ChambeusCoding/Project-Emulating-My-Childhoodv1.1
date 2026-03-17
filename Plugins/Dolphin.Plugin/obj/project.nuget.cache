@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "3H4f0vhI7Oc=",
+  "dgSpecHash": "8EzJvceA2hQ=",
   "success": true,
-  "projectFilePath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/Dolphin.Plugin/Dolphin.Plugin.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\code\\Documents\\GitKraken Repos\\ProjectRetroRunner\\Plugins\\Dolphin.Plugin\\Dolphin.Plugin.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\code\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.22\\microsoft.netcore.app.ref.8.0.22.nupkg.sha512",
+    "C:\\Users\\code\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.22\\microsoft.windowsdesktop.app.ref.8.0.22.nupkg.sha512",
+    "C:\\Users\\code\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.22\\microsoft.aspnetcore.app.ref.8.0.22.nupkg.sha512"
+  ],
   "logs": []
 }

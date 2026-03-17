@@ -9,9 +9,9 @@
         Height="800"
         Background="#121212"
         Title="RetroRunner 2.2.0"
-        ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="NoChrome"
-        ExtendClientAreaTitleBarHeightHint="48"
+        ExtendClientAreaToDecorationsHint="False"
+        ExtendClientAreaChromeHints="SystemChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
         mc:Ignorable="d"
         Loaded="OnMainWindowLoaded">
     

@@ -55,7 +55,7 @@ namespace Launcher.App.ViewModels
         }
 
         public ObservableCollection<string> EmulatorInstallers { get; } =
-            new ObservableCollection<string> { "SNES9x", "Mupen64Plus", "Azahar", "MelonDS", "Cemu"};
+            new ObservableCollection<string> { "SNES9x(Linux)", "Mupen64Plus(Linux)", "Azahar(Linux)", "MelonDS(Linux)", "Cemu(Linux)", "Mupen64Plus(Windows)", "SNES9x(Windows)", "Azahar(Windows)", "MelonDS(Windows)" };
 
         private string? _selectedEmulatorInstaller;
         public string? SelectedEmulatorInstaller
@@ -326,10 +326,15 @@ namespace Launcher.App.ViewModels
 
             var scriptName = SelectedEmulatorInstaller switch
             {
-                "SNES9x" => "install_snes9x.sh",
-                "Mupen64Plus" => "install_mupen64plus.sh",
-                "Azahar" => "install_azahar.sh",
-                "MelonDS" => "install_melonds.sh",
+                "SNES9x(Linux)" => "install_snes9x.sh",
+                "Mupen64Plus(Linux)" => "install_mupen64plus.sh",
+                "Azahar(Linux)" => "install_azahar.sh",
+                "MelonDS(Linux)" => "install_melonds.sh",
+                "Mupen64Plus(Windows)" => "install_mupen64plus.bat",
+                "SNES9x(Windows)" => "",
+                "Azahar(Windows)" => "",
+                "MelonDS(Windows)" => "",
+                
                 _ => null
             };
 
