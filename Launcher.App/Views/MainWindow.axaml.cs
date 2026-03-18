@@ -9,8 +9,7 @@ using Launcher.Core.Games;
 using Launcher.Core.Emulation;
 using Launcher.App.ViewModels;
 using Avalonia.Interactivity;
-using System.ComponentModel; 
-
+using System.ComponentModel;
 
 namespace Launcher.App.Views;
 
@@ -74,7 +73,40 @@ public partial class MainWindow : Window
         }
     }
 
+    private void OnTerminalKeyDown(object sender, KeyEventArgs e)
+    {
+        if (DataContext is not MainWindowViewModel vm) return;
 
+        // BLOCK Ctrl+C/V clipboard crashes
+        if (e.Key == Key.C && e.KeyModifiers.HasFlag(KeyModifiers.Control))
+        {
+            e.Handled = true;
+            vm.CopyTerminalCommand.Execute(null);
+            return;
+        }
+    
+        if (e.Key == Key.V && e.KeyModifiers.HasFlag(KeyModifiers.Control))
+        {
+            e.Handled = true;
+            vm.PasteTerminalCommand.Execute(null);
+            return;
+        }
+    
+        if (e.Key == Key.Enter)
+        {
+            e.Handled = true;
+            _ = vm.ExecuteTerminalCommand();
+            return;
+        }
+    
+        if (e.Key == Key.Escape)
+        {
+            e.Handled = true;
+            vm.TerminalInput = "";
+        }
+    }
+
+    
     private void RedirectConsoleToTerminal()
     {
         if (DataContext is MainWindowViewModel vm)
@@ -124,25 +156,6 @@ public partial class MainWindow : Window
     {
         _terminalInputBox ??= this.FindControl<TextBox>("TerminalInputBox");
         _terminalInputBox?.Focus();
-    }
-    
-    private async void OnTerminalKeyDown(object? sender, KeyEventArgs e)
-    {
-        if (DataContext is not MainWindowViewModel vm)
-            return;
-
-        switch (e.Key)
-        {
-            case Key.Enter:
-                e.Handled = true;
-                await vm.ExecuteTerminalCommand();
-                break;
-
-            case Key.Escape:
-                e.Handled = true;
-                vm.TerminalInput = "";
-                break;
-        }
     }
 
     protected override void OnClosed(EventArgs e)

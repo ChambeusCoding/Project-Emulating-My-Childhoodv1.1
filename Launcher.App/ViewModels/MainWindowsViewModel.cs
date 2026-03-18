@@ -14,6 +14,9 @@ using Launcher.App.Common;
 using System.Net.Http;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Threading;
+using Avalonia.Controls.ApplicationLifetimes;
+
 
 namespace Launcher.App.ViewModels
 {
@@ -317,83 +320,93 @@ namespace Launcher.App.ViewModels
         }
 
         private async Task RunSelectedInstaller()
+{
+    if (string.IsNullOrWhiteSpace(SelectedEmulatorInstaller))
+    {
+        AppendTerminal("[INSTALL] Select an emulator first");
+        return;
+    }
+
+    var scriptName = SelectedEmulatorInstaller switch
+    {
+        "SNES9x(Linux)" => "install_snes9x.sh",
+        "Mupen64Plus(Linux)" => "install_mupen64plus.sh",
+        "Azahar(Linux)" => "install_azahar.sh",
+        "MelonDS(Linux)" => "install_melonds.sh",
+        "Cemu(Linux)" => "install_cemu.sh",
+        "Mupen64Plus(Windows)" => "install_mupen64plus.bat",
+        "SNES9x(Windows)" => "install_snes9x.bat",
+        "Azahar(Windows)" => "install_azahar.bat", 
+        "MelonDS(Windows)" => "install_melonds.bat",
+        _ => null
+    };
+
+    if (scriptName == null)
+    {
+        AppendTerminal($"[INSTALL] No script for {SelectedEmulatorInstaller}");
+        return;
+    }
+
+    var scriptsDir = Path.Combine(AppContext.BaseDirectory, "Installers");
+    var scriptPath = Path.Combine(scriptsDir, scriptName);
+
+    if (!File.Exists(scriptPath))
+    {
+        AppendTerminal($"[INSTALL] Missing: {scriptPath}");
+        return;
+    }
+
+    AppendTerminal($"[INSTALL] Running {scriptName}...");
+
+    // PLATFORM-AWARE EXECUTION
+    string fileName, arguments;
+    if (scriptName.EndsWith(".bat") || scriptName.EndsWith(".cmd"))
+    {
+        // Windows: use cmd.exe
+        fileName = "cmd.exe";
+        arguments = $"/c \"{scriptPath}\"";
+    }
+    else
+    {
+        // Linux/macOS: use bash
+        fileName = "/bin/bash";
+        arguments = $"\"{scriptPath}\"";
+    }
+
+    var psi = new ProcessStartInfo
+    {
+        FileName = fileName,
+        Arguments = arguments,
+        WorkingDirectory = scriptsDir,
+        UseShellExecute = false,
+        RedirectStandardOutput = true,
+        RedirectStandardError = true
+    };
+
+    using var proc = Process.Start(psi)!;
+
+    async Task ReadStream(StreamReader reader)
+    {
+        try
         {
-            if (string.IsNullOrWhiteSpace(SelectedEmulatorInstaller))
+            while (!reader.EndOfStream)
             {
-                AppendTerminal("[INSTALL] Select an emulator first");
-                return;
+                var line = await reader.ReadLineAsync();
+                if (line != null) AppendTerminal(line);
             }
-
-            var scriptName = SelectedEmulatorInstaller switch
-            {
-                "SNES9x(Linux)" => "install_snes9x.sh",
-                "Mupen64Plus(Linux)" => "install_mupen64plus.sh",
-                "Azahar(Linux)" => "install_azahar.sh",
-                "MelonDS(Linux)" => "install_melonds.sh",
-                "Mupen64Plus(Windows)" => "install_mupen64plus.bat",
-                "SNES9x(Windows)" => "",
-                "Azahar(Windows)" => "",
-                "MelonDS(Windows)" => "",
-                
-                _ => null
-            };
-
-            if (scriptName == null)
-            {
-                AppendTerminal($"[INSTALL] No script for {SelectedEmulatorInstaller}");
-                return;
-            }
-
-            var scriptsDir = Path.Combine(AppContext.BaseDirectory, "Installers");
-            var scriptPath = Path.Combine(scriptsDir, scriptName);
-
-            if (!File.Exists(scriptPath))
-            {
-                AppendTerminal($"[INSTALL] Missing: {scriptPath}");
-                return;
-            }
-
-            AppendTerminal($"[INSTALL] Running {scriptName}...");
-
-            var psi = new ProcessStartInfo
-            {
-                FileName = "/bin/bash",
-                Arguments = $"\"{scriptPath}\"",
-                WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            };
-
-            psi.EnvironmentVariables["TERM"] = "xterm-256color";
-            psi.EnvironmentVariables["COLORTERM"] = "truecolor";
-            psi.EnvironmentVariables["LANG"] = "en_US.UTF-8";
-            psi.EnvironmentVariables["PATH"] = Environment.GetEnvironmentVariable("PATH") ?? "";
-            psi.EnvironmentVariables["HOME"] = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-
-            using var proc = Process.Start(psi)!;
-
-            async Task ReadStream(StreamReader reader)
-            {
-                try
-                {
-                    while (!reader.EndOfStream)
-                    {
-                        var line = await reader.ReadLineAsync();
-                        if (line != null) AppendTerminal(line);
-                    }
-                }
-                catch { }
-            }
-
-            await Task.WhenAll(
-                ReadStream(proc.StandardOutput),
-                ReadStream(proc.StandardError)
-            );
-
-            await proc.WaitForExitAsync();
-            AppendTerminal($"[INSTALL] Done (code: {proc.ExitCode})");
         }
+        catch { }
+    }
+
+    await Task.WhenAll(
+        ReadStream(proc.StandardOutput),
+        ReadStream(proc.StandardError)
+    );
+
+    await proc.WaitForExitAsync();
+    AppendTerminal($"[INSTALL] Done (code: {proc.ExitCode})");
+}
+
 
         private void ScanGames()
         {

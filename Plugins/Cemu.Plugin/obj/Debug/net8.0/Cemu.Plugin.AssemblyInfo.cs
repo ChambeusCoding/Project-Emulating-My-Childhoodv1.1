@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Cemu.Plugin")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ab04b8d5397d140848a271381bfd446966d5bbff")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c2242cfd7506583f9a71264d778fc1495145286b")]
 [assembly: System.Reflection.AssemblyProductAttribute("Cemu.Plugin")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Cemu.Plugin")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
