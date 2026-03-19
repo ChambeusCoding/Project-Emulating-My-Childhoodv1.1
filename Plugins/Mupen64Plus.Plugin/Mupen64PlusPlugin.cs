@@ -9,6 +9,7 @@ namespace Mupen64Plus.Plugin
     public sealed class Mupen64PlusPlugin : IEmulatorPlugin
     {
         public EmulatorManifest Manifest { get; }
+        public string[] Executables { get; set; } = Array.Empty<string>();
 
         public Mupen64PlusPlugin()
         {
@@ -17,7 +18,11 @@ namespace Mupen64Plus.Plugin
                 Id = "mupen64plus",
                 DisplayName = "Mupen64Plus", 
                 System = "Nintendo 64",
-                Executable = "mupen64plus",
+                Executables = new[] { 
+                    "mupen64plus-ui-console.exe",    // Windows
+                    "mupen64plus",               // Linux/macOS  
+                    "mupen64plus.exe"            // Windows fallback
+                },
                 SupportedExtensions = new[] { ".n64", ".z64", ".v64" }
             };
 
@@ -48,19 +53,26 @@ namespace Mupen64Plus.Plugin
             try
             {
                 var (resolvedExecutable, arguments) = BuildLaunchCommand(romPath);
-                string workingDir = Path.GetDirectoryName(romPath)!;  // ← ADD THIS
+                string workingDir = Path.GetDirectoryName(romPath)!;
 
-                Console.WriteLine($"[PLUGIN] Executable: {resolvedExecutable}");
-                Console.WriteLine($"[PLUGIN] Arguments: {arguments}");
-                Console.WriteLine($"[PLUGIN] WorkingDirectory: {workingDir}");  // ← ADD LOGGING
+                Console.WriteLine($"[PLUGIN] Launching: {resolvedExecutable} {arguments}");
+                Console.WriteLine($"[PLUGIN] WorkingDirectory: {workingDir}");
 
-                int exitCode = await PlatformServices.ProcessRunner.RunAsync(
-                    resolvedExecutable, 
-                    arguments,
-                    workingDir  // ← PASS THIS
-                );
+                // Fire and forget - DON'T wait for emulator exit
+                var process = new System.Diagnostics.Process
+                {
+                    StartInfo = new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = resolvedExecutable,
+                        Arguments = arguments,
+                        WorkingDirectory = workingDir,
+                        UseShellExecute = false,
+                        CreateNoWindow = false  // Let Mupen have its console window
+                    }
+                };
 
-                Console.WriteLine($"[PLUGIN] Emulator exited with code {exitCode}");
+                process.Start();
+                Console.WriteLine($"[PLUGIN] Mupen64Plus launched (PID: {process.Id})");
             }
             catch (Exception ex)
             {

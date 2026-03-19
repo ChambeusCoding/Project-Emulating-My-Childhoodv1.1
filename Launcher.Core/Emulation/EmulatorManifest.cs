@@ -5,18 +5,20 @@ namespace Launcher.Core.Emulation;
 public sealed class EmulatorManifest
 {
 
-    public required string Id { get; init; }
+    public string Id { get; init; }
 
 
-    public required string DisplayName { get; init; }
+    public string DisplayName { get; init; }
 
 
-    public required string System { get; init; }
+    public string System { get; init; }
 
 
-    public required string Executable { get; init; }
-
-
+    public string Executable { get; init; } = string.Empty;  // Legacy single
+    public string[] Executables { get; init; } = Array.Empty<string>();  // Multi
+    public string[] GetAllExecutables() => 
+        Executables.Length > 0 ? Executables : new[] { Executable };
+    
     private IReadOnlyList<string> _supportedExtensions = new List<string>();
     public IReadOnlyList<string> SupportedExtensions
     {

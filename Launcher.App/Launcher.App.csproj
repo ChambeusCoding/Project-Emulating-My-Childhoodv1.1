@@ -16,10 +16,24 @@
     <AvaloniaResource Include="Assets\Shirtfffff.png" />
     <None Remove="Assets\logo.png" />
     <AvaloniaResource Include="Assets\logo.png" />
+    <None Include="bin\Debug\net10.0\Plugins\Mupen64Plus\plugin.json" />
     <None Include="bin\Debug\net8.0\Plugins\Mupen64Plus\plugin.json" />
+    <None Include="bin\Debug\net9.0\Plugins\Mupen64Plus\plugin.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="bin\Debug\net10.0\Plugins\Installers\cemu.install.sh" />
+    <Content Include="bin\Debug\net10.0\Plugins\Installers\dolphin.install.sh" />
+    <Content Include="bin\Debug\net10.0\Plugins\Installers\emulators.install.ps1" />
+    <Content Include="bin\Debug\net10.0\Plugins\Installers\install_azahar.sh" />
+    <Content Include="bin\Debug\net10.0\Plugins\Installers\install_melonds.sh" />
+    <Content Include="bin\Debug\net10.0\Plugins\Installers\install_mupen64plus.bat" />
+    <Content Include="bin\Debug\net10.0\Plugins\Installers\install_mupen64plus.sh" />
+    <Content Include="bin\Debug\net10.0\Plugins\Installers\install_snes9x.sh" />
+    <Content Include="bin\Debug\net10.0\Plugins\Installers\retroarch.install.sh" />
+    <Content Include="bin\Debug\net10.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.deps.json" />
+    <Content Include="bin\Debug\net10.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.dll" />
+    <Content Include="bin\Debug\net10.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.pdb" />
     <Content Include="bin\Debug\net8.0\Installers\install_azahar.sh" />
     <Content Include="bin\Debug\net8.0\Installers\cemu.install.sh" />
     <Content Include="bin\Debug\net8.0\Installers\dolphin.install.sh" />
@@ -61,6 +75,18 @@
     <Content Include="bin\Debug\net8.0\Plugins\Snesx9\SNESx9.Plugin.deps.json" />
     <Content Include="bin\Debug\net8.0\Plugins\Snesx9\SNESx9.Plugin.dll" />
     <Content Include="bin\Debug\net8.0\Plugins\Snesx9\SNESx9.Plugin.pdb" />
+    <Content Include="bin\Debug\net9.0\Plugins\Installers\cemu.install.sh" />
+    <Content Include="bin\Debug\net9.0\Plugins\Installers\dolphin.install.sh" />
+    <Content Include="bin\Debug\net9.0\Plugins\Installers\emulators.install.ps1" />
+    <Content Include="bin\Debug\net9.0\Plugins\Installers\install_azahar.sh" />
+    <Content Include="bin\Debug\net9.0\Plugins\Installers\install_melonds.sh" />
+    <Content Include="bin\Debug\net9.0\Plugins\Installers\install_mupen64plus.bat" />
+    <Content Include="bin\Debug\net9.0\Plugins\Installers\install_mupen64plus.sh" />
+    <Content Include="bin\Debug\net9.0\Plugins\Installers\install_snes9x.sh" />
+    <Content Include="bin\Debug\net9.0\Plugins\Installers\retroarch.install.sh" />
+    <Content Include="bin\Debug\net9.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.deps.json" />
+    <Content Include="bin\Debug\net9.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.dll" />
+    <Content Include="bin\Debug\net9.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.pdb" />
   </ItemGroup>
 
   <ItemGroup>

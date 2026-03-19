@@ -12,6 +12,7 @@ using Launcher.Core.Games;
 using Launcher.Core.Emulation;
 using Launcher.App.Common;
 using System.Net.Http;
+using System.Runtime.Versioning;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
@@ -224,43 +225,95 @@ namespace Launcher.App.ViewModels
             line.Contains("IBus");
 
         public async Task ExecuteTerminalCommand()
+{
+    var input = TerminalInput.Trim();
+    TerminalInput = "";
+
+    if (string.IsNullOrWhiteSpace(input)) return;
+
+    AppendTerminal($"$ {input}");
+    
+    var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+    var cmd = parts.Length > 0 ? parts[0].ToLowerInvariant() : "";
+
+    switch (cmd)
+    {
+        case "help":
+            AppendTerminal("Commands:");
+            AppendTerminal("  help    - Show this help");
+            AppendTerminal("  clear   - Clear terminal");
+            AppendTerminal("  scan    - Scan for games");
+            AppendTerminal("  debug   - Run debugger");
+            AppendTerminal("  systat  - List emulators");
+            AppendTerminal("  sysnet  - Show .NET versions");
+            AppendTerminal("  list    - Show game/emulator count");
+            AppendTerminal("  paths   - Show project paths");
+            AppendTerminal("  test    - System check");
+            AppendTerminal("  version - Show version info");
+            AppendTerminal("  quit    - Exit application");
+            AppendTerminal("  shell   - Run system command");
+            break;
+        case "clear":
+            TerminalOutput = "";
+            break;
+        case "scan":
+            ScanGames();
+            break;
+        case "debug":
+            await RunDebugger();
+            break;
+        case "systat":
         {
-            var input = TerminalInput.Trim();
-            TerminalInput = "";
-
-            if (string.IsNullOrWhiteSpace(input)) return;
-
-            AppendTerminal($"$ {input}");
-            
-            var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            var cmd = parts.Length > 0 ? parts[0].ToLowerInvariant() : "";
-
-            switch (cmd)
-            {
-                case "help":
-                    AppendTerminal("Commands: help, clear, scan, debug");
-                    break;
-                case "clear":
-                    TerminalOutput = "";
-                    break;
-                case "scan":
-                    ScanGames();
-                    break;
-                case "debug":
-                    await RunDebugger();
-                    break;
-                case "systat":
-                {
-                    var list = string.Join(", ", EmulatorInstallers);
-                    AppendTerminal($"Available emulators: {list}");
-                    break;
-                }
-                    
-                default:
-                    await RunShellCommand(input);
-                    break;
-            }
+            var list = string.Join(", ", EmulatorInstallers);
+            AppendTerminal($"Available emulators: {list}");
+            break;
         }
+        case "sysnet":
+        {
+            var supportedFrameworks = new[] { ".NET 8.0", ".NET 9.0", ".NET 10.0" };
+            AppendTerminal($"Supported Frameworks: {string.Join(", ", supportedFrameworks)}");
+            break;
+        }
+        case "plugins":
+        case "pl":
+        {
+            AppendTerminal($"Emulator plugins: {string.Join(", ", EmulatorInstallers)}");
+            break;
+        }
+        case "paths":
+        {
+            AppendTerminal("Project paths:");
+            AppendTerminal($"  Emulators: {string.Join(", ", EmulatorInstallers)}");
+            AppendTerminal($"  .NET: {Environment.Version}");
+            break;
+        }
+        case "test":
+        case "ping":
+        {
+            AppendTerminal("System OK");
+            AppendTerminal($".NET: {Environment.Version}");
+            break;
+        }
+        case "version":
+        case "ver":
+        {
+            AppendTerminal("ProjectRetroRunner");
+            AppendTerminal($".NET Runtime: {Environment.Version}");
+            break;
+        }
+        case "quit":
+        case "exit":
+            // Graceful exit (adjust for your app framework)
+            AppendTerminal("Goodbye!");
+            // Application.Current?.Shutdown();  // Uncomment if Avalonia/WPF
+            break;
+        default:
+            await RunShellCommand(input);
+            break;
+    }
+}
+
+
 
         private async Task RunDebugger()
         {
