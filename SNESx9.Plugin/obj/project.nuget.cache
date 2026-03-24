@@ -1,12 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "BOH/BK31kZM=",
+  "dgSpecHash": "nSf5vCBQeyg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\code\\Documents\\GitKraken Repos\\ProjectRetroRunner\\SNESx9.Plugin\\SNESx9.Plugin.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\code\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.22\\microsoft.netcore.app.ref.8.0.22.nupkg.sha512",
-    "C:\\Users\\code\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.22\\microsoft.windowsdesktop.app.ref.8.0.22.nupkg.sha512",
-    "C:\\Users\\code\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.22\\microsoft.aspnetcore.app.ref.8.0.22.nupkg.sha512"
-  ],
+  "projectFilePath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/SNESx9.Plugin/SNESx9.Plugin.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }

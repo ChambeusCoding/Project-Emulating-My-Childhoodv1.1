@@ -15,8 +15,8 @@ namespace Launcher.Infrastructure.Windows
             {
                 FileName = executable,
                 Arguments = arguments,
-                UseShellExecute = true,          // you had this before
-                CreateNoWindow = false,          // you had this before
+                UseShellExecute = true,          
+                CreateNoWindow = false,          
                 WorkingDirectory = workingDirectory ?? string.Empty
             };
 

@@ -65,10 +65,8 @@ public partial class MainWindow : Window
     {
         if (sender is ScrollViewer scrollViewer)
         {
-            // Update ViewModel ticker position
             if (DataContext is MainWindowViewModel vm)
             {
-                // Handle scroll for news ticker
             }
         }
     }

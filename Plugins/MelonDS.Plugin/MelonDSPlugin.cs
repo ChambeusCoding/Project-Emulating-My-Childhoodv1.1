@@ -48,16 +48,16 @@ namespace MelonDS.Plugin
             try
             {
                 var (resolvedExecutable, arguments) = BuildLaunchCommand(romPath);
-                string workingDir = Path.GetDirectoryName(romPath)!;  // ← ADD THIS
+                string workingDir = Path.GetDirectoryName(romPath)!;
 
                 Console.WriteLine($"[PLUGIN] Executable: {resolvedExecutable}");
                 Console.WriteLine($"[PLUGIN] Arguments: {arguments}");
-                Console.WriteLine($"[PLUGIN] WorkingDirectory: {workingDir}");  // ← ADD LOGGING
+                Console.WriteLine($"[PLUGIN] WorkingDirectory: {workingDir}");
 
                 int exitCode = await PlatformServices.ProcessRunner.RunAsync(
                     resolvedExecutable, 
                     arguments,
-                    workingDir  // ← PASS THIS
+                    workingDir
                 );
 
                 Console.WriteLine($"[PLUGIN] Emulator exited with code {exitCode}");

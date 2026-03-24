@@ -16,7 +16,7 @@ namespace Launcher.Infrastructure.Linux
                 FileName = executable,
                 Arguments = arguments,
                 UseShellExecute = false,
-                WorkingDirectory = workingDirectory ?? string.Empty  // or Environment.CurrentDirectory
+                WorkingDirectory = workingDirectory ?? string.Empty
             };
 
             using var process = Process.Start(startInfo);

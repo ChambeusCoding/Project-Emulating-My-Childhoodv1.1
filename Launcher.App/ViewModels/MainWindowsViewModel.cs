@@ -303,9 +303,7 @@ namespace Launcher.App.ViewModels
         }
         case "quit":
         case "exit":
-            // Graceful exit (adjust for your app framework)
             AppendTerminal("Goodbye!");
-            // Application.Current?.Shutdown();  // Uncomment if Avalonia/WPF
             break;
         default:
             await RunShellCommand(input);
@@ -421,7 +419,7 @@ namespace Launcher.App.ViewModels
     }
     else
     {
-        // Linux/macOS: use bash
+        // Linux/macOS:
         fileName = "/bin/bash";
         arguments = $"\"{scriptPath}\"";
     }
@@ -471,7 +469,7 @@ namespace Launcher.App.ViewModels
             foreach (var game in _scanner.Scan(romsDir))
             {
                 game.System ??= "Unknown";
-                game.BoxArtPath = null;  // ← THIS LINE FIXES BINDING ERRORS
+                game.BoxArtPath = null;
                 Games.Add(game);
                 AppendTerminal($"[SCAN] + {game.Title}");
             }
@@ -487,7 +485,7 @@ namespace Launcher.App.ViewModels
             foreach (var game in _scanner.Scan(romsDir))
             {
                 game.System ??= "Unknown";
-                game.BoxArtPath ??= "Assets/placeholder.png";  // ← THIS LINE FIXED
+                game.BoxArtPath ??= "Assets/placeholder.png";
                 Games.Add(game);
                 AppendTerminal($"[SCAN] + {game.Title}");
             }

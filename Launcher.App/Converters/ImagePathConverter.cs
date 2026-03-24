@@ -15,24 +15,20 @@ public class StringToImageConverter : IValueConverter
         {
             try
             {
-                // avares:// assets
                 if (path.StartsWith("avares://"))
                 {
                     return new Bitmap(path);
                 }
-                
-                // Local file
+
                 if (File.Exists(path))
                 {
                     return new Bitmap(path);
                 }
-                
-                // Fallback placeholder
+
                 return new Bitmap("avares://Launcher.App/Assets/placeholder.png");
             }
             catch
             {
-                // Silent fallback
                 return new Bitmap("avares://Launcher.App/Assets/placeholder.png");
             }
         }

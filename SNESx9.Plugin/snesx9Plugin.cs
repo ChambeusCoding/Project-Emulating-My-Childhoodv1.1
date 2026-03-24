@@ -55,8 +55,6 @@ namespace SNESx9.Plugin
                 throw new ArgumentException("ROM path must not be empty.", nameof(romPath));
 
             string resolvedExecutable = PlatformServices.PathResolver.ResolveExecutable(Manifest.Executable);
-
-            // 🔧 FIX: snes9x-gtk requires -n flag for ROM loading
             string args = $"-n \"{romPath}\"";
 
             Console.WriteLine($"[PLUGIN] BuildLaunchCommand: exe='{resolvedExecutable}', args={args}");
@@ -75,16 +73,16 @@ namespace SNESx9.Plugin
             try
             {
                 var (resolvedExecutable, arguments) = BuildLaunchCommand(romPath);
-                string workingDir = Path.GetDirectoryName(romPath)!;  // ← ADD THIS
+                string workingDir = Path.GetDirectoryName(romPath)!;
 
                 Console.WriteLine($"[PLUGIN] Executable: {resolvedExecutable}");
                 Console.WriteLine($"[PLUGIN] Arguments: {arguments}");
-                Console.WriteLine($"[PLUGIN] WorkingDirectory: {workingDir}");  // ← ADD LOGGING
+                Console.WriteLine($"[PLUGIN] WorkingDirectory: {workingDir}");
 
                 int exitCode = await PlatformServices.ProcessRunner.RunAsync(
                     resolvedExecutable, 
                     arguments,
-                    workingDir  // ← PASS THIS
+                    workingDir
                 );
 
                 Console.WriteLine($"[PLUGIN] Emulator exited with code {exitCode}");

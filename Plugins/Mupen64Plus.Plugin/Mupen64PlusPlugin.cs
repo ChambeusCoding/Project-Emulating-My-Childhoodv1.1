@@ -67,7 +67,7 @@ namespace Mupen64Plus.Plugin
                         Arguments = arguments,
                         WorkingDirectory = workingDir,
                         UseShellExecute = false,
-                        CreateNoWindow = false  // Let Mupen have its console window
+                        CreateNoWindow = false
                     }
                 };
 

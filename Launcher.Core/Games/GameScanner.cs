@@ -30,7 +30,7 @@ public sealed class GameScanner
                 FilePath = file,
                 System = emulator.Manifest.System,
                 EmulatorId = emulator.Manifest.Id,
-                BoxArtPath = "avares://Launcher.App/Assets/placeholder.png" // optional
+                BoxArtPath = "avares://Launcher.App/Assets/placeholder.png"
             };
 
             yield return game;

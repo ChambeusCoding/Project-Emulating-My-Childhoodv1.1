@@ -1,12 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "XK0qC4euFWg=",
+  "dgSpecHash": "TPrnjDQ7fk0=",
   "success": true,
-  "projectFilePath": "C:\\Users\\code\\Documents\\GitKraken Repos\\ProjectRetroRunner\\Plugins\\MelonDS.Plugin\\MelonDS.Plugin.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\code\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.22\\microsoft.netcore.app.ref.8.0.22.nupkg.sha512",
-    "C:\\Users\\code\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.22\\microsoft.windowsdesktop.app.ref.8.0.22.nupkg.sha512",
-    "C:\\Users\\code\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.22\\microsoft.aspnetcore.app.ref.8.0.22.nupkg.sha512"
-  ],
+  "projectFilePath": "/home/phoenix/Documents/GitKraken Repositories/Project-Emulating-My-Childhoodv1.1/Plugins/MelonDS.Plugin/MelonDS.Plugin.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }

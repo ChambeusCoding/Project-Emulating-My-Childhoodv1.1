@@ -40,7 +40,6 @@ namespace Azahar.Plugin
             }
             else
             {
-                // Fallback — only works if user actually installed it in PATH
                 executablePath = "azahar";
             }
 
@@ -62,13 +61,11 @@ namespace Azahar.Plugin
             Console.WriteLine($"[PLUGIN] Raw executable: {Manifest.Executable}");
         }
 
-        // NEW: used by your ViewModel to run Azahar and capture stdout/stderr
         public (string Executable, string Arguments) BuildLaunchCommand(string romPath)
         {
             if (string.IsNullOrWhiteSpace(romPath))
                 throw new ArgumentException("ROM path must not be empty.", nameof(romPath));
 
-            // Resolve executable (AppImage path or PATH)
             string resolved =
                 PlatformServices.PathResolver.ResolveExecutable(
                     Manifest.Executable
@@ -80,8 +77,7 @@ namespace Azahar.Plugin
 
             return (resolved, args);
         }
-
-        // Kept for other callers; now delegates to BuildLaunchCommand
+        
         public async Task LaunchAsync(string romPath)
         {
             if (!File.Exists(romPath))
@@ -93,16 +89,16 @@ namespace Azahar.Plugin
             try
             {
                 var (resolvedExecutable, arguments) = BuildLaunchCommand(romPath);
-                string workingDir = Path.GetDirectoryName(romPath)!;  // ← ADD THIS
+                string workingDir = Path.GetDirectoryName(romPath)!;
 
                 Console.WriteLine($"[PLUGIN] Executable: {resolvedExecutable}");
                 Console.WriteLine($"[PLUGIN] Arguments: {arguments}");
-                Console.WriteLine($"[PLUGIN] WorkingDirectory: {workingDir}");  // ← ADD LOGGING
+                Console.WriteLine($"[PLUGIN] WorkingDirectory: {workingDir}");
 
                 int exitCode = await PlatformServices.ProcessRunner.RunAsync(
                     resolvedExecutable, 
                     arguments,
-                    workingDir  // ← PASS THIS
+                    workingDir
                 );
 
                 Console.WriteLine($"[PLUGIN] Emulator exited with code {exitCode}");

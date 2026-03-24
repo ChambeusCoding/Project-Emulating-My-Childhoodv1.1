@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Mupen64Plus.Plugin")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+027c277ca59cfeb4194a1b7025c58de910ded4d7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b5c3c9650b042127a6990a65e6f1cb78083ed2c1")]
 [assembly: System.Reflection.AssemblyProductAttribute("Mupen64Plus.Plugin")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Mupen64Plus.Plugin")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
