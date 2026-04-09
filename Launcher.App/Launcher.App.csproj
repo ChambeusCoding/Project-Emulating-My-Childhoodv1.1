@@ -19,6 +19,10 @@
     <None Include="bin\Debug\net10.0\Plugins\Mupen64Plus\plugin.json" />
     <None Include="bin\Debug\net8.0\Plugins\Mupen64Plus\plugin.json" />
     <None Include="bin\Debug\net9.0\Plugins\Mupen64Plus\plugin.json" />
+    <None Include="bin\Debug\net8.0\Plugins\Azahar\plugin.json" />
+    <None Include="bin\Debug\net8.0\Plugins\MelonDS\plugin.json" />
+    <None Include="bin\Debug\net8.0\Plugins\Snesx9\plugin.json" />
+    <None Include="bin\Debug\net8.0\Plugins\Cemu\plugin.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,7 +39,7 @@
     <Content Include="bin\Debug\net10.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.dll" />
     <Content Include="bin\Debug\net10.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.pdb" />
     <Content Include="bin\Debug\net8.0\Installers\install_azahar.sh" />
-    <Content Include="bin\Debug\net8.0\Installers\cemu.install.sh" />
+    <Content Include="bin\Debug\net8.0\Installers\install_cemu.sh" />
     <Content Include="bin\Debug\net8.0\Installers\dolphin.install.sh" />
     <Content Include="bin\Debug\net8.0\Installers\emulators.install.ps1" />
     <Content Include="bin\Debug\net8.0\Installers\install_melonds.sh" />
@@ -48,18 +52,10 @@
     <Content Include="bin\Debug\net8.0\Plugins\Azahar\Azahar.Plugin.pdb" />
     <Content Include="bin\Debug\net8.0\Plugins\Azahar\manifest.json" />
     <Content Include="bin\Debug\net8.0\Plugins\Azahar\plugin.json" />
-    <Content Include="bin\Debug\net8.0\Plugins\Citra3DS\Citra3DS.Plugin.deps.json" />
-    <Content Include="bin\Debug\net8.0\Plugins\Citra3DS\Citra3DS.Plugin.dll" />
-    <Content Include="bin\Debug\net8.0\Plugins\Citra3DS\Citra3DS.Plugin.pdb" />
-    <Content Include="bin\Debug\net8.0\Plugins\Citra3DS\plugin.json" />
-    <Content Include="bin\Debug\net8.0\Plugins\Installers\azahar.install.sh" />
-    <Content Include="bin\Debug\net8.0\Plugins\Installers\cemu.install.sh" />
-    <Content Include="bin\Debug\net8.0\Plugins\Installers\dolphin.install.sh" />
-    <Content Include="bin\Debug\net8.0\Plugins\Installers\emulators.install.ps1" />
-    <Content Include="bin\Debug\net8.0\Plugins\Installers\melonDS.install.sh" />
-    <Content Include="bin\Debug\net8.0\Plugins\Installers\mupen64plus.install.sh" />
-    <Content Include="bin\Debug\net8.0\Plugins\Installers\retroarch.install.sh" />
-    <Content Include="bin\Debug\net8.0\Plugins\Installers\snes9x.install.sh" />
+    <Content Include="bin\Debug\net8.0\Plugins\Cemu\Cemu.Plugin.deps.json" />
+    <Content Include="bin\Debug\net8.0\Plugins\Cemu\Cemu.Plugin.dll" />
+    <Content Include="bin\Debug\net8.0\Plugins\Cemu\Cemu.Plugin.pdb" />
+    <Content Include="bin\Debug\net8.0\Plugins\Cemu\plugin.json" />
     <Content Include="bin\Debug\net8.0\Plugins\MelonDS\MelonDS.Plugin.deps.json" />
     <Content Include="bin\Debug\net8.0\Plugins\MelonDS\MelonDS.Plugin.dll" />
     <Content Include="bin\Debug\net8.0\Plugins\MelonDS\MelonDS.Plugin.pdb" />
@@ -67,10 +63,6 @@
     <Content Include="bin\Debug\net8.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.deps.json" />
     <Content Include="bin\Debug\net8.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.dll" />
     <Content Include="bin\Debug\net8.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.pdb" />
-    <Content Include="bin\Debug\net8.0\Plugins\RetroArch\plugin.json" />
-    <Content Include="bin\Debug\net8.0\Plugins\RetroArch\RetroArch.deps.json" />
-    <Content Include="bin\Debug\net8.0\Plugins\RetroArch\RetroArch.dll" />
-    <Content Include="bin\Debug\net8.0\Plugins\RetroArch\RetroArch.pdb" />
     <Content Include="bin\Debug\net8.0\Plugins\Snesx9\plugin.json" />
     <Content Include="bin\Debug\net8.0\Plugins\Snesx9\SNESx9.Plugin.deps.json" />
     <Content Include="bin\Debug\net8.0\Plugins\Snesx9\SNESx9.Plugin.dll" />
@@ -83,7 +75,6 @@
     <Content Include="bin\Debug\net9.0\Plugins\Installers\install_mupen64plus.bat" />
     <Content Include="bin\Debug\net9.0\Plugins\Installers\install_mupen64plus.sh" />
     <Content Include="bin\Debug\net9.0\Plugins\Installers\install_snes9x.sh" />
-    <Content Include="bin\Debug\net9.0\Plugins\Installers\retroarch.install.sh" />
     <Content Include="bin\Debug\net9.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.deps.json" />
     <Content Include="bin\Debug\net9.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.dll" />
     <Content Include="bin\Debug\net9.0\Plugins\Mupen64Plus\Mupen64Plus.Plugin.pdb" />

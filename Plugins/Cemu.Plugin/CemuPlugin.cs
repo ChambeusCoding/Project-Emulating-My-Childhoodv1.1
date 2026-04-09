@@ -18,7 +18,7 @@ namespace Cemu.Plugin
                 DisplayName = "Cemu",
                 System =  "Wii U",
                 Executable = "cemu",
-                SupportedExtensions = new[] {".meta", ".rtx"}
+                SupportedExtensions = new[] {".rtx"}
             };
             
             Console.WriteLine("[PLUGIN] Cemu plugin constructed");

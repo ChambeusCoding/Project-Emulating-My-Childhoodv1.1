@@ -4,35 +4,55 @@ using Avalonia.Platform;
 using System;
 using System.Globalization;
 using System.IO;
+using System.Net.Http;
+
+namespace Launcher.App.Converters;
 
 public class StringToImageConverter : IValueConverter
 {
     public static readonly StringToImageConverter Instance = new();
-    
+
+    private static readonly HttpClient _http = new();
+
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is string path)
+        try
         {
-            try
-            {
-                if (path.StartsWith("avares://"))
-                {
-                    return new Bitmap(path);
-                }
+            if (value is not string path || string.IsNullOrWhiteSpace(path))
+                return LoadFallback();
 
-                if (File.Exists(path))
-                {
-                    return new Bitmap(path);
-                }
-
-                return new Bitmap("avares://Launcher.App/Assets/placeholder.png");
-            }
-            catch
+            if (path.StartsWith("avares://"))
             {
-                return new Bitmap("avares://Launcher.App/Assets/placeholder.png");
+                var uri = new Uri(path);
+                using var stream = AssetLoader.Open(uri);
+                return new Bitmap(stream);
             }
+
+            if (path.StartsWith("http"))
+            {
+                var bytes = _http.GetByteArrayAsync(path).Result;
+                using var ms = new MemoryStream(bytes);
+                return new Bitmap(ms);
+            }
+            
+            if (File.Exists(path))
+            {
+                return new Bitmap(path);
+            }
+
+            return LoadFallback();
         }
-        return null;
+        catch
+        {
+            return LoadFallback();
+        }
+    }
+
+    private Bitmap LoadFallback()
+    {
+        var uri = new Uri("avares://Launcher.App/Assets/placeholder.png");
+        using var stream = AssetLoader.Open(uri);
+        return new Bitmap(stream);
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

@@ -1,0 +1,14 @@
+{
+  "Id": "cemu",
+  "Name": "Cemu",
+  "DisplayName": "Cemu",
+  "System": "Nintendo Wii U",
+  "SupportedExtensions": [".wud", ".wux", ".wua", ".rpx"],
+  "Executables": [
+    "cemu",
+    "Cemu.AppImage",
+    "cemu.exe"
+  ],
+  "Args": ["-g", "{rom}"],
+  "WorkingDirectory": "{rom_directory}"
+}

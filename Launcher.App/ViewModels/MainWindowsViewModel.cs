@@ -15,9 +15,7 @@ using System.Net.Http;
 using System.Runtime.Versioning;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Avalonia.Threading;
 using Avalonia.Controls.ApplicationLifetimes;
-
 
 namespace Launcher.App.ViewModels
 {
@@ -57,7 +55,7 @@ namespace Launcher.App.ViewModels
                 }
             }
         }
-
+        
         public ObservableCollection<string> EmulatorInstallers { get; } =
             new ObservableCollection<string> { "SNES9x(Linux)", "Mupen64Plus(Linux)", "Azahar(Linux)", "MelonDS(Linux)", "Cemu(Linux)", "Mupen64Plus(Windows)", "SNES9x(Windows)", "Azahar(Windows)", "MelonDS(Windows)" };
 
@@ -461,38 +459,38 @@ namespace Launcher.App.ViewModels
 
         private void ScanGames()
         {
-            AppendTerminal("[SCAN] Scanning ~/Documents/ROMs...");
-            
+            AppendTerminal("[SCAN] Scanning ~/Documents/ROMs... (all subfolders)");
+
             var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            var romsDir = Path.Combine(home, "Documents", "ROMs");
-            
-            foreach (var game in _scanner.Scan(romsDir))
-            {
-                game.System ??= "Unknown";
-                game.BoxArtPath = null;
-                Games.Add(game);
-                AppendTerminal($"[SCAN] + {game.Title}");
-            }
-            
-            Games.Clear();
-            
+            var romsDir = Path.Combine(home, "Documents", "ROMs");  
+
             if (!Directory.Exists(romsDir))
             {
                 AppendTerminal($"[SCAN] Create ~/Documents/ROMs first");
+                AppendTerminal($"[SCAN] Found 0 games");
                 return;
             }
+    
+            Games.Clear();
+            int count = 0;
 
-            foreach (var game in _scanner.Scan(romsDir))
+            foreach (var game in _scanner.Scan(romsDir))  
             {
                 game.System ??= "Unknown";
-                game.BoxArtPath ??= "Assets/placeholder.png";
+                game.BoxArtPath ??= "avares://Launcher.App/Assets/placeholder.png";
+        
+                var relFolder = Path.GetRelativePath(romsDir, Path.GetDirectoryName(game.FilePath) ?? romsDir);
+                AppendTerminal($"[SCAN] + {game.Title} ({relFolder})");
+
                 Games.Add(game);
-                AppendTerminal($"[SCAN] + {game.Title}");
+                _ = LoadBoxArt(game);
+                count++;
             }
-            
+
             ApplyFilters();
-            AppendTerminal($"[SCAN] Found {Games.Count} games");
+            AppendTerminal($"[SCAN] Found {count} games");
         }
+
 
         private void SelectSystem(string system) => SelectedSystem = system;
 
@@ -606,37 +604,120 @@ namespace Launcher.App.ViewModels
                 }
             }
         }
-        private async Task<string?> GetBoxArtAsync(string gameName, string platformId = "12") // 12=NDS
+        private async Task<string?> GetBoxArtAsync(string gameName)
         {
-            var url = $"https://api.thegamesdb.net/v4/games/by-game-name?name={Uri.EscapeDataString(gameName)}&page_size=1";
-    
+            var url = $"https://api.thegamesdb.net/v4/games/by-game-name?name={Uri.EscapeDataString(gameName)}&include=boxart&fields=game_title";
+
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, url);
                 request.Headers.Add("User-Key", TgdbApiKey);
                 request.Headers.Add("Accept", "application/json");
-        
+
                 var response = await _httpClient.SendAsync(request);
                 if (!response.IsSuccessStatusCode) return null;
-        
+
                 var json = await response.Content.ReadAsStringAsync();
-                return "https://example.com/found-boxart.jpg";
+                using var doc = JsonDocument.Parse(json);
+
+                var root = doc.RootElement;
+
+                // Get game ID
+                var games = root.GetProperty("data").GetProperty("games");
+                if (games.GetArrayLength() == 0) return null;
+
+                var gameId = games[0].GetProperty("id").GetInt32().ToString();
+
+                // Get base URL
+                var baseUrl = root.GetProperty("include")
+                    .GetProperty("base_url")
+                    .GetProperty("medium")
+                    .GetString();
+
+                // Get boxart filename
+                var boxartData = root.GetProperty("include")
+                    .GetProperty("boxart")
+                    .GetProperty("data");
+
+                if (!boxartData.TryGetProperty(gameId, out var images))
+                    return null;
+
+                foreach (var img in images.EnumerateArray())
+                {
+                    var type = img.GetProperty("type").GetString();
+
+                    if (type == "boxart")
+                    {
+                        var side = img.GetProperty("side").GetString();
+
+                        if (side == "front")
+                        {
+                            var filename = img.GetProperty("filename").GetString();
+                            return baseUrl + filename;
+                        }
+                    }
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return null;
+                AppendTerminal($"[BOXART ERROR] {ex.Message}");
             }
+
+            return null;
         }
         
         public string BoxArtPath { get; set; } = "avares://Launcher.App/Assets/placeholder.png";
+        
 
-        private async Task LoadBoxArt(string romName)
+        private async Task LoadBoxArt(GameEntry game)
         {
-            var boxartUrl = await GetBoxArtAsync(romName);
-            BoxArtPath = boxartUrl ?? "avares://Launcher.App/Assets/placeholder.png";
-            OnPropertyChanged(nameof(BoxArtPath));
+            var imageUrl = await GetBoxArtAsync(game.Title);
+
+            if (string.IsNullOrWhiteSpace(imageUrl))
+            {
+                game.BoxArtPath = "avares://Launcher.App/Assets/placeholder.png";
+                return;
+            }
+
+            var cacheDir = Path.Combine(AppContext.BaseDirectory, "cache");
+            Directory.CreateDirectory(cacheDir);
+
+            var safeName = string.Join("_", game.Title.Split(Path.GetInvalidFileNameChars()));
+            var cachePath = Path.Combine(cacheDir, $"{safeName}.jpg");
+
+            if (!File.Exists(cachePath))
+            {
+                try
+                {
+                    var bytes = await _httpClient.GetByteArrayAsync(imageUrl);
+                    await File.WriteAllBytesAsync(cachePath, bytes);
+                }
+                catch
+                {
+                    game.BoxArtPath = "avares://Launcher.App/Assets/placeholder.png";
+                    return;
+                }
+            }
+
+            game.BoxArtPath = cachePath;
         }
+        
+        private string CleanGameName(string name)
+        {
+            var cleaned = name;
+            
+            while (cleaned.Contains("("))
+            {
+                var start = cleaned.IndexOf("(");
+                var end = cleaned.IndexOf(")", start);
+                if (end > start)
+                    cleaned = cleaned.Remove(start, end - start + 1);
+                else break;
+            }
 
-
+            return cleaned.Trim();
+        }
+        
+        
     }
 }

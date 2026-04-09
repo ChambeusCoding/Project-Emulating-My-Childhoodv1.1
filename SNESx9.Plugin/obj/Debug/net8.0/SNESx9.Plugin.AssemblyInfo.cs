@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SNESx9.Plugin")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b5c3c9650b042127a6990a65e6f1cb78083ed2c1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4f42b24464135fc55f14a55be11511c1372fc877")]
 [assembly: System.Reflection.AssemblyProductAttribute("SNESx9.Plugin")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SNESx9.Plugin")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="https://github.com/avaloniaui/design"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:conv="clr-namespace:Launcher.App.Converters"
         xmlns:vm="clr-namespace:Launcher.App.ViewModels"
         x:Class="Launcher.App.Views.MainWindow"
         x:Name="MainWindowRoot"
@@ -15,6 +16,9 @@
         mc:Ignorable="d"
         Loaded="OnMainWindowLoaded">
     
+    <Window.Resources>
+        <conv:StringToImageConverter x:Key="ImageConverter"/>
+    </Window.Resources>
     <Grid RowDefinitions="48,*,28,320">
 
 <!-- ================= TOP BAR ================= -->
@@ -129,8 +133,7 @@
                         ClipToBounds="True">
                     <Grid>
                         <!-- Fixed Image - works with TGDB URLs + placeholder -->
-                        <Image Source="{Binding BoxArtPath}" 
-                               Stretch="UniformToFill"/>
+                        <Image Source="{Binding BoxArtPath, Converter={StaticResource ImageConverter}}" /> 
         
                         <!-- Gradient -->
                         <Rectangle Fill="Black" Opacity="0.7" 
