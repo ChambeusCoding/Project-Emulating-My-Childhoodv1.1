@@ -24,13 +24,9 @@ public sealed class GameEntry : INotifyPropertyChanged
             }
         }
     }
-    
-    public string? _selectedGame { get; set; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private void OnPropertyChanged([CallerMemberName] string? name = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }

@@ -137,7 +137,7 @@ namespace Launcher.App.ViewModels
             FilteredGames = new ObservableCollection<GameEntry>();
             Systems = new ObservableCollection<string>();
             ExecuteTerminalCommandCommand = new RelayCommand(() => _ = ExecuteTerminalCommand());
-            ScanGamesCommand = new RelayCommand(ScanGames);
+            ScanGamesCommand = new RelayCommand(() => _ = ScanGames());
             SelectSystemCommand = new RelayCommand<string>(SelectSystem);
             LaunchGameCommand = new RelayCommand<GameEntry>(game => _ = LaunchGameAsync(game));
             InstallSelectedEmulatorCommand = new RelayCommand(() => _ = RunSelectedInstaller());
@@ -255,7 +255,7 @@ namespace Launcher.App.ViewModels
             TerminalOutput = "";
             break;
         case "scan":
-            ScanGames();
+            await ScanGames();
             break;
         case "debug":
             await RunDebugger();
@@ -457,38 +457,39 @@ namespace Launcher.App.ViewModels
 }
 
 
-        private void ScanGames()
+        private async Task ScanGames()
         {
             AppendTerminal("[SCAN] Scanning ~/Documents/ROMs... (all subfolders)");
 
             var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            var romsDir = Path.Combine(home, "Documents", "ROMs");  
+            var romsDir = Path.Combine(home, "Documents", "ROMs");
 
             if (!Directory.Exists(romsDir))
             {
-                AppendTerminal($"[SCAN] Create ~/Documents/ROMs first");
-                AppendTerminal($"[SCAN] Found 0 games");
+                AppendTerminal("[SCAN] Create ~/Documents/ROMs first");
+                AppendTerminal("[SCAN] Found 0 games");
                 return;
             }
-    
+
             Games.Clear();
             int count = 0;
 
-            foreach (var game in _scanner.Scan(romsDir))  
+            foreach (var game in _scanner.Scan(romsDir))
             {
                 game.System ??= "Unknown";
                 game.BoxArtPath ??= "avares://Launcher.App/Assets/placeholder.png";
-        
+
                 var relFolder = Path.GetRelativePath(romsDir, Path.GetDirectoryName(game.FilePath) ?? romsDir);
                 AppendTerminal($"[SCAN] + {game.Title} ({relFolder})");
 
                 Games.Add(game);
-                _ = LoadBoxArt(game);
                 count++;
             }
 
             ApplyFilters();
             AppendTerminal($"[SCAN] Found {count} games");
+
+            await LoadAllBoxArtAsync();
         }
 
 
@@ -504,7 +505,7 @@ namespace Launcher.App.ViewModels
 
             AppendTerminal($"[LAUNCH] {game.Title}...");
     
-            var emulator = _emulators.GetEmulators(game.System)
+            var emulator = _emulators.GetEmulators(game.System ?? "Unknown")
                 .FirstOrDefault(e => e.Manifest.Id == game.EmulatorId);
 
             if (emulator == null)
@@ -604,103 +605,158 @@ namespace Launcher.App.ViewModels
                 }
             }
         }
-        private async Task<string?> GetBoxArtAsync(string gameName)
+        
+      private static readonly SemaphoreSlim _rateLimiter = new(1, 1);  // 1 concurrent
+private static DateTime _lastRequest = DateTime.MinValue;
+
+private async Task<string?> GetBoxArtAsync(string gameName)
+{
+    // Rate limit: 1/sec
+    await _rateLimiter.WaitAsync();
+    try
+    {
+        var now = DateTime.UtcNow;
+        if (now.Subtract(_lastRequest).TotalSeconds < 1.0)
+            await Task.Delay(1000 - (int)(now.Subtract(_lastRequest).TotalMilliseconds));
+
+        _lastRequest = DateTime.UtcNow;
+
+        var cleanName = CleanGameName(gameName);
+        var url = $"https://api.thegamesdb.net/v1/Games/ByGameName/{Uri.EscapeDataString(cleanName)}";
+
+        AppendTerminal($"[API] Fetching: {cleanName}");
+        var request = new HttpRequestMessage(HttpMethod.Get, url);
+        request.Headers.Add("User-Key", TgdbApiKey);
+        request.Headers.Add("Accept", "application/json");
+
+        var response = await _httpClient.SendAsync(request);
+        if (!response.IsSuccessStatusCode)
         {
-            var url = $"https://api.thegamesdb.net/v4/games/by-game-name?name={Uri.EscapeDataString(gameName)}&include=boxart&fields=game_title";
-
-            try
-            {
-                var request = new HttpRequestMessage(HttpMethod.Get, url);
-                request.Headers.Add("User-Key", TgdbApiKey);
-                request.Headers.Add("Accept", "application/json");
-
-                var response = await _httpClient.SendAsync(request);
-                if (!response.IsSuccessStatusCode) return null;
-
-                var json = await response.Content.ReadAsStringAsync();
-                using var doc = JsonDocument.Parse(json);
-
-                var root = doc.RootElement;
-
-                // Get game ID
-                var games = root.GetProperty("data").GetProperty("games");
-                if (games.GetArrayLength() == 0) return null;
-
-                var gameId = games[0].GetProperty("id").GetInt32().ToString();
-
-                // Get base URL
-                var baseUrl = root.GetProperty("include")
-                    .GetProperty("base_url")
-                    .GetProperty("medium")
-                    .GetString();
-
-                // Get boxart filename
-                var boxartData = root.GetProperty("include")
-                    .GetProperty("boxart")
-                    .GetProperty("data");
-
-                if (!boxartData.TryGetProperty(gameId, out var images))
-                    return null;
-
-                foreach (var img in images.EnumerateArray())
-                {
-                    var type = img.GetProperty("type").GetString();
-
-                    if (type == "boxart")
-                    {
-                        var side = img.GetProperty("side").GetString();
-
-                        if (side == "front")
-                        {
-                            var filename = img.GetProperty("filename").GetString();
-                            return baseUrl + filename;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                AppendTerminal($"[BOXART ERROR] {ex.Message}");
-            }
-
+            AppendTerminal($"[API] HTTP {response.StatusCode}");
             return null;
         }
-        
-        public string BoxArtPath { get; set; } = "avares://Launcher.App/Assets/placeholder.png";
-        
 
-        private async Task LoadBoxArt(GameEntry game)
+        var json = await response.Content.ReadAsStringAsync();
+        AppendTerminal($"[API] Response: {json.Substring(0, Math.Min(1000, json.Length))}...");
+
+        using var doc = JsonDocument.Parse(json);
+        var root = doc.RootElement;
+
+        // v1: root.data is array of games
+        if (!root.TryGetProperty("data", out var data) || data.ValueKind != JsonValueKind.Array || data.GetArrayLength() == 0)
         {
-            var imageUrl = await GetBoxArtAsync(game.Title);
-
-            if (string.IsNullOrWhiteSpace(imageUrl))
-            {
-                game.BoxArtPath = "avares://Launcher.App/Assets/placeholder.png";
-                return;
-            }
-
-            var cacheDir = Path.Combine(AppContext.BaseDirectory, "cache");
-            Directory.CreateDirectory(cacheDir);
-
-            var safeName = string.Join("_", game.Title.Split(Path.GetInvalidFileNameChars()));
-            var cachePath = Path.Combine(cacheDir, $"{safeName}.jpg");
-
-            if (!File.Exists(cachePath))
-            {
-                try
-                {
-                    var bytes = await _httpClient.GetByteArrayAsync(imageUrl);
-                    await File.WriteAllBytesAsync(cachePath, bytes);
-                }
-                catch
-                {
-                    game.BoxArtPath = "avares://Launcher.App/Assets/placeholder.png";
-                    return;
-                }
-            }
-
-            game.BoxArtPath = cachePath;
+            AppendTerminal("[API] No games in data array");
+            return null;
         }
+
+        var game = data.EnumerateArray().First();
+        var gameId = game.GetProperty("id").GetString() ?? "";
+        AppendTerminal($"[API] Game ID: {gameId}");
+
+        // v1 images: game.images or thumbnails array
+        JsonElement images;
+        if (!game.TryGetProperty("images", out images) && !game.TryGetProperty("thumbnails", out images))
+        {
+            AppendTerminal("[API] No images/thumbs in game");
+            return null;
+        }
+
+        string? baseUrl = null;
+        // Common v1 base_url locations
+        if (root.TryGetProperty("base_url", out var buRoot))
+            baseUrl = buRoot.GetString();
+        else if (game.TryGetProperty("base_url", out var buGame))
+            baseUrl = buGame.GetString();
+        else
+        {
+            // Fallback: https://static.thegamesdb.net/ or similar
+            AppendTerminal("[API] No base_url - using fallback");
+            baseUrl = "https://static.thegamesdb.net/images/medium/";
+        }
+
+        if (string.IsNullOrEmpty(baseUrl))
+        {
+            AppendTerminal("[API] No base_url found");
+            return null;
+        }
+        AppendTerminal($"[API] Base URL: {baseUrl}");
+
+        // Find boxart front (flexible field names)
+        foreach (var img in images.EnumerateArray())
+        {
+            // Check type/side combinations
+            if ((img.TryGetProperty("type", out var type) && type.GetString()?.Contains("boxart") == true ||
+                 img.TryGetProperty("class", out var cls) && cls.GetString()?.Contains("cover") == true) &&
+                (img.TryGetProperty("side", out var side) && side.GetString() == "front" ||
+                 img.TryGetProperty("position", out var pos) && pos.GetString() == "front"))
+            {
+                var filename = img.GetProperty("filename").GetString() ?? 
+                              img.GetProperty("file_name").GetString() ?? 
+                              img.GetProperty("imageid").GetString() ?? "";
+                if (!string.IsNullOrEmpty(filename))
+                {
+                    var fullUrl = baseUrl + filename;
+                    AppendTerminal($"[API] Found cover: {fullUrl}");
+                    return fullUrl;
+                }
+            }
+        }
+
+        AppendTerminal("[API] No front boxart found");
+    }
+    catch (Exception ex)
+    {
+        AppendTerminal($"[API ERROR] {ex.Message}");
+    }
+    finally
+    {
+        _rateLimiter.Release();
+    }
+    return null;
+}
+
+private async Task LoadBoxArt(GameEntry game)
+{
+    var imageUrl = await GetBoxArtAsync(game.Title);
+
+    if (string.IsNullOrWhiteSpace(imageUrl))
+    {
+        game.BoxArtPath = "avares://Launcher.App/Assets/placeholder.png";
+        return;
+    }
+
+    var cacheDir = Path.Combine(AppContext.BaseDirectory, "cache");
+    Directory.CreateDirectory(cacheDir);
+
+    var safeName = string.Join("_", game.Title.Take(50).Select(c => char.IsLetterOrDigit(c) ? c : '_'));
+    var cachePath = Path.Combine(cacheDir, $"{safeName}.jpg");
+
+    if (!File.Exists(cachePath))
+    {
+        try
+        {
+            AppendTerminal($"[CACHE] Downloading: {Path.GetFileName(cachePath)}");
+            var bytes = await _httpClient.GetByteArrayAsync(imageUrl);
+            await File.WriteAllBytesAsync(cachePath, bytes);
+            AppendTerminal($"[CACHE] Saved: {cachePath}");
+        }
+        catch (Exception ex)
+        {
+            AppendTerminal($"[CACHE ERROR] {imageUrl}: {ex.Message}");
+            game.BoxArtPath = "avares://Launcher.App/Assets/placeholder.png";
+            return;
+        }
+    }
+    
+    Bitmap LoadPlaceholderBitmap()
+    {
+        using var stream = AssetLoader.Open(new Uri("avares://Launcher.App/Assets/placeholder.png"));
+        return new Bitmap(stream);
+    }
+
+    game.BoxArtPath = cachePath;
+    AppendTerminal($"[ART] Loaded: {game.Title}");
+}
         
         private string CleanGameName(string name)
         {
@@ -716,6 +772,15 @@ namespace Launcher.App.ViewModels
             }
 
             return cleaned.Trim();
+        }
+        
+        private async Task LoadAllBoxArtAsync()
+        {
+            foreach (var game in Games)
+            {
+                await LoadBoxArt(game);
+                await Task.Delay(1500);
+            }
         }
         
         

@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 set -e
 
+echo "🟢 Installing Cemu (package-based)..."
+
 if [[ "$EUID" -ne 0 ]]; then
     echo "Re-launching installer with admin privileges..."
     exec pkexec bash "$0" "$@"
+fi
+
+if command -v cemu >/dev/null 2>&1; then
+    echo "✅ melonDS already installed: $(command -v cemu)"
+    exit 0
 fi
 
 EMULATOR_NAME="Cemu"

@@ -16,6 +16,7 @@
     <AvaloniaResource Include="Assets\Shirtfffff.png" />
     <None Remove="Assets\logo.png" />
     <AvaloniaResource Include="Assets\logo.png" />
+    <AvaloniaResource Include="Assets\placeholder.png" />
     <None Include="bin\Debug\net10.0\Plugins\Mupen64Plus\plugin.json" />
     <None Include="bin\Debug\net8.0\Plugins\Mupen64Plus\plugin.json" />
     <None Include="bin\Debug\net9.0\Plugins\Mupen64Plus\plugin.json" />

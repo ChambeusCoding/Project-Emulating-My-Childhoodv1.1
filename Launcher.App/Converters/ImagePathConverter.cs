@@ -25,14 +25,18 @@ public class StringToImageConverter : IValueConverter
             {
                 var uri = new Uri(path);
                 using var stream = AssetLoader.Open(uri);
-                return new Bitmap(stream);
+                return new Bitmap(stream);  // Bitmap takes ownership
             }
 
             if (path.StartsWith("http"))
             {
-                var bytes = _http.GetByteArrayAsync(path).Result;
-                using var ms = new MemoryStream(bytes);
-                return new Bitmap(ms);
+                try 
+                {
+                    var bytes = _http.GetByteArrayAsync(path).GetAwaiter().GetResult();  // Or make full async converter
+                    using var ms = new MemoryStream(bytes);
+                    return new Bitmap(ms);
+                }
+                catch { }
             }
             
             if (File.Exists(path))

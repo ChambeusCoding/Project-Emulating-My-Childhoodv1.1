@@ -133,7 +133,7 @@
                         ClipToBounds="True">
                     <Grid>
                         <!-- Fixed Image - works with TGDB URLs + placeholder -->
-                        <Image Source="{Binding BoxArtPath, Converter={StaticResource ImageConverter}}" /> 
+                        <Image Source="{Binding BoxArtPath, Converter={StaticResource ImageConverter}}" />
         
                         <!-- Gradient -->
                         <Rectangle Fill="Black" Opacity="0.7" 
