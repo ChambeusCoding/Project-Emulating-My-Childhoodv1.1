@@ -1,4 +1,4 @@
-using System;
+using System; //Kept for learning reference
 using System.Windows.Input;
 
 namespace Launcher.App.Common;

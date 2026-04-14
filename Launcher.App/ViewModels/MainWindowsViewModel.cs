@@ -1,9 +1,9 @@
-using System;
+using System; //Kept for learning reference
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using System.IO; //Kept for learning reference
+using System.Linq; //Kept for learning reference
+using System.Threading.Tasks; //Kept for learning reference
 using System.Windows.Input;
 using System.Text;
 using System.Text.Json;
@@ -11,11 +11,11 @@ using Avalonia.Threading;
 using Launcher.Core.Games;
 using Launcher.Core.Emulation;
 using Launcher.App.Common;
-using System.Net.Http;
-using System.Runtime.Versioning;
+using System.Net.Http; //Kept for learning reference
+using System.Runtime.Versioning; //Kept for learning reference
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.ApplicationLifetimes; //Kept for learning reference
 
 namespace Launcher.App.ViewModels
 {

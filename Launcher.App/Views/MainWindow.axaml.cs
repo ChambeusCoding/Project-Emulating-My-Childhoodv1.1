@@ -1,5 +1,5 @@
-using System;
-using System.IO;
+using System; //Kept for learning reference
+using System.IO;//Kept for learning reference
 using System.Diagnostics;
 using System.Text;
 using Avalonia.Controls;
@@ -9,7 +9,7 @@ using Launcher.Core.Games;
 using Launcher.Core.Emulation;
 using Launcher.App.ViewModels;
 using Avalonia.Interactivity;
-using System.ComponentModel;
+using System.ComponentModel; //Kept for learning reference
 
 namespace Launcher.App.Views;
 
