@@ -1,0 +1,8 @@
+C:\Users\Phoenix\Documents\GitKraken Repos\Project-Emulating-My-Childhoodv1.1\Launcher.App\obj\Release\net8.0\win-x64\Launcher.App.csproj.AssemblyReference.cache
+C:\Users\Phoenix\Documents\GitKraken Repos\Project-Emulating-My-Childhoodv1.1\Launcher.App\obj\Release\net8.0\win-x64\Avalonia\Resources.Inputs.cache
+C:\Users\Phoenix\Documents\GitKraken Repos\Project-Emulating-My-Childhoodv1.1\Launcher.App\obj\Release\net8.0\win-x64\Avalonia\resources
+C:\Users\Phoenix\Documents\GitKraken Repos\Project-Emulating-My-Childhoodv1.1\Launcher.App\obj\Release\net8.0\win-x64\Launcher.App.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Phoenix\Documents\GitKraken Repos\Project-Emulating-My-Childhoodv1.1\Launcher.App\obj\Release\net8.0\win-x64\Launcher.App.AssemblyInfoInputs.cache
+C:\Users\Phoenix\Documents\GitKraken Repos\Project-Emulating-My-Childhoodv1.1\Launcher.App\obj\Release\net8.0\win-x64\Launcher.App.AssemblyInfo.cs
+C:\Users\Phoenix\Documents\GitKraken Repos\Project-Emulating-My-Childhoodv1.1\Launcher.App\obj\Release\net8.0\win-x64\Launcher.App.csproj.CoreCompileInputs.cache
+C:\Users\Phoenix\Documents\GitKraken Repos\Project-Emulating-My-Childhoodv1.1\Launcher.App\obj\Release\net8.0\win-x64\Launcher.App.sourcelink.json

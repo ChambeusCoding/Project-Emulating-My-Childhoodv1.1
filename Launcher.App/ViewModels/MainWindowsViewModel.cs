@@ -383,10 +383,10 @@ namespace Launcher.App.ViewModels
         "Azahar(Linux)" => "install_azahar.sh",
         "MelonDS(Linux)" => "install_melonds.sh",
         "Cemu(Linux)" => "install_cemu.sh",
-        "Mupen64Plus(Windows)" => "install_mupen64plus.bat",
-        "SNES9x(Windows)" => "install_snes9x.bat",
-        "Azahar(Windows)" => "install_azahar.bat", 
-        "MelonDS(Windows)" => "install_melonds.bat",
+        "Mupen64Plus(Windows)" => "install_mupen64plus.ps1",
+        "SNES9x(Windows)" => "install_snes9x.ps1",
+        "Azahar(Windows)" => "install_azahar.ps1", 
+        "MelonDS(Windows)" => "install_melonds.ps1",
         _ => null
     };
 

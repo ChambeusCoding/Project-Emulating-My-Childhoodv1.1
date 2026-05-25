@@ -17,7 +17,10 @@
       },
       "Launcher.Core/1.0.0": {
         "runtime": {
-          "Launcher.Core.dll": {}
+          "Launcher.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "Launcher.Infrastructure/1.0.0": {
@@ -25,7 +28,10 @@
           "Launcher.Core": "1.0.0"
         },
         "runtime": {
-          "Launcher.Infrastructure.dll": {}
+          "Launcher.Infrastructure.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }
