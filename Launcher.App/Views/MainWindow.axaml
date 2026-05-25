@@ -1,4 +1,5 @@
 <Window xmlns="https://github.com/avaloniaui"
+        Icon="avares://Launcher.App/Assets/logoicon.ico"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="https://github.com/avaloniaui/design"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"

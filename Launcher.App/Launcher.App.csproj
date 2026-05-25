@@ -24,6 +24,9 @@
     <None Include="bin\Debug\net8.0\Plugins\MelonDS\plugin.json" />
     <None Include="bin\Debug\net8.0\Plugins\Snesx9\plugin.json" />
     <None Include="bin\Debug\net8.0\Plugins\Cemu\plugin.json" />
+    <None Remove="Assets\logoicon.png" />
+    <None Remove="Assets\logoicon.ico" />
+    <AvaloniaResource Include="Assets\logoicon.ico" />
   </ItemGroup>
 
   <ItemGroup>
